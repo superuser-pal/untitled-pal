@@ -1,0 +1,742 @@
+# Advanced Elicitation Pattern - Personal Automation Framework
+# Extracted from BMAD advanced-elicitation.xml on 2025-12-22
+
+This pattern shows how to use 50+ content enhancement techniques to improve any document or decision through intelligent questioning, perspective-shifting, and deep analysis.
+
+## Concept: Content Enhancement Through Structured Techniques
+
+**What it is:**
+Advanced elicitation is a library of 50+ methods for enhancing content through structured thinking techniques. It uses a CSV-driven method library with dynamic selection based on context.
+
+**Why it's universal:**
+- Works on ANY content (documents, decisions, plans, ideas)
+- 50+ techniques spanning 9 categories
+- Dynamically selects relevant methods for context
+- Iterative enhancement (apply multiple methods)
+- Integrates with workflow checkpoints
+
+**Personal automation value:**
+- Improve goal setting with First Principles Analysis
+- Enhance monthly reviews with Multiple Perspectives
+- Refine career plans with Pre-Mortem Analysis
+- Deepen budget decisions with Root Cause Analysis
+- Brainstorm solutions with Idea Synthesis techniques
+
+## Complete Elicitation System Structure
+
+```xml
+<task id="_bmad/core/tasks/advanced-elicitation.xml" name="Advanced Elicitation" standalone="true"
+  methods="{project-root}/_bmad/core/tasks/advanced-elicitation-methods.csv"
+  agent-party="{project-root}/_bmad/_config/agent-manifest.csv">
+
+  <llm critical="true">
+    <i>MANDATORY: Execute ALL steps in the flow section IN EXACT ORDER</i>
+    <i>DO NOT skip steps or change the sequence</i>
+  </llm>
+
+  <!-- Integration with workflow checkpoints -->
+  <integration description="When called from workflow">
+    <desc>When called during template workflow processing:</desc>
+    <i>1. Receive or review the current section content that was just generated</i>
+    <i>2. Apply elicitation methods iteratively to enhance that specific content</i>
+    <i>3. Return the enhanced version back when user selects 'x' to proceed</i>
+    <i>4. The enhanced content replaces the original section content in the output document</i>
+  </integration>
+
+  <!-- ... (complete flow below) ... -->
+</task>
+```
+
+## Three-Step Flow
+
+### Step 1: Method Registry Loading
+
+**Goal:** Load technique library and intelligently select 5 relevant methods
+
+**Method Library (CSV):**
+
+```csv
+id,category,method_name,description,output_pattern
+1,collaboration,Stakeholder Round Table,perspectives → synthesis → alignment
+13,advanced,Thread of Thought,context → thread → synthesis
+40,core,First Principles Analysis,assumptions → truths → new approach
+45,learning,Feynman Technique,complex → simple → gaps → mastery
+...50+ more methods
+```
+
+**CSV Structure:**
+- `category`: Method grouping (core, structural, risk, collaboration, etc.)
+- `method_name`: Display name for the method
+- `description`: Rich explanation of what the method does, when to use it, and why it's valuable
+- `output_pattern`: Flexible flow guide using → arrows (e.g., "analysis → insights → action")
+
+**Context Analysis:**
+
+```
+Analyze from conversation history:
+- Content type (goal, review, plan, budget, decision)
+- Complexity (simple, moderate, complex)
+- Stakeholder needs (personal vs. family vs. work)
+- Risk level (low, medium, high stakes)
+- Creative potential (routine vs. innovative)
+```
+
+**Smart Selection Process:**
+
+```
+1. Analyze context: Content type, complexity, stakeholder needs, risk, creativity
+2. Parse descriptions: Understand each method's purpose from CSV descriptions
+3. Select 5 methods: Choose methods that best match the context
+4. Balance approach: Mix of foundational and specialized techniques
+```
+
+**Example selection for monthly budget review:**
+```
+Context: Financial decision, moderate complexity, low risk, personal stakeholder
+
+Selected methods:
+1. First Principles Analysis (core) - Question budget assumptions
+2. Gap Analysis (foundational) - Find spending vs. income gaps
+3. Stakeholder Round Table (collaboration) - Consider family perspectives
+4. Scenario Planning (scenario) - What-if analysis for next month
+5. Pattern Recognition (advanced) - Identify spending trends
+```
+
+### Step 2: Present Options and Handle Responses
+
+**Interactive Menu Format:**
+
+```
+**Advanced Elicitation Options**
+Choose a number (1-5), [r] to Reshuffle, [a] List All, or [x] to Proceed:
+
+1. First Principles Analysis
+2. Gap Analysis
+3. Stakeholder Round Table
+4. Scenario Planning
+5. Pattern Recognition
+r. Reshuffle the list with 5 new options
+a. List all methods with descriptions
+x. Proceed / No Further Actions
+```
+
+**Response Handling:**
+
+**Case: User selects 1-5 (Apply method)**
+
+```
+1. Execute the selected method using its description from the CSV
+2. Adapt the method's complexity and output format based on context
+3. Apply the method creatively to the current section content being enhanced
+4. Display the enhanced version showing what the method revealed or improved
+5. CRITICAL: Ask user if they would like to apply the changes (y/n/other) and HALT
+6. ONLY if Yes, apply the changes. IF No, discard. If other, follow user instructions.
+7. CRITICAL: Re-present the same 1-5,r,x prompt to allow additional elicitations
+```
+
+**Case: User selects 'r' (Reshuffle)**
+
+```
+1. Select 5 random methods from advanced-elicitation-methods.csv
+2. Try to pick a diverse set of methods covering different categories and approaches
+3. Prioritize 1 and 2 as potentially most useful for the document or section
+4. Present new list with same prompt format
+```
+
+**Case: User selects 'x' (Exit)**
+
+```
+1. Complete elicitation and proceed
+2. Return the fully enhanced content back to workflow
+3. The enhanced content becomes the final version for that section
+4. Signal completion to continue with next section
+```
+
+**Case: User selects 'a' (List all methods)**
+
+```
+1. List all methods with their descriptions from the CSV in a compact table
+2. Allow user to select any method by name or number from the full list
+3. After selection, execute the method as described in case 1-5 above
+```
+
+**Case: User provides direct feedback**
+
+```
+1. Apply changes to current section content based on user input
+2. Re-present choices
+```
+
+**Case: User selects multiple numbers (e.g., "1, 3, 5")**
+
+```
+1. Execute methods in sequence on the content
+2. Re-offer choices after all executed
+```
+
+### Step 3: Execution Guidelines
+
+**Method Execution Principles:**
+
+```
+1. Use the description from CSV to understand and apply each method
+2. Use the output_pattern as a flexible guide (e.g., "paths → evaluation → selection")
+3. Adapt complexity based on content needs (simple to sophisticated)
+4. Interpret methods flexibly based on context while maintaining pattern consistency
+5. Focus on actionable insights
+6. Tie elicitation to specific content being analyzed
+7. Identify personas for multi-perspective methods
+8. Use party members if available in memory
+```
+
+**Critical Loop Behavior:**
+
+```
+- Always re-offer the 1-5,r,a,x choices after each method execution
+- Continue until user selects 'x' to proceed with enhanced content
+- Confirm or ask user what should be accepted from the session
+- Each method application builds upon previous enhancements
+```
+
+**Content Preservation:**
+
+```
+- Track all enhancements made during elicitation
+- Iterative enhancement: Each selected method (1-5) should:
+  1. Apply to the current enhanced version of the content
+  2. Show the improvements made
+  3. Return to the prompt for additional elicitations or completion
+```
+
+## Method Library Categories
+
+### 1. Core Methods (Fundamental Thinking)
+
+**Examples:**
+- **First Principles Analysis** - Break down to fundamental truths, rebuild from scratch
+- **Root Cause Analysis** - Identify underlying causes (5 Whys)
+- **SWOT Analysis** - Strengths, Weaknesses, Opportunities, Threats
+- **Cost-Benefit Analysis** - Weigh pros and cons systematically
+
+**Use for:**
+- Goal setting
+- Major life decisions
+- Budget planning
+- Career moves
+
+### 2. Collaboration Methods (Perspectives)
+
+**Examples:**
+- **Stakeholder Round Table** - Gather perspectives from all affected parties
+- **Devil's Advocate** - Challenge assumptions with opposing view
+- **Fishbowl Conversation** - Observe perspectives from outside
+- **World Café** - Rotating small group discussions
+
+**Use for:**
+- Family decisions
+- Team goal alignment
+- Relationship discussions
+- Community planning
+
+### 3. Scenario Methods (Future Planning)
+
+**Examples:**
+- **Scenario Planning** - Explore best case, worst case, likely case
+- **Pre-Mortem Analysis** - Imagine failure, work backward to prevent it
+- **Future Wheel** - Map ripple effects of a decision
+- **Back-casting** - Start from desired future, plan backward
+
+**Use for:**
+- Career planning
+- Financial projections
+- Life transitions
+- Risk assessment
+
+### 4. Structural Methods (Organization)
+
+**Examples:**
+- **Idea Pyramids** - Organize ideas hierarchically
+- **Mind Mapping** - Visual brainstorming
+- **Gap Analysis** - Identify what's missing
+- **Force Field Analysis** - Forces for and against change
+
+**Use for:**
+- Organizing thoughts
+- Breaking down complex goals
+- Identifying obstacles
+- Planning projects
+
+### 5. Advanced Methods (Deep Thinking)
+
+**Examples:**
+- **Thread of Thought** - Follow reasoning chain deeply
+- **Pattern Recognition** - Identify recurring themes
+- **Systems Thinking** - Understand interconnections
+- **Lateral Thinking** - Creative problem solving
+
+**Use for:**
+- Complex problems
+- Innovation
+- Deep analysis
+- Finding new approaches
+
+### 6. Risk Methods (Safety Analysis)
+
+**Examples:**
+- **Risk Matrix** - Likelihood × Impact assessment
+- **Failure Mode Analysis** - What could go wrong
+- **Safety Net Analysis** - Identify backup plans
+- **Contingency Planning** - Prepare for uncertainties
+
+**Use for:**
+- High-stakes decisions
+- Financial planning
+- Health choices
+- Career changes
+
+### 7. Learning Methods (Understanding)
+
+**Examples:**
+- **Feynman Technique** - Explain simply to find gaps
+- **Socratic Questioning** - Deep questioning to understand
+- **Comparative Analysis** - Compare multiple options
+- **Analogy Building** - Use metaphors to understand
+
+**Use for:**
+- Learning new skills
+- Understanding complex topics
+- Teaching others
+- Clarifying confusion
+
+### 8. Creative Methods (Ideation)
+
+**Examples:**
+- **Brainstorming** - Generate many ideas quickly
+- **SCAMPER** - Substitute, Combine, Adapt, Modify, Put to other uses, Eliminate, Reverse
+- **Random Input** - Use unrelated concepts to spark ideas
+- **Idea Synthesis** - Combine multiple ideas into new ones
+
+**Use for:**
+- Problem solving
+- Goal exploration
+- Career options
+- Life design
+
+### 9. Foundational Methods (Basics)
+
+**Examples:**
+- **5 Whys** - Ask why repeatedly to find root cause
+- **Pros and Cons List** - Simple decision making
+- **Prioritization Matrix** - Urgent vs. Important
+- **Checklist** - Ensure nothing is missed
+
+**Use for:**
+- Quick decisions
+- Everyday planning
+- Habit tracking
+- Routine reviews
+
+## Personal Automation Use Cases
+
+### Use Case 1: Enhancing Monthly Goal Review
+
+**Context:** You've drafted your monthly review and want to go deeper.
+
+**Workflow integration:**
+```xml
+<step n="3" goal="Review goals">
+  <template-output target="{{review_file}}" show="user">
+## Goal Progress
+
+This month I completed 3 out of 5 goals. Workouts were consistent but budget overspent on dining.
+  </template-output>
+</step>
+
+User selects: [a] Advanced Elicitation
+
+Advanced Elicitation presents:
+1. Root Cause Analysis (core)
+2. Pattern Recognition (advanced)
+3. Pre-Mortem Analysis (scenario)
+4. Gap Analysis (structural)
+5. First Principles Analysis (core)
+
+User selects: 1 (Root Cause Analysis)
+```
+
+**Agent applies Root Cause Analysis:**
+
+```
+Original: "Budget overspent on dining"
+
+Agent: "Let's find the root cause. Why did you overspend on dining?"
+User: "Had more work dinners than expected"
+Agent: "Why were there more work dinners?"
+User: "New project with evening meetings"
+Agent: "Why do evening meetings lead to dining out?"
+User: "Too tired to cook after late meetings"
+Agent: "So the root cause is: Evening meetings → tiredness → dining out"
+
+Enhanced version:
+## Goal Progress - Budget
+
+**Issue:** Budget overspent on dining by $200 (40% over)
+
+**Root Cause:** New project created evening meetings 3x/week
+→ Too tired to cook after 8pm meetings
+→ Ordered delivery or dined out
+
+**Solution:** Not a willpower issue, it's a schedule issue. Options:
+1. Meal prep on weekends for late-night meals
+2. Budget for project-related dining (separate category)
+3. Bring easy-to-eat meals to office for post-meeting dinners
+
+Agent: "Apply these changes? (y/n/other)"
+User: y
+
+[Content updated, menu re-appears for more elicitation or user selects 'x' to continue]
+```
+
+### Use Case 2: Refining Career Goals with First Principles
+
+**Context:** Setting career goals for next year, want to question assumptions.
+
+**Agent presents methods:**
+```
+1. First Principles Analysis (core) ← Selected
+2. Future Wheel (scenario)
+3. Stakeholder Round Table (collaboration)
+4. Thread of Thought (advanced)
+5. Comparative Analysis (learning)
+```
+
+**Agent applies First Principles:**
+
+```
+Original career goal: "Get promoted to Senior Engineer"
+
+Agent: "Let's break this down to first principles. Why do you want a promotion?"
+User: "More money and recognition"
+Agent: "What is money for in your life?"
+User: "Financial security and freedom to pursue hobbies"
+Agent: "What is recognition for?"
+User: "Validation that I'm good at what I do"
+Agent: "Are there other ways to achieve financial security and validation?"
+User: "Hmm... I could freelance for more money, or contribute to open source for recognition"
+
+Enhanced version:
+## Career Goal - Rethinking Promotion
+
+**Assumed goal:** Get promoted to Senior Engineer
+
+**First principles breakdown:**
+- Underlying need 1: Financial security ($20K raise expected)
+- Underlying need 2: Validation of skills
+
+**Alternative paths to same outcomes:**
+1. Promotion (traditional path)
+   - Pros: Benefits, stability, clear recognition
+   - Cons: Office politics, longer hours, management pressure
+
+2. Freelancing (financial path)
+   - Pros: Potentially $30K+ extra, flexibility
+   - Cons: Unstable, no benefits, hustle required
+
+3. Open Source + Current Role (recognition path)
+   - Pros: Industry validation, skill growth, maintain stability
+   - Cons: No immediate financial gain
+
+**Refined goal:** Achieve financial security ($20K increase) AND skill validation through one or more paths - evaluate promotion vs. alternatives by Q1 end.
+
+Agent: "Apply? (y/n/other)"
+User: y
+```
+
+### Use Case 3: Budget Planning with Scenario Analysis
+
+**Context:** Creating next month's budget, want to prepare for uncertainties.
+
+**Agent presents methods:**
+```
+1. Scenario Planning (scenario) ← Selected
+2. Pre-Mortem Analysis (scenario)
+3. Risk Matrix (risk)
+4. Gap Analysis (structural)
+5. Contingency Planning (risk)
+```
+
+**Agent applies Scenario Planning:**
+
+```
+Original: "Income: $5000, Expenses: $4500, Savings: $500"
+
+Agent: "Let's explore 3 scenarios for next month."
+
+**Best Case Scenario:**
+- Freelance project pays $1000 bonus
+- No unexpected expenses
+- Income: $6000, Expenses: $4500, Savings: $1500
+
+**Likely Case Scenario:**
+- Income as expected: $5000
+- Minor car maintenance: $200
+- Income: $5000, Expenses: $4700, Savings: $300
+
+**Worst Case Scenario:**
+- Car needs major repair: $1000
+- Client delays payment (no bonus)
+- Income: $5000, Expenses: $5500, Deficit: -$500
+
+**Preparation:**
+- Keep $1000 emergency buffer for worst case
+- Target savings: $300-500 (likely case)
+- If best case happens: Boost emergency fund with extra $1000
+
+Enhanced budget includes scenario planning and contingencies.
+
+Agent: "Apply? (y/n/other)"
+User: y
+```
+
+### Use Case 4: Weekly Review with Pattern Recognition
+
+**Context:** Reviewing weekly logs, looking for insights.
+
+**Agent presents methods:**
+```
+1. Pattern Recognition (advanced) ← Selected
+2. Gap Analysis (structural)
+3. Root Cause Analysis (core)
+4. SWOT Analysis (core)
+5. Trend Analysis (advanced)
+```
+
+**Agent applies Pattern Recognition:**
+
+```
+Original weekly review:
+Mon: Workout, work 9h, tired
+Tue: No workout, work 10h, very tired
+Wed: No workout, work 9h, tired
+Thu: Workout, work 8h, energized
+Fri: Workout, work 8h, energized
+
+Agent analyzes and identifies patterns:
+
+**Pattern 1: Exercise → Energy**
+- Days with workouts: 8-9h work, feel energized
+- Days without: 9-10h work, feel tired
+- Insight: Workouts boost energy and productivity
+
+**Pattern 2: Tuesday Trap**
+- Tuesdays consistently: No workout, longest work day, most tired
+- Insight: Tuesday is the "overwork day"
+
+**Pattern 3: Thursday Turnaround**
+- Workouts resume Thu/Fri after mid-week slump
+- Insight: Recover energy end of week
+
+**Recommendations:**
+1. Protect Tuesday workout time - critical for preventing overwork
+2. Limit Tuesday work to 9h max
+3. Schedule important work for Thu/Fri when energy is highest
+
+Enhanced review includes actionable insights from patterns.
+
+Agent: "Apply? (y/n/other)"
+User: y
+```
+
+## Integration with Workflows
+
+### Pattern 1: Checkpoint Enhancement
+
+**In any workflow with template-output:**
+
+```xml
+<step n="5" goal="Generate recommendations">
+  <template-output target="{{output_file}}" show="user">
+## Recommendations
+
+Based on your progress this month, here are my recommendations:
+1. Continue current workout schedule
+2. Reduce dining budget by $100
+3. Focus on savings goal
+  </template-output>
+</step>
+
+<!-- User sees content, selects [a] Advanced Elicitation -->
+
+Advanced Elicitation options appear:
+1. Pre-Mortem Analysis - Imagine these recommendations failing, why?
+2. Stakeholder Round Table - Consider family impact
+3. Scenario Planning - What if income changes?
+4. First Principles - Question the underlying goals
+5. Gap Analysis - What's missing from recommendations?
+
+<!-- User enhances content, then continues workflow -->
+```
+
+### Pattern 2: Standalone Elicitation
+
+**Use directly without a workflow:**
+
+```
+User: "I want to brainstorm career options using advanced elicitation"
+
+Agent loads method library, presents 5 relevant methods:
+1. SCAMPER (creative)
+2. Future Wheel (scenario)
+3. Stakeholder Round Table (collaboration)
+4. Idea Synthesis (creative)
+5. Comparative Analysis (learning)
+
+User iteratively applies methods to explore career paths.
+```
+
+### Pattern 3: Party Mode Integration
+
+**With agent-party manifest loaded:**
+
+```
+Agent: "I've loaded your team from agent-manifest.csv. Party mode members can join elicitation!"
+
+Methods now executed by appropriate agents:
+- Financial methods: Sofia (Finance Manager) applies
+- Health methods: Dr. Ava (Health Coach) applies
+- Career methods: Morgan (Career Advisor) applies
+- Schedule methods: Alex (Schedule Optimizer) applies
+
+Multiple perspectives automatically!
+```
+
+## Best Practices
+
+### 1. When to Use Elicitation
+
+**Use for:**
+- ✅ Important decisions (career, finance, health)
+- ✅ Complex goals requiring deep thought
+- ✅ Documents that feel incomplete
+- ✅ When stuck or unsure
+- ✅ Quarterly/annual reviews
+
+**Skip for:**
+- ❌ Routine check-ins
+- ❌ Simple logging
+- ❌ Data entry tasks
+- ❌ Time-sensitive decisions
+
+### 2. Method Selection Strategy
+
+**For goal setting:**
+- First Principles Analysis
+- Pre-Mortem Analysis
+- Scenario Planning
+- SWOT Analysis
+
+**For problem solving:**
+- Root Cause Analysis (5 Whys)
+- Gap Analysis
+- Systems Thinking
+- Lateral Thinking
+
+**For decision making:**
+- Cost-Benefit Analysis
+- Risk Matrix
+- Scenario Planning
+- Comparative Analysis
+
+**For brainstorming:**
+- SCAMPER
+- Random Input
+- Idea Synthesis
+- Mind Mapping
+
+**For reviews:**
+- Pattern Recognition
+- Gap Analysis
+- SWOT Analysis
+- Trend Analysis
+
+### 3. Iterative Enhancement
+
+**Good flow:**
+```
+1. Draft content (normal workflow)
+2. Apply Root Cause Analysis (find deeper issues)
+3. Apply Scenario Planning (explore futures)
+4. Apply First Principles (question assumptions)
+5. Exit with fully enhanced content
+```
+
+**Each method builds on previous enhancements!**
+
+### 4. Reshuffle Wisely
+
+**Reshuffle when:**
+- Presented methods don't fit context
+- Want to explore different categories
+- Finished with current set but want more
+
+**Don't reshuffle:**
+- Just because you don't recognize a method (try it!)
+- Repeatedly looking for one specific method (use 'a' to list all)
+
+### 5. Balance Depth and Time
+
+**Deep elicitation (3-5 methods):**
+- Annual goals
+- Career decisions
+- Major purchases
+- Life transitions
+
+**Light elicitation (1-2 methods):**
+- Monthly reviews
+- Weekly planning
+- Budget adjustments
+- Habit changes
+
+## Summary
+
+Advanced elicitation provides:
+- ✅ 50+ structured thinking techniques
+- ✅ Context-aware method selection
+- ✅ Iterative content enhancement
+- ✅ Integration with workflow checkpoints
+- ✅ CSV-driven extensibility
+- ✅ Party mode collaboration support
+
+Use this pattern to enhance ANY content in your personal automation system - goals, reviews, plans, decisions, budgets, and more.
+
+## Migration Notes
+
+**From BMAD to Personal Automation:**
+
+**Keep (Universal):**
+- ✅ Complete method library (all 50+ techniques are universal)
+- ✅ CSV structure and loading
+- ✅ Selection algorithm
+- ✅ Iterative enhancement loop
+- ✅ Integration with workflows
+
+**Adapt (Context):**
+- Method selection: Software context → Personal life context
+- Examples: PRD enhancement → Goal refinement, budget planning, career decisions
+- Agent party: Dev team → Personal support team (Finance, Health, Career, Schedule)
+
+**Extend:**
+- Add personal-specific methods to CSV
+- Customize descriptions for personal use cases
+- Add new categories (relationships, wellness, learning)
+
+## Use When
+
+- Enhancing important documents
+- Making significant decisions
+- Stuck on a problem
+- Want deeper insights
+- Brainstorming options
+- Reviewing progress
+- Planning major changes
+- Questioning assumptions

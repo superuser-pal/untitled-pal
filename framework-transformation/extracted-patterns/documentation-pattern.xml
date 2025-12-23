@@ -1,0 +1,480 @@
+# Documentation Generation Pattern - Personal Automation Framework
+# Extracted from BMAD index-docs task on 2025-12-22
+
+This pattern shows how to automatically generate index.md files for directories to organize and navigate documents.
+
+## Concept: Automatic Documentation Indexing
+
+**What it does:**
+Scans a directory and automatically generates an organized index.md file with:
+- File listings grouped by type or purpose
+- Brief descriptions based on actual file content (not just filenames)
+- Clickable markdown links for easy navigation
+- Hierarchical organization for subdirectories
+
+**Why it's useful:**
+- Creates instant navigation for document folders
+- Keeps documentation organized as files change
+- Saves time manually cataloging files
+- Helps agents find relevant documents
+- Makes folders self-documenting
+
+## Complete Task Structure
+
+```xml
+<task id="index-docs" name="Index Docs"
+  description="Generates or updates an index.md of all documents in the specified directory"
+  webskip="true" standalone="true">
+
+  <llm critical="true">
+    <i>MANDATORY: Execute ALL steps in the flow section IN EXACT ORDER</i>
+    <i>DO NOT skip steps or change the sequence</i>
+    <i>HALT immediately when halt-conditions are met</i>
+    <i>Each action xml tag within step xml tag is a REQUIRED action to complete that step</i>
+    <i>Sections outside flow (validation, output, critical-context) provide essential context - review and apply throughout execution</i>
+  </llm>
+
+  <flow>
+    <step n="1" title="Scan Directory">
+      <i>List all files and subdirectories in the target location</i>
+    </step>
+
+    <step n="2" title="Group Content">
+      <i>Organize files by type, purpose, or subdirectory</i>
+    </step>
+
+    <step n="3" title="Generate Descriptions">
+      <i>Read each file to understand its actual purpose and create brief (3-10 word) descriptions based on the content, not just the filename</i>
+    </step>
+
+    <step n="4" title="Create/Update Index">
+      <i>Write or update index.md with organized file listings</i>
+    </step>
+  </flow>
+
+  <output-format>
+    <example>
+      # Directory Index
+
+      ## Files
+
+      - **[filename.ext](./filename.ext)** - Brief description
+      - **[another-file.ext](./another-file.ext)** - Brief description
+
+      ## Subdirectories
+
+      ### subfolder/
+
+      - **[file1.ext](./subfolder/file1.ext)** - Brief description
+      - **[file2.ext](./subfolder/file2.ext)** - Brief description
+
+      ### another-folder/
+
+      - **[file3.ext](./another-folder/file3.ext)** - Brief description
+    </example>
+  </output-format>
+
+  <halt-conditions critical="true">
+    <i>HALT if target directory does not exist or is inaccessible</i>
+    <i>HALT if user does not have write permissions to create index.md</i>
+  </halt-conditions>
+
+  <validation>
+    <i>Use relative paths starting with ./</i>
+    <i>Group similar files together</i>
+    <i>Read file contents to generate accurate descriptions - don't guess from filenames</i>
+    <i>Keep descriptions concise but informative (3-10 words)</i>
+    <i>Sort alphabetically within groups</i>
+    <i>Skip hidden files (starting with .) unless specified</i>
+  </validation>
+</task>
+```
+
+## Flow Breakdown
+
+### Step 1: Scan Directory
+**Goal:** Discover all files and subdirectories
+
+**Actions:**
+- List all files in target directory
+- List all subdirectories
+- Note file types and structure
+- Skip hidden files by default (files starting with .)
+
+### Step 2: Group Content
+**Goal:** Organize files into logical groups
+
+**Grouping strategies:**
+- **By type:** Markdown files, YAML files, images, etc.
+- **By purpose:** Reviews, budgets, logs, plans, etc.
+- **By subdirectory:** Each subfolder gets its own section
+- **Alphabetically:** Within each group, sort A-Z
+
+### Step 3: Generate Descriptions
+**Goal:** Create meaningful descriptions for each file
+
+**Important:** Read file content, don't guess from filename!
+
+**Description guidelines:**
+- 3-10 words maximum
+- Describe WHAT the file contains
+- Focus on purpose, not format
+- Examples:
+  - ✅ "January 2025 monthly budget with savings goals"
+  - ❌ "Budget file"
+  - ✅ "Weekly review of fitness and nutrition progress"
+  - ❌ "Health review"
+
+### Step 4: Create/Update Index
+**Goal:** Write the index.md file
+
+**Format:**
+- Markdown headings for sections
+- Bullet lists with bold links
+- Relative paths (start with `./`)
+- Clear hierarchy (Files → Subdirectories)
+
+## Use Cases for Personal Automation
+
+### Use Case 1: Organizing Budget Documents
+
+**Scenario:** You have a folder with monthly budgets, spending reports, and savings tracking.
+
+**Before indexing:**
+```
+finance/
+├── budget-2025-01.md
+├── budget-2025-02.md
+├── spending-analysis-jan.md
+├── savings-tracker.md
+└── emergency-fund-plan.md
+```
+
+**After running index-docs:**
+```
+finance/
+├── index.md  ← NEW!
+├── budget-2025-01.md
+├── budget-2025-02.md
+├── spending-analysis-jan.md
+├── savings-tracker.md
+└── emergency-fund-plan.md
+```
+
+**Generated index.md:**
+```markdown
+# Finance Documents Index
+
+## Budgets
+
+- **[budget-2025-01.md](./budget-2025-01.md)** - January 2025 monthly budget with $2000 savings goal
+- **[budget-2025-02.md](./budget-2025-02.md)** - February 2025 monthly budget with reduced dining expenses
+
+## Analysis
+
+- **[spending-analysis-jan.md](./spending-analysis-jan.md)** - January spending breakdown by category with overspending alerts
+
+## Savings
+
+- **[savings-tracker.md](./savings-tracker.md)** - Emergency fund progress tracking ($3000/$10000)
+- **[emergency-fund-plan.md](./emergency-fund-plan.md)** - 12-month plan to build emergency fund
+```
+
+### Use Case 2: Indexing Health Logs
+
+**Scenario:** You track workouts, meals, and health metrics.
+
+**Structure:**
+```
+health/
+├── workouts/
+│   ├── workout-2025-01-05.md
+│   ├── workout-2025-01-07.md
+│   └── workout-2025-01-10.md
+├── meals/
+│   ├── meal-prep-week-1.md
+│   └── meal-prep-week-2.md
+└── metrics/
+    ├── weight-tracking.md
+    └── sleep-log.md
+```
+
+**Generated index.md:**
+```markdown
+# Health Tracking Index
+
+## Workouts
+
+### workouts/
+
+- **[workout-2025-01-05.md](./workouts/workout-2025-01-05.md)** - Upper body strength training 45 min
+- **[workout-2025-01-07.md](./workouts/workout-2025-01-07.md)** - Cardio run 5k in 28 minutes
+- **[workout-2025-01-10.md](./workouts/workout-2025-01-10.md)** - Yoga flow and stretching 60 min
+
+## Nutrition
+
+### meals/
+
+- **[meal-prep-week-1.md](./meals/meal-prep-week-1.md)** - Week 1 meal prep with macro breakdown
+- **[meal-prep-week-2.md](./meals/meal-prep-week-2.md)** - Week 2 meal prep focusing on protein
+
+## Metrics
+
+### metrics/
+
+- **[weight-tracking.md](./metrics/weight-tracking.md)** - Daily weight log with trend analysis
+- **[sleep-log.md](./metrics/sleep-log.md)** - Sleep hours and quality tracking
+```
+
+### Use Case 3: Organizing Goal Reviews
+
+**Scenario:** You do weekly, monthly, and quarterly reviews.
+
+**Structure:**
+```
+reviews/
+├── weekly/
+│   ├── week-1-2025.md
+│   ├── week-2-2025.md
+│   └── week-3-2025.md
+├── monthly/
+│   ├── january-2025.md
+│   └── february-2025.md
+└── quarterly/
+    └── q1-2025.md
+```
+
+**Generated index.md:**
+```markdown
+# Review Documents Index
+
+## Weekly Reviews
+
+### weekly/
+
+- **[week-1-2025.md](./weekly/week-1-2025.md)** - Week 1 review: Strong start on fitness goals
+- **[week-2-2025.md](./weekly/week-2-2025.md)** - Week 2 review: Budget overspend on dining
+- **[week-3-2025.md](./weekly/week-3-2025.md)** - Week 3 review: Back on track with all goals
+
+## Monthly Reviews
+
+### monthly/
+
+- **[january-2025.md](./monthly/january-2025.md)** - January 2025 monthly review with goal completion analysis
+- **[february-2025.md](./monthly/february-2025.md)** - February 2025 monthly review showing 80% goal completion
+
+## Quarterly Reviews
+
+### quarterly/
+
+- **[q1-2025.md](./quarterly/q1-2025.md)** - Q1 2025 quarterly review with annual goal progress
+```
+
+### Use Case 4: Career Learning Materials
+
+**Scenario:** You're learning new skills and saving resources.
+
+**Structure:**
+```
+career/learning/
+├── courses/
+│   ├── react-course-progress.md
+│   └── python-course-notes.md
+├── projects/
+│   ├── portfolio-website.md
+│   └── api-project.md
+└── certifications/
+    └── aws-certification-plan.md
+```
+
+**Agent Integration:**
+The Career Advisor agent can:
+1. Run index-docs on career/learning/
+2. Quickly find relevant resources
+3. Track learning progress across multiple courses
+4. Reference projects when discussing skills
+
+## Integration with Workflows
+
+### Pattern 1: Auto-index After Workflow Completion
+
+Add to end of workflow:
+
+```xml
+<step n="FINAL" goal="Generate folder index">
+  <output>
+Alex (Schedule Optimizer): "Let me create an index of your review documents for easy navigation."
+  </output>
+
+  <action>Execute index-docs task on {reviews_folder}</action>
+  <action>Verify index.md was created</action>
+
+  <output>
+✓ Index created at {reviews_folder}/index.md
+
+You can now easily navigate all your reviews!
+  </output>
+</step>
+```
+
+### Pattern 2: Agent Menu Item for Indexing
+
+```xml
+<item cmd="*index-docs" exec="{project-root}/_bmad/core/tasks/index-docs.xml">
+  Generate index.md for a folder
+</item>
+```
+
+### Pattern 3: Periodic Re-indexing
+
+Set up monthly workflow to refresh all indexes:
+
+```yaml
+name: "refresh-indexes"
+description: "Update all folder indexes monthly"
+
+# Run on:
+# - Budget folder (after monthly budget created)
+# - Health folder (after monthly health review)
+# - Reviews folder (after monthly review)
+# - Career folder (after learning progress update)
+```
+
+## Best Practices
+
+### 1. When to Index
+
+**Index folders that:**
+- ✅ Contain 5+ documents
+- ✅ Have regular additions (weekly/monthly)
+- ✅ Agents need to search/reference
+- ✅ You want to navigate quickly
+
+**Don't index folders with:**
+- ❌ Only 1-2 files
+- ❌ Temporary/scratch files
+- ❌ Files that change names frequently
+
+### 2. Grouping Strategy
+
+**For time-based documents:**
+- Group by time period (weekly, monthly, quarterly)
+- Most recent at top or bottom (be consistent)
+
+**For category-based documents:**
+- Group by category (budgets, reviews, logs)
+- Alphabetically within category
+
+**For hierarchical folders:**
+- Use subdirectory grouping
+- Show folder structure clearly
+
+### 3. Description Quality
+
+**Good descriptions:**
+- "January 2025 budget with $2000 savings target"
+- "Workout log: Upper body strength 45 min"
+- "Weekly review showing 80% goal completion"
+- "Career development plan for Q1 2025"
+
+**Bad descriptions:**
+- "Budget document" (too generic)
+- "File" (useless)
+- "January budget for the year 2025 with detailed breakdown of all income sources and expenses including savings goals" (too long)
+
+### 4. Re-indexing Frequency
+
+**Monthly indexes:** Update monthly (after new files added)
+**Weekly indexes:** Update weekly
+**Static folders:** Update only when structure changes
+
+### 5. Index Placement
+
+Always create `index.md` at the **root of the folder** being indexed, not in a parent folder.
+
+```
+✅ CORRECT:
+finance/
+└── index.md  ← describes files in finance/
+
+❌ WRONG:
+index.md  ← describes files in finance/ (should be inside)
+finance/
+```
+
+## Agent Integration
+
+### Finance Manager Agent
+```
+1. Create monthly budget
+2. Run index-docs on budget folder
+3. Agent can now reference all budgets easily
+```
+
+### Health Tracker Agent
+```
+1. Log workout
+2. Run index-docs on workouts folder
+3. Agent can find previous workouts for comparison
+```
+
+### Schedule Optimizer Agent
+```
+1. Complete weekly review
+2. Run index-docs on reviews folder
+3. Agent can track review history
+```
+
+## Automation Example
+
+### Monthly Review Workflow with Auto-Indexing
+
+```xml
+<step n="FINAL-1" goal="Save review document">
+  <template-output target="{reviews_folder}/monthly/review-{{date}}.md" show="user">
+    <!-- Generate review document -->
+  </template-output>
+</step>
+
+<step n="FINAL-2" goal="Update folder indexes">
+  <output>
+Alex: "Let me update the indexes so everything stays organized."
+  </output>
+
+  <action>Run index-docs on {reviews_folder}</action>
+  <action>Run index-docs on {reviews_folder}/monthly/</action>
+
+  <output>
+✓ Indexes updated:
+  - {reviews_folder}/index.md
+  - {reviews_folder}/monthly/index.md
+
+All reviews are now indexed and easy to find!
+  </output>
+</step>
+```
+
+## Summary
+
+The documentation pattern provides:
+- ✅ Automatic folder organization
+- ✅ Easy navigation for users and agents
+- ✅ Content-based descriptions (not filename-based)
+- ✅ Consistent formatting
+- ✅ Self-documenting folders
+- ✅ Integration with workflows
+
+Use this pattern to keep your personal automation outputs organized and discoverable.
+
+## Migration Notes
+
+**From BMAD to Personal Automation:**
+- ❌ Remove: Software-specific file types (test files, source code)
+- ✅ Keep: Markdown documentation, YAML configs, data files
+- ✅ Add: Personal document types (budgets, reviews, logs, plans)
+- ✅ Adapt: Descriptions for personal context (not technical jargon)
+
+**Integration with Goal Tracking:**
+- Index goal folders to help agents find relevant goals
+- Index review folders to track progress over time
+- Index adjustment folders to see course correction history

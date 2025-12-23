@@ -1,0 +1,850 @@
+# Workflow Execution Engine Pattern - Personal Automation Framework
+# Extracted from BMAD workflow.xml on 2025-12-22
+
+This pattern documents the complete workflow execution engine that powers all workflows - the runtime system that loads configurations, executes steps, handles user interaction, and generates documents.
+
+## Concept: Universal Workflow Runtime
+
+**What it is:**
+The workflow execution engine is the core runtime that interprets workflow.yaml configurations and instructions.md files to execute multi-step processes. It's the "interpreter" that brings workflows to life.
+
+**Why it's universal:**
+- Works for ANY domain (software, personal life, business)
+- Handles both document generation (templates) and action-only workflows
+- Smart file loading with multiple strategies
+- Interactive and autonomous (YOLO) modes
+- Variable resolution system
+- Conditional logic and iteration
+- Reusable protocols
+
+**Personal automation value:**
+Understanding the engine lets you:
+- Build custom workflows for any goal
+- Know how variables get resolved
+- Understand when files get loaded
+- Use advanced features like protocols and YOLO mode
+- Debug workflows when they behave unexpectedly
+
+## Complete Engine Structure
+
+```xml
+<task id="_bmad/core/tasks/workflow.xml" name="Execute Workflow">
+  <objective>Execute given workflow by loading its configuration, following instructions, and producing output</objective>
+
+  <!-- Core Mandates -->
+  <llm critical="true">
+    <mandate>Always read COMPLETE files - NEVER use offset/limit when reading workflow files</mandate>
+    <mandate>Instructions are MANDATORY - either as file path, steps or embedded list</mandate>
+    <mandate>Execute ALL steps in instructions IN EXACT ORDER</mandate>
+    <mandate>Save to template output file after EVERY "template-output" tag</mandate>
+    <mandate>NEVER skip a step - YOU are responsible for every step's execution</mandate>
+  </llm>
+
+  <!-- Workflow Rules -->
+  <WORKFLOW-RULES critical="true">
+    <rule n="1">Steps execute in exact numerical order (1, 2, 3...)</rule>
+    <rule n="2">Optional steps: Ask user unless #yolo mode active</rule>
+    <rule n="3">Template-output tags: Save content, discuss with user, NEVER proceed until user indicates (unless YOLO mode)</rule>
+  </WORKFLOW-RULES>
+
+  <!-- ... (complete execution flow below) ... -->
+</task>
+```
+
+## Three-Step Execution Flow
+
+### Step 1: Load and Initialize Workflow
+
+**Goal:** Load all workflow components and resolve variables
+
+**Substep 1a: Load Configuration and Resolve Variables**
+
+```
+Phase 1: Load external config from config_source path
+Phase 2: Resolve all {config_source}: references with values from config
+Phase 3: Resolve system variables (date:system-generated) and paths ({project-root}, {installed_path})
+Phase 4: Ask user for input of any variables that are still unknown
+```
+
+**Example variable resolution:**
+```yaml
+# workflow.yaml
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+output_folder: "{config_source}:output_folder"  # Loads from config
+user_name: "{config_source}:user_name"          # Loads from config
+date: "{{date}}"                                 # System-generated: 2025-12-22
+```
+
+**Substep 1b: Load Required Components**
+
+```
+- Instructions: Read COMPLETE file from path OR embedded list (REQUIRED)
+- Template: Read COMPLETE template file if template path specified
+- Validation: Note path for later loading when needed
+- Template mode: If template: false → action-workflow, else template-workflow
+- Data files (csv, json): Store paths only, load on-demand when instructions reference them
+```
+
+**Substep 1c: Initialize Output** (template-workflow only)
+
+```
+- Resolve default_output_file path with all variables and {{date}}
+- Create output directory if doesn't exist
+- Write template to output file with placeholders (if template-workflow)
+- Skip file creation (if action-workflow)
+```
+
+### Step 2: Process Each Instruction Step in Order
+
+**Goal:** Execute every step in instructions sequentially
+
+**Substep 2a: Handle Step Attributes**
+
+```xml
+<step n="1" title="Step Title" optional="true" if="condition" for-each="item" repeat="n">
+  ...
+</step>
+```
+
+**Attribute handling:**
+- `optional="true"` → Ask user to include (unless #yolo mode)
+- `if="condition"` → Evaluate condition, skip if false
+- `for-each="item"` → Repeat step for each item in collection
+- `repeat="n"` → Repeat step n times
+
+**Substep 2b: Execute Step Content**
+
+**Supported XML tags:**
+
+```xml
+<!-- Actions -->
+<action>Perform the action</action>
+<action if="condition">Conditional single action (inline, no closing tag)</action>
+
+<!-- Conditional blocks -->
+<check if="condition">
+  <action>Wrapped actions</action>
+</check>
+
+<!-- User interaction -->
+<ask>Prompt user and WAIT for response</ask>
+
+<!-- Workflow invocation -->
+<invoke-workflow>Execute another workflow</invoke-workflow>
+<invoke-task>Execute specified task</invoke-task>
+<invoke-protocol name="protocol_name">Execute reusable protocol</invoke-protocol>
+
+<!-- Control flow -->
+<goto step="x">Jump to specified step</goto>
+```
+
+**Variable replacement:**
+- `{{variable}}` → Ask user if unknown
+- `{variable}` → Resolve from config or workflow.yaml
+
+**Substep 2c: Handle template-output Tags**
+
+**Critical checkpoint system:**
+
+```xml
+<template-output target="{{file_path}}" show="user">
+  Generate this section content here
+</template-output>
+```
+
+**When template-output encountered:**
+1. Generate content for this section
+2. Save to file (Write first time, Edit subsequent)
+3. Display generated content to user
+4. Present options: `[a] Advanced Elicitation, [c] Continue, [p] Party-Mode, [y] YOLO the rest`
+5. WAIT for user response
+6. Execute chosen action
+
+**Options explained:**
+- `[a]` → Launch advanced-elicitation.xml to enhance this section
+- `[c]` → Continue to next step
+- `[p]` → Launch party-mode for multi-agent collaboration
+- `[y]` → Enter YOLO mode for rest of workflow (auto-complete)
+
+**Substep 2d: Step Completion**
+
+```
+If no special tags and NOT #yolo:
+  Ask: "Continue to next step? (y/n/edit)"
+```
+
+### Step 3: Completion
+
+**Goal:** Finalize workflow execution
+
+```
+- Confirm document saved to output path
+- Report workflow completion
+```
+
+## Execution Modes
+
+### Normal Mode
+
+**Behavior:**
+- Full user interaction at EVERY step
+- Confirmation required at EVERY template-output
+- NO EXCEPTIONS (unless YOLO mode activated mid-workflow)
+
+**Use when:**
+- Creating important documents
+- Want to review every section
+- Need to think through each step
+- Collaborating with the agent
+
+**Example:**
+```
+Agent: "I've generated the Executive Summary section. Here's what I created:
+[Shows content]
+
+Options: [a] Advanced Elicitation, [c] Continue, [p] Party-Mode, [y] YOLO the rest
+Your choice: "
+
+User: c
+
+Agent: "Moving to next section: Problem Statement..."
+```
+
+### YOLO Mode
+
+**Behavior:**
+- Skip all confirmations and elicitation prompts
+- Minimize user interaction
+- Auto-produce entire workflow
+- Simulate discussions with expert user
+
+**Use when:**
+- Familiar with the workflow output
+- Trust the agent to complete fully
+- Need speed over customization
+- Drafting that you'll edit later
+
+**Example:**
+```
+User: y
+
+Agent: "YOLO mode activated! Auto-completing entire document..."
+[Agent generates all remaining sections automatically]
+Agent: "Workflow complete! Document saved to: /path/to/output.md"
+```
+
+**Hybrid usage:**
+```
+Step 1: User interacts normally
+Step 2: User interacts normally
+Step 3: User types 'y' → YOLO mode for remaining steps
+Steps 4-10: Auto-completed
+```
+
+## Supported Tags Reference
+
+### Structural Tags
+
+```xml
+<step n="X" goal="...">Define step with number and goal</step>
+<step optional="true">Step can be skipped</step>
+<step if="condition">Conditional execution</step>
+<step for-each="collection">Iterate over items</step>
+<step repeat="n">Repeat n times</step>
+```
+
+### Execution Tags
+
+```xml
+<action>Required action to perform</action>
+<action if="condition">Single conditional action (inline, no closing tag)</action>
+<check if="condition">...actions...</check>  <!-- Multi-line conditional block -->
+<ask>Get user input (ALWAYS wait for response before continuing)</ask>
+<goto step="x">Jump to another step</goto>
+<invoke-workflow>Call another workflow</invoke-workflow>
+<invoke-task>Call a task</invoke-task>
+<invoke-protocol name="protocol_name">Execute a reusable protocol</invoke-protocol>
+```
+
+### Output Tags
+
+```xml
+<template-output target="{{file}}" show="user">Save content checkpoint</template-output>
+<output>Display message to user</output>
+<critical>Cannot be skipped</critical>
+<example>Show example output</example>
+```
+
+## discover_inputs Protocol
+
+**Purpose:** Intelligently load project files (whole or sharded) based on workflow's input_file_patterns configuration
+
+**When executed:** Only if workflow.yaml contains `input_file_patterns` section
+
+### Protocol Flow
+
+**Step 1: Parse Input File Patterns**
+
+```yaml
+# Example from workflow.yaml
+input_file_patterns:
+  prd:
+    sharded: "{output_folder}/*prd*/*.md"
+    whole: "{output_folder}/*prd*.md"
+    load_strategy: FULL_LOAD
+
+  architecture:
+    sharded: "{output_folder}/*architecture*/*.md"
+    whole: "{output_folder}/*architecture*.md"
+    load_strategy: INDEX_GUIDED
+
+  epic:
+    sharded_single: "{output_folder}/*epics*/epic-{{epic_num}}.md"
+    load_strategy: SELECTIVE_LOAD
+```
+
+**Step 2: Load Files Using Smart Strategies**
+
+For each pattern, try sharded first, then fall back to whole document.
+
+### Three Load Strategies
+
+**1. FULL_LOAD**
+
+**Description:** Load ALL files in sharded directory
+
+**Use for:** PRD, Architecture, UX, brownfield docs
+
+**How it works:**
+```
+1. Use glob pattern to find ALL .md files (e.g., "{output_folder}/*architecture*/*.md")
+2. Load EVERY matching file completely
+3. Concatenate content in logical order (index.md first if exists, then alphabetical)
+4. Store in variable: {pattern_name_content}
+```
+
+**Example:**
+```
+Pattern: prd (FULL_LOAD)
+Glob: /output/*prd*/*.md
+
+Found:
+  /output/prd/index.md
+  /output/prd/requirements.md
+  /output/prd/user-stories.md
+  /output/prd/acceptance-criteria.md
+
+Action:
+  Load ALL 4 files
+  Concatenate: index → requirements → user-stories → acceptance-criteria
+  Store as: {prd_content}
+```
+
+**2. SELECTIVE_LOAD**
+
+**Description:** Load specific shard using template variable
+
+**Use for:** Epics with `{{epic_num}}`, stories with `{{story_id}}`
+
+**How it works:**
+```
+1. Check for template variables in sharded_single pattern (e.g., {{epic_num}})
+2. If variable undefined, ask user for value OR infer from context
+3. Resolve template to specific file path
+4. Load that specific file
+5. Store in variable: {pattern_name_content}
+```
+
+**Example:**
+```
+Pattern: epic (SELECTIVE_LOAD)
+Sharded single: /output/*epics*/epic-{{epic_num}}.md
+
+User provides: epic_num = 3
+
+Action:
+  Resolve to: /output/epics/epic-3.md
+  Load ONLY that file
+  Store as: {epic_content}
+```
+
+**3. INDEX_GUIDED**
+
+**Description:** Load index.md, analyze structure, intelligently load relevant docs
+
+**Use for:** Large sharded collections where not all docs are relevant
+
+**How it works:**
+```
+1. Load index.md from sharded directory
+2. Parse table of contents, links, section headers
+3. Analyze workflow's purpose and objective
+4. Identify which linked/referenced documents are likely relevant
+5. Load all identified relevant documents
+6. Store combined content in variable: {pattern_name_content}
+```
+
+**CRITICAL MANDATE:** DO NOT BE LAZY - use best judgment to load documents that might have relevant information, even if only a 5% chance. When in doubt, LOAD IT - context is valuable, being thorough is better than missing critical info.
+
+**Example:**
+```
+Pattern: architecture (INDEX_GUIDED)
+Workflow purpose: "Implement authentication feature"
+
+Step 1: Load /output/architecture/index.md
+Contents show:
+  - Auth Overview.md
+  - Payment Setup.md
+  - Deployment.md
+  - Database Schema.md
+
+Step 2: Analyze relevance
+  - Auth Overview.md → LOAD (directly relevant)
+  - Database Schema.md → LOAD (auth needs DB tables)
+  - Deployment.md → LOAD (might have auth config)
+  - Payment Setup.md → SKIP (unrelated to auth)
+
+Step 3: Load Auth Overview + Database Schema + Deployment
+Step 4: Store as {architecture_content}
+```
+
+**Fallback to whole document:**
+
+```
+If no sharded matches found:
+  1. Attempt glob match on 'whole' pattern (e.g., "{output_folder}/*prd*.md")
+  2. If matches found, load ALL matching files completely
+  3. Store content in variable: {pattern_name_content}
+```
+
+**Not found handling:**
+
+```
+If no matches for sharded OR whole:
+  1. Set {pattern_name_content} to empty string
+  2. Note in session: "No {pattern_name} files found" (not an error, just unavailable)
+  3. Offer user chance to provide file path
+```
+
+**Step 3: Report Discovery Results**
+
+```
+Example output:
+✓ Loaded {prd_content} from 5 sharded files: prd/index.md, prd/requirements.md, ...
+✓ Loaded {architecture_content} from 1 file: Architecture.md
+✓ Loaded {epics_content} from selective load: epics/epic-3.md
+○ No ux_design files found
+```
+
+**Transparency:** This gives workflow visibility into what context is available for execution.
+
+## Personal Automation Examples
+
+### Example 1: Monthly Budget Review Workflow
+
+**workflow.yaml:**
+```yaml
+name: "monthly-budget-review"
+description: "Review monthly budget and spending"
+config_source: "{project-root}/_personal-automation/config.yaml"
+template: "{installed_path}/template.md"
+instructions: "{installed_path}/instructions.md"
+default_output_file: "{output_folder}/budget/reviews/review-{{date}}.md"
+
+input_file_patterns:
+  budget:
+    whole: "{output_folder}/budget/budget-*.md"
+    load_strategy: FULL_LOAD
+
+  spending:
+    sharded: "{output_folder}/finance/spending/*.md"
+    load_strategy: INDEX_GUIDED
+```
+
+**instructions.md:**
+```xml
+<workflow>
+  <step n="1" goal="Load financial data">
+    <invoke-protocol name="discover_inputs">Load budget and spending files</invoke-protocol>
+    <output>
+Loaded financial data:
+- {budget_content}
+- {spending_content}
+    </output>
+  </step>
+
+  <step n="2" goal="Generate spending analysis">
+    <template-output target="{{default_output_file}}" show="user">
+## Spending Analysis
+
+[Agent analyzes {spending_content} and generates insights]
+    </template-output>
+  </step>
+
+  <step n="3" goal="Compare to budget">
+    <template-output target="{{default_output_file}}" show="user">
+## Budget Comparison
+
+[Agent compares {spending_content} to {budget_content}]
+    </template-output>
+  </step>
+
+  <step n="4" goal="Recommendations">
+    <template-output target="{{default_output_file}}" show="user">
+## Recommendations
+
+[Agent provides budget adjustment recommendations]
+    </template-output>
+  </step>
+</workflow>
+```
+
+**Execution:**
+```
+1. Engine loads workflow.yaml
+2. Resolves variables: date → 2025-12-22, output_folder from config
+3. Loads instructions.md and template.md
+4. Creates output file: /output/budget/reviews/review-2025-12-22.md
+
+Step 1: discover_inputs protocol loads budget and spending files
+Step 2: User sees spending analysis, chooses [c] to continue
+Step 3: User sees budget comparison, chooses [a] for advanced elicitation to enhance
+Step 4: User sees recommendations, chooses [y] to YOLO any remaining sections
+
+Result: Complete budget review document saved
+```
+
+### Example 2: Weekly Health Check-In (Action Workflow)
+
+**workflow.yaml:**
+```yaml
+name: "weekly-health-checkin"
+description: "Quick health metrics check-in"
+config_source: "{project-root}/_personal-automation/config.yaml"
+template: false  # Action workflow, no document generation
+instructions: "{installed_path}/instructions.md"
+```
+
+**instructions.md:**
+```xml
+<workflow>
+  <step n="1" goal="Get weekly metrics">
+    <ask>How many workouts this week?</ask>
+    <action>Store as {{workouts}}</action>
+
+    <ask>Average sleep hours?</ask>
+    <action>Store as {{sleep}}</action>
+
+    <ask>Water intake (glasses/day average)?</ask>
+    <action>Store as {{water}}</action>
+  </step>
+
+  <step n="2" goal="Check goals">
+    <check if="{{workouts}} >= 3">
+      <output>✅ Workout goal MET! (3+ workouts)</output>
+    </check>
+    <check if="{{workouts}} < 3">
+      <output>⚠️ Workout goal MISSED (target: 3, actual: {{workouts}})</output>
+      <ask>What blocked you from working out?</ask>
+      <action>Store as {{workout_blocker}}</action>
+    </check>
+
+    <check if="{{sleep}} >= 7">
+      <output>✅ Sleep goal MET! (7+ hours)</output>
+    </check>
+    <check if="{{sleep}} < 7">
+      <output>⚠️ Sleep goal MISSED (target: 7h, actual: {{sleep}}h)</output>
+    </check>
+  </step>
+
+  <step n="3" goal="Update tracking file">
+    <action>Append to {output_folder}/health/weekly-checkins.md:</action>
+    <action>
+## {{date}}
+- Workouts: {{workouts}}
+- Sleep: {{sleep}}h avg
+- Water: {{water}} glasses/day
+{{#if workout_blocker}}- Workout blocker: {{workout_blocker}}{{/if}}
+    </action>
+    <output>✓ Check-in saved to weekly-checkins.md</output>
+  </step>
+</workflow>
+```
+
+**Execution:**
+```
+1. Engine loads workflow.yaml (template: false → action-workflow)
+2. No output file created
+3. Executes steps interactively
+
+Step 1: Asks user for 3 metrics, stores responses
+Step 2: Evaluates conditionals, provides feedback
+Step 3: Appends data to tracking file
+
+Result: Quick check-in completed, data logged
+```
+
+## Integration with workflow.yaml and instructions
+
+**Workflow YAML provides:**
+- Configuration (paths, variables)
+- Input file patterns (what to load)
+- Template path (what to generate)
+- Output file path (where to save)
+- Metadata (name, description)
+
+**Instructions provide:**
+- Step-by-step execution logic
+- User interaction points (ask tags)
+- Conditional logic (check, if)
+- Template sections (template-output tags)
+- Protocol invocations (discover_inputs)
+
+**Engine provides:**
+- Variable resolution
+- File loading (discover_inputs)
+- User interaction handling
+- Document generation (template-output)
+- Mode switching (normal ↔ YOLO)
+- Error handling
+
+**Together they create:** Complete, executable workflows for any domain
+
+## Best Practices
+
+### 1. Variable Resolution Strategy
+
+**Use {config_source}: for shared settings:**
+```yaml
+user_name: "{config_source}:user_name"
+output_folder: "{config_source}:output_folder"
+```
+
+**Use {{template_var}} for workflow-specific:**
+```yaml
+goal_name: "{{goal_name}}"  # Ask user during execution
+```
+
+**Use system variables for automation:**
+```yaml
+date: "{{date}}"  # Auto-generated: 2025-12-22
+```
+
+### 2. Choose Right Load Strategy
+
+**FULL_LOAD when:**
+- Need complete context (PRD, Architecture)
+- All files are relevant
+- Sharded docs are well-organized
+
+**SELECTIVE_LOAD when:**
+- Working with one specific item (epic #3, story #12)
+- Template variables identify the target
+- Other shards are irrelevant
+
+**INDEX_GUIDED when:**
+- Large collection of shards
+- Only some are relevant to current workflow
+- Want intelligent context loading
+
+### 3. Template-Output Placement
+
+**Good:**
+```xml
+<step n="1" goal="Generate executive summary">
+  <template-output target="{{file}}">
+## Executive Summary
+[Content here]
+  </template-output>
+</step>
+
+<step n="2" goal="Generate problem statement">
+  <template-output target="{{file}}">
+## Problem Statement
+[Content here]
+  </template-output>
+</step>
+```
+
+**Bad:**
+```xml
+<step n="1" goal="Generate everything">
+  <template-output target="{{file}}">
+## Section 1
+[Content]
+
+## Section 2
+[Content]
+
+## Section 3
+[Content]
+  </template-output>
+  <!-- User can't interact between sections! -->
+</step>
+```
+
+**Why:** Each template-output is a checkpoint where user can:
+- Review the content
+- Request advanced elicitation
+- Launch party mode
+- Continue or edit
+
+### 4. YOLO Mode Usage
+
+**When to offer YOLO:**
+- After 2-3 interactive sections
+- When user is familiar with workflow
+- For repetitive sections
+- When drafting for later editing
+
+**When NOT to offer YOLO:**
+- First time running workflow
+- Critical decision points
+- Sections needing user input
+- High-stakes documents
+
+### 5. Conditional Logic
+
+**Use `if` attribute for single actions:**
+```xml
+<action if="{{workouts}} >= 3">Congratulate user</action>
+```
+
+**Use `<check>` blocks for multiple actions:**
+```xml
+<check if="{{workouts}} >= 3">
+  <output>Great job!</output>
+  <action>Update streak</action>
+  <action>Log achievement</action>
+</check>
+```
+
+### 6. Protocol Invocation
+
+**Always invoke discover_inputs early:**
+```xml
+<step n="1" goal="Load context">
+  <invoke-protocol name="discover_inputs">Load all required files</invoke-protocol>
+</step>
+
+<step n="2" goal="Use loaded context">
+  <action>Now use {prd_content}, {architecture_content}, etc.</action>
+</step>
+```
+
+**Don't:** Try to manually load files if discover_inputs can do it.
+
+## Advanced Features
+
+### Goto Control Flow
+
+**Use for:**
+- Retry loops
+- Conditional branching
+- Error recovery
+
+**Example:**
+```xml
+<step n="1" goal="Get valid input">
+  <ask>Enter a number between 1-10:</ask>
+  <action>Store as {{number}}</action>
+</step>
+
+<step n="2" goal="Validate">
+  <check if="{{number}} < 1 OR {{number}} > 10">
+    <output>Invalid! Must be 1-10.</output>
+    <goto step="1">Retry input</goto>
+  </check>
+</step>
+
+<step n="3" goal="Continue with valid input">
+  <output>Valid number: {{number}}</output>
+</step>
+```
+
+### For-Each Iteration
+
+**Example:**
+```xml
+<step n="1" for-each="goal in {{active_goals}}">
+  <output>Reviewing goal: {{goal.name}}</output>
+  <ask>What's the progress on {{goal.name}}?</ask>
+  <action>Store as {{goal.progress}}</action>
+</step>
+```
+
+### Nested Workflows
+
+**Example:**
+```xml
+<step n="1" goal="Run sub-workflow">
+  <invoke-workflow path="{project-root}/_workflows/budget-analysis/workflow.yaml">
+    Pass variables: month={{current_month}}
+  </invoke-workflow>
+</step>
+```
+
+## Engine Responsibilities Summary
+
+**The workflow engine is responsible for:**
+
+1. ✅ Loading and parsing workflow.yaml
+2. ✅ Resolving all variables (config, system, user-provided)
+3. ✅ Loading instructions and templates
+4. ✅ Creating output files (template workflows)
+5. ✅ Executing steps in exact order
+6. ✅ Handling user interaction (ask, template-output)
+7. ✅ Managing execution modes (normal, YOLO)
+8. ✅ Invoking protocols (discover_inputs)
+9. ✅ Evaluating conditionals (if, check)
+10. ✅ Iterating (for-each, repeat)
+11. ✅ Saving content at checkpoints (template-output)
+12. ✅ Reporting completion
+
+**The workflow engine is NOT responsible for:**
+
+- ❌ Creating workflow.yaml or instructions (you design these)
+- ❌ Generating content (the agent generates based on instructions)
+- ❌ Making decisions (user or instructions decide)
+- ❌ Validating business logic (use validation-pattern for that)
+
+## Summary
+
+The workflow execution engine is the **universal runtime** that makes personal automation possible. It:
+
+- ✅ Works across all domains (finance, health, career, etc.)
+- ✅ Handles both interactive and automated execution
+- ✅ Intelligently loads context with discover_inputs protocol
+- ✅ Supports complex logic (conditionals, iteration, protocols)
+- ✅ Provides user control (checkpoints, modes, elicitation)
+- ✅ Scales from simple check-ins to complex documents
+
+**Key insight:** You don't modify the engine - you create workflow.yaml + instructions.md files that the engine executes. The engine is stable, workflows are flexible.
+
+## Use When
+
+- Building custom workflows for personal automation
+- Need to understand how workflows execute
+- Debugging workflow behavior
+- Designing complex multi-step processes
+- Want to use advanced features (protocols, YOLO, conditionals)
+
+## Migration Notes
+
+**From BMAD to Personal Automation:**
+
+**Keep (Universal):**
+- ✅ Entire execution flow
+- ✅ Variable resolution system
+- ✅ discover_inputs protocol
+- ✅ Template-output checkpoints
+- ✅ YOLO mode
+- ✅ Conditional logic
+- ✅ All supported tags
+
+**Adapt (Context):**
+- Input patterns: Software files → Personal documents (budgets, reviews, goals)
+- Variable names: sprint_status → goal_status, epic_num → goal_id
+- Output paths: Sprint docs → Monthly reviews, budget reports, health logs
+
+**No changes needed:** The engine itself is 100% universal and works as-is for personal automation.

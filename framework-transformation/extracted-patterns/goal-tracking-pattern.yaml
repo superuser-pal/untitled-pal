@@ -1,0 +1,445 @@
+# Goal Tracking Pattern - Personal Automation Framework
+# Adapted from BMM sprint-status.yaml on 2025-12-22
+
+This pattern shows how to track personal goals, habits, and tasks - adapted from BMAD's sprint-status tracking.
+
+## Concept: From Sprint Status to Goal Status
+
+**Software Development (BMM):**
+- Tracks epics, stories, tasks
+- Sprint-based (2-week cycles)
+- Status: not-started, in-progress, done, blocked
+
+**Personal Life (Adapted):**
+- Tracks goals, habits, tasks
+- Time-based (weekly/monthly cycles)
+- Status: not-started, in-progress, completed, paused
+
+## YAML Structure: goal-status.yaml
+
+```yaml
+# Personal Goal Tracking
+# Generated: 2025-01-15
+# Period: January 2025 (Monthly) OR Week 3 2025 (Weekly)
+
+metadata:
+  tracking_period: "monthly"  # or "weekly"
+  period_label: "January 2025"
+  start_date: "2025-01-01"
+  end_date: "2025-01-31"
+  owner: "Rodrigo"
+  last_updated: "2025-01-15"
+
+# Goal Categories (like epics)
+goals:
+  financial:
+    goal-1:
+      title: "Save $2000 for emergency fund"
+      category: "savings"
+      priority: "high"
+      status: "in-progress"
+      target_date: "2025-01-31"
+      progress: "65%"  # $1300 / $2000
+      notes: "On track. Automated $500/paycheck transfer working well."
+
+    goal-2:
+      title: "Reduce eating out to $200/month"
+      category: "spending"
+      priority: "medium"
+      status: "in-progress"
+      target_date: "2025-01-31"
+      progress: "40%"  # Currently at $300, need to save $100 more
+      notes: "Struggling with weekend lunches. Need meal prep strategy."
+
+  health:
+    goal-3:
+      title: "Work out 3x per week"
+      category: "fitness"
+      priority: "high"
+      status: "in-progress"
+      target_date: "2025-01-31"
+      progress: "75%"  # 9 out of 12 workouts completed
+      notes: "Missed Week 2 workouts due to cold. Back on track."
+
+    goal-4:
+      title: "Meal prep every Sunday"
+      category: "nutrition"
+      priority: "medium"
+      status: "completed"
+      target_date: "2025-01-31"
+      progress: "100%"
+      notes: "Habit established. Prepping for 5 days works well."
+
+  career:
+    goal-5:
+      title: "Complete React course (10 hours)"
+      category: "learning"
+      priority: "high"
+      status: "in-progress"
+      target_date: "2025-01-31"
+      progress: "60%"  # 6 hours done
+      notes: "2 hours left. Will finish this week."
+
+# Tasks (like stories - specific actions)
+tasks:
+  financial:
+    task-f-1:
+      parent_goal: "goal-1"
+      title: "Set up automatic transfer to savings"
+      status: "completed"
+      completed_date: "2025-01-02"
+
+    task-f-2:
+      parent_goal: "goal-2"
+      title: "Research meal prep recipes"
+      status: "completed"
+      completed_date: "2025-01-05"
+
+    task-f-3:
+      parent_goal: "goal-2"
+      title: "Buy meal prep containers"
+      status: "completed"
+      completed_date: "2025-01-06"
+
+  health:
+    task-h-1:
+      parent_goal: "goal-3"
+      title: "Schedule workouts in calendar"
+      status: "completed"
+      completed_date: "2025-01-01"
+
+    task-h-2:
+      parent_goal: "goal-3"
+      title: "Join gym / renew membership"
+      status: "completed"
+      completed_date: "2025-01-03"
+
+  career:
+    task-c-1:
+      parent_goal: "goal-5"
+      title: "Watch React course sections 1-5"
+      status: "completed"
+      completed_date: "2025-01-10"
+
+    task-c-2:
+      parent_goal: "goal-5"
+      title: "Build sample React app"
+      status: "in-progress"
+      started_date: "2025-01-12"
+
+# Habits (recurring behaviors to track)
+habits:
+  daily:
+    habit-d-1:
+      title: "Drink 8 glasses of water"
+      frequency: "daily"
+      streak: 12
+      target_streak: 31
+      last_completed: "2025-01-15"
+      status: "active"
+
+    habit-d-2:
+      title: "Log expenses in app"
+      frequency: "daily"
+      streak: 15
+      target_streak: 31
+      last_completed: "2025-01-15"
+      status: "active"
+
+  weekly:
+    habit-w-1:
+      title: "Review budget"
+      frequency: "weekly"
+      completed_weeks: 2
+      target_weeks: 4
+      last_completed: "2025-01-14"
+      status: "active"
+
+    habit-w-2:
+      title: "Meal prep Sunday"
+      frequency: "weekly"
+      completed_weeks: 3
+      target_weeks: 4
+      last_completed: "2025-01-14"
+      status: "active"
+
+# Blockers & Issues (like impediments)
+blockers:
+  blocker-1:
+    title: "Gym closed for maintenance Jan 20-22"
+    impact: "goal-3"
+    severity: "medium"
+    status: "active"
+    mitigation: "Plan home workouts for those 3 days"
+
+  blocker-2:
+    title: "Car repair $400 unexpected expense"
+    impact: "goal-1"
+    severity: "high"
+    status: "resolved"
+    resolution: "Used part of emergency fund, will replenish next month"
+
+# Retrospective Notes (lessons learned mid-period)
+notes:
+  - date: "2025-01-08"
+    type: "win"
+    content: "Meal prep habit is working! Saves time and money."
+
+  - date: "2025-01-10"
+    type: "struggle"
+    content: "Weekend eating out still too high. Need better planning."
+
+  - date: "2025-01-12"
+    type: "adjustment"
+    content: "Switched workout time to morning - better consistency."
+```
+
+## Usage Examples
+
+### Example 1: Weekly Goal Status
+
+```yaml
+# Week 3, January 2025
+metadata:
+  tracking_period: "weekly"
+  period_label: "Week 3, January 2025"
+  start_date: "2025-01-15"
+  end_date: "2025-01-21"
+  owner: "Rodrigo"
+
+goals:
+  this_week:
+    goal-w3-1:
+      title: "Complete 3 workouts"
+      status: "in-progress"
+      progress: "67%"  # 2/3 done
+
+    goal-w3-2:
+      title: "Finish React course module 3"
+      status: "completed"
+      progress: "100%"
+
+tasks:
+  work:
+    task-1: "Prepare presentation for Friday"
+      status: "in-progress"
+
+  personal:
+    task-2: "Schedule dentist appointment"
+      status: "completed"
+```
+
+### Example 2: Monthly Health Goals
+
+```yaml
+# Health Goals - January 2025
+metadata:
+  tracking_period: "monthly"
+  period_label: "January 2025 - Health Focus"
+  category: "health"
+
+goals:
+  fitness:
+    goal-1:
+      title: "12 workouts this month"
+      status: "in-progress"
+      progress: "75%"  # 9/12
+      workouts_completed:
+        - "2025-01-02: Strength"
+        - "2025-01-04: Cardio"
+        - "2025-01-06: Yoga"
+        # ... etc
+
+  nutrition:
+    goal-2:
+      title: "Track all meals for 30 days"
+      status: "in-progress"
+      progress: "50%"  # 15/30 days
+      notes: "Using MyFitnessPal consistently"
+
+  sleep:
+    goal-3:
+      title: "Average 7.5 hours sleep/night"
+      status: "in-progress"
+      progress: "80%"
+      average_sleep: "7.2 hours"
+      notes: "Close! Need earlier bedtime on weekends."
+```
+
+### Example 3: Financial Goals Quarterly
+
+```yaml
+# Q1 2025 Financial Goals
+metadata:
+  tracking_period: "quarterly"
+  period_label: "Q1 2025"
+  start_date: "2025-01-01"
+  end_date: "2025-03-31"
+
+goals:
+  savings:
+    goal-q1-1:
+      title: "Save $6,000 emergency fund"
+      status: "in-progress"
+      progress: "33%"  # $2,000 saved
+      monthly_breakdown:
+        january: "$1,300 (65%)"
+        february: "$700 (35%)"
+        march: "Not started"
+
+  debt:
+    goal-q1-2:
+      title: "Pay off credit card ($3,000)"
+      status: "in-progress"
+      progress: "40%"  # $1,200 paid
+      remaining: "$1,800"
+
+  income:
+    goal-q1-3:
+      title: "Start side consulting (earn $2,000)"
+      status: "not-started"
+      progress: "0%"
+      notes: "Waiting to finish React course first"
+```
+
+## Integration with Workflows
+
+### Workflow: Check Goal Status
+
+```yaml
+name: "check-goal-status"
+description: "Review current goal tracking and surface priorities"
+
+config_source: "{project-root}/_personal-automation/life-management/config.yaml"
+goals_folder: "{config_source}:goals_folder"
+
+required_inputs:
+  - goal_status: "{goals_folder}/goal-status.yaml"
+
+# Workflow loads YAML, analyzes progress, surfaces:
+# - On-track goals (celebrate!)
+# - Struggling goals (need attention)
+# - Blocked goals (remove blockers)
+# - Completed goals (mark done, set new goals)
+```
+
+### Workflow: Update Goal Status
+
+```yaml
+name: "update-goal-status"
+description: "Weekly/monthly update of goal progress"
+
+config_source: "{project-root}/_personal-automation/life-management/config.yaml"
+goals_folder: "{config_source}:goals_folder"
+
+# Workflow prompts user:
+# - Which goals made progress?
+# - What's the new %?
+# - Any new blockers?
+# - Any completed tasks?
+# - Any new tasks needed?
+```
+
+### Workflow: Goal Retrospective
+
+```yaml
+name: "goal-retrospective"
+description: "End-of-period goal review and lessons learned"
+
+config_source: "{project-root}/_personal-automation/life-management/config.yaml"
+goals_folder: "{config_source}:goals_folder"
+
+# Workflow reviews:
+# - What goals completed?
+# - What goals missed? Why?
+# - What worked well?
+# - What to change next period?
+```
+
+## Best Practices
+
+### 1. Keep It Simple
+- Don't track too many goals (3-5 max per category)
+- Don't track everything (focus on what matters)
+- Review weekly, update weekly
+
+### 2. Use Status Effectively
+- **not-started**: Set but not begun
+- **in-progress**: Actively working on it
+- **paused**: Temporarily stopped (not abandoned)
+- **completed**: Done!
+- **abandoned**: Decided not to pursue
+
+### 3. Track Progress Meaningfully
+- Use percentages for measurable goals (savings, workouts)
+- Use milestone counts for binary goals (course completed: yes/no)
+- Use streak counts for habits (days in a row)
+
+### 4. Surface Blockers Early
+- Document what's preventing progress
+- Assess impact (high/medium/low)
+- Create mitigation plans
+
+### 5. Celebrate Wins
+- Note completed goals
+- Record lessons learned
+- Build momentum
+
+## Agent Integration
+
+### Schedule Optimizer Agent
+Reads goal-status.yaml to:
+- Prioritize tasks based on goal status
+- Suggest time blocks for struggling goals
+- Identify conflicts between goals
+
+### Finance Manager Agent
+Reads goal-status.yaml to:
+- Track financial goals (savings, debt, spending)
+- Alert on budget impacts
+- Suggest reallocations
+
+### Health Tracker Agent
+Reads goal-status.yaml to:
+- Track fitness and nutrition goals
+- Monitor habit streaks
+- Suggest adjustments
+
+## Migration from sprint-status.yaml
+
+| Sprint Status | Goal Status |
+|---------------|-------------|
+| Epic | Goal |
+| Story | Task |
+| Sprint | Week/Month |
+| Velocity | Progress % |
+| Blocker | Blocker |
+| Retrospective | Review/Reflection |
+| Status: done | Status: completed |
+
+## Example Agent Menu Item
+
+```xml
+<item cmd="*check-goals" workflow="{project-root}/_personal-automation/life-management/workflows/goals/check-status/workflow.yaml">
+  Review current goal progress
+</item>
+
+<item cmd="*update-goals" workflow="{project-root}/_personal-automation/life-management/workflows/goals/update-status/workflow.yaml">
+  Update goal progress for this week
+</item>
+
+<item cmd="*goal-review" workflow="{project-root}/_personal-automation/life-management/workflows/goals/monthly-review/workflow.yaml">
+  Monthly goal retrospective and planning
+</item>
+```
+
+## Summary
+
+Goal status tracking provides:
+- ✅ Clear visibility into progress
+- ✅ Early warning on struggling goals
+- ✅ Accountability and momentum
+- ✅ Data for retrospectives
+- ✅ Foundation for agent decision-making
+
+Use this pattern for any time-boxed goal tracking (weekly, monthly, quarterly, yearly).

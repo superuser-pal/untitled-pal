@@ -1,0 +1,638 @@
+# Document Sharding Pattern - Personal Automation Framework
+# Extracted from BMAD shard-doc tool on 2025-12-22
+
+This pattern shows how to split large markdown documents into smaller, manageable files organized by sections.
+
+## Concept: Document Sharding
+
+**What it does:**
+Takes a large markdown document and automatically splits it into multiple smaller files based on level 2 headings (##), creating:
+- Individual markdown file for each major section
+- Auto-generated index.md for navigation
+- Organized folder structure
+- Maintains document hierarchy and content
+
+**Why it's useful:**
+- Makes large documents easier to navigate
+- Enables selective loading (load only needed sections)
+- Reduces cognitive overhead (focus on one section at a time)
+- Works better with version control (smaller diffs)
+- Agents can load specific sections instead of entire doc
+
+**Tool dependency:** `npx @kayvan/markdown-tree-parser`
+
+## When to Shard Documents
+
+### Shard When:
+- ✅ Document exceeds **500 lines**
+- ✅ Document has **10+ level 2 sections**
+- ✅ Sections are logically independent
+- ✅ You reference only parts of the document frequently
+- ✅ Document is slowing down editors/tools
+
+### Don't Shard When:
+- ❌ Document is under 200 lines
+- ❌ Sections are tightly coupled
+- ❌ You always read the whole document
+- ❌ It's a reference doc you search frequently (keep as one file)
+
+## Complete Tool Structure
+
+```xml
+<tool id="shard-doc" name="Shard Document"
+  description="Splits large markdown documents into smaller, organized files based on level 2 (default) sections"
+  webskip="true" standalone="true">
+
+  <objective>
+    Split large markdown documents into smaller, organized files based on level 2 sections using @kayvan/markdown-tree-parser tool
+  </objective>
+
+  <llm critical="true">
+    <i>MANDATORY: Execute ALL steps in the flow section IN EXACT ORDER</i>
+    <i>DO NOT skip steps or change the sequence</i>
+    <i>HALT immediately when halt-conditions are met</i>
+    <i>Each action xml tag within step xml tag is a REQUIRED action to complete that step</i>
+    <i>Sections outside flow (validation, output, critical-context) provide essential context - review and apply throughout execution</i>
+  </llm>
+
+  <critical-context>
+    <i>Uses `npx @kayvan/markdown-tree-parser` to automatically shard documents by level 2 headings and generate an index</i>
+  </critical-context>
+
+  <flow>
+    <step n="1" title="Get Source Document">
+      <action>Ask user for the source document path if not provided already</action>
+      <action>Verify file exists and is accessible</action>
+      <action>Verify file is markdown format (.md extension)</action>
+      <action if="file not found or not markdown">HALT with error message</action>
+    </step>
+
+    <step n="2" title="Get Destination Folder">
+      <action>Determine default destination: same location as source file, folder named after source file without .md extension</action>
+      <action>Example: /path/to/architecture.md → /path/to/architecture/</action>
+      <action>Ask user for the destination folder path ([y] to confirm use of default: [suggested-path], else enter a new path)</action>
+      <action if="user accepts default">Use the suggested destination path</action>
+      <action if="user provides custom path">Use the custom destination path</action>
+      <action>Verify destination folder exists or can be created</action>
+      <action>Check write permissions for destination</action>
+      <action if="permission denied">HALT with error message</action>
+    </step>
+
+    <step n="3" title="Execute Sharding">
+      <action>Inform user that sharding is beginning</action>
+      <action>Execute command: `npx @kayvan/markdown-tree-parser explode [source-document] [destination-folder]`</action>
+      <action>Capture command output and any errors</action>
+      <action if="command fails">HALT and display error to user</action>
+    </step>
+
+    <step n="4" title="Verify Output">
+      <action>Check that destination folder contains sharded files</action>
+      <action>Verify index.md was created in destination folder</action>
+      <action>Count the number of files created</action>
+      <action if="no files created">HALT with error message</action>
+    </step>
+
+    <step n="5" title="Report Completion">
+      <action>Display completion report to user including:</action>
+      <i>- Source document path and name</i>
+      <i>- Destination folder path</i>
+      <i>- Number of section files created</i>
+      <i>- Confirmation that index.md was created</i>
+      <i>- Any tool output or warnings</i>
+      <action>Inform user that sharding completed successfully</action>
+    </step>
+
+    <step n="6" title="Handle Original Document">
+      <critical>Keeping both the original and sharded versions defeats the purpose of sharding and can cause confusion</critical>
+
+      <action>Present user with options for the original document:</action>
+
+      <ask>What would you like to do with the original document `[source-document-name]`?
+
+        Options:
+        [d] Delete - Remove the original (recommended - shards can always be recombined)
+        [m] Move to archive - Move original to a backup/archive location
+        [k] Keep - Leave original in place (NOT recommended - defeats sharding purpose)
+
+        Your choice (d/m/k):</ask>
+
+      <check if="user selects 'd' (delete)">
+        <action>Delete the original source document file</action>
+        <action>Confirm deletion to user: "✓ Original document deleted: [source-document-path]"</action>
+        <note>The document can be reconstructed from shards by concatenating all section files in order</note>
+      </check>
+
+      <check if="user selects 'm' (move)">
+        <action>Determine default archive location: same directory as source, in an "archive" subfolder</action>
+        <action>Example: /path/to/architecture.md → /path/to/archive/architecture.md</action>
+        <ask>Archive location ([y] to use default: [default-archive-path], or provide custom path):</ask>
+        <action if="user accepts default">Use default archive path</action>
+        <action if="user provides custom path">Use custom archive path</action>
+        <action>Create archive directory if it doesn't exist</action>
+        <action>Move original document to archive location</action>
+        <action>Confirm move to user: "✓ Original document moved to: [archive-path]"</action>
+      </check>
+
+      <check if="user selects 'k' (keep)">
+        <action>Display warning to user:</action>
+        <output>⚠️ WARNING: Keeping both original and sharded versions is NOT recommended.
+
+          This creates confusion because:
+          - The discover_inputs protocol may load the wrong version
+          - Updates to one won't reflect in the other
+          - You'll have duplicate content taking up space
+
+          Consider deleting or archiving the original document.</output>
+        <action>Confirm user choice: "Original document kept at: [source-document-path]"</action>
+      </check>
+    </step>
+  </flow>
+
+  <halt-conditions critical="true">
+    <i>HALT if npx command fails or produces no output files</i>
+  </halt-conditions>
+</tool>
+```
+
+## Flow Breakdown
+
+### Step 1: Get Source Document
+**Goal:** Identify the document to shard
+
+**Actions:**
+- Ask user for document path (if not provided)
+- Verify file exists
+- Verify it's markdown (.md extension)
+- Halt if file not found or wrong format
+
+### Step 2: Get Destination Folder
+**Goal:** Determine where sharded files will go
+
+**Default naming:**
+- Source: `annual-review-2025.md`
+- Destination: `annual-review-2025/` (same location)
+
+**Actions:**
+- Suggest default destination
+- Allow user to customize
+- Verify write permissions
+- Create folder if needed
+
+### Step 3: Execute Sharding
+**Goal:** Run the sharding tool
+
+**Command:**
+```bash
+npx @kayvan/markdown-tree-parser explode [source] [destination]
+```
+
+**What it does:**
+- Splits by level 2 headings (`##`)
+- Creates one file per section
+- Generates index.md automatically
+- Preserves markdown formatting
+
+### Step 4: Verify Output
+**Goal:** Confirm sharding succeeded
+
+**Checks:**
+- Destination folder contains files
+- index.md was created
+- Count how many section files created
+- Report any errors
+
+### Step 5: Report Completion
+**Goal:** Inform user of results
+
+**Report includes:**
+- Source document name
+- Destination folder
+- Number of files created
+- Index.md confirmation
+
+### Step 6: Handle Original Document
+**Goal:** Prevent duplicate confusion
+
+**CRITICAL:** Keeping both original and sharded versions causes problems!
+
+**Options:**
+1. **Delete** (recommended) - Remove original, use shards
+2. **Move to archive** - Keep backup but out of the way
+3. **Keep** (not recommended) - Leave original in place (shows warning)
+
+**Why delete is recommended:**
+- Agents won't get confused about which to load
+- No duplicate content taking up space
+- Shards can always be recombined if needed
+- Updates to shards won't be out of sync with original
+
+## Use Cases for Personal Automation
+
+### Use Case 1: Annual Review → Quarterly Shards
+
+**Before sharding:**
+```
+reviews/
+└── annual-review-2025.md  (800 lines, hard to navigate)
+```
+
+**annual-review-2025.md structure:**
+```markdown
+# Annual Review 2025
+
+## Q1 2025
+
+[200 lines of Q1 content]
+
+## Q2 2025
+
+[200 lines of Q2 content]
+
+## Q3 2025
+
+[200 lines of Q3 content]
+
+## Q4 2025
+
+[200 lines of Q4 content]
+```
+
+**After sharding:**
+```
+reviews/
+└── annual-review-2025/
+    ├── index.md
+    ├── q1-2025.md
+    ├── q2-2025.md
+    ├── q3-2025.md
+    └── q4-2025.md
+```
+
+**Benefits:**
+- Load only Q1 when reviewing first quarter
+- Compare Q1 vs Q2 without scrolling through entire doc
+- Agents can selectively load relevant quarter
+
+### Use Case 2: Comprehensive Goal Document → Category Shards
+
+**Before sharding:**
+```
+goals/
+└── 2025-goals.md  (600 lines, all categories mixed)
+```
+
+**2025-goals.md structure:**
+```markdown
+# 2025 Goals
+
+## Financial Goals
+
+[150 lines]
+
+## Health & Fitness Goals
+
+[150 lines]
+
+## Career Development Goals
+
+[150 lines]
+
+## Personal Development Goals
+
+[150 lines]
+```
+
+**After sharding:**
+```
+goals/
+└── 2025-goals/
+    ├── index.md
+    ├── financial-goals.md
+    ├── health-fitness-goals.md
+    ├── career-development-goals.md
+    └── personal-development-goals.md
+```
+
+**Benefits:**
+- Finance Manager agent loads only financial-goals.md
+- Health Tracker agent loads only health-fitness-goals.md
+- Smaller, focused files for each agent
+
+### Use Case 3: Large Research Document → Topic Shards
+
+**Before sharding:**
+```
+career/
+└── ai-research-2025.md  (1000 lines, multiple topics)
+```
+
+**ai-research-2025.md structure:**
+```markdown
+# AI Research 2025
+
+## Machine Learning Fundamentals
+
+[200 lines]
+
+## Neural Networks
+
+[200 lines]
+
+## Natural Language Processing
+
+[200 lines]
+
+## Computer Vision
+
+[200 lines]
+
+## Reinforcement Learning
+
+[200 lines]
+```
+
+**After sharding:**
+```
+career/
+└── ai-research-2025/
+    ├── index.md
+    ├── machine-learning-fundamentals.md
+    ├── neural-networks.md
+    ├── natural-language-processing.md
+    ├── computer-vision.md
+    └── reinforcement-learning.md
+```
+
+**Benefits:**
+- Study one topic at a time
+- Reference specific topics without loading everything
+- Easier to add new topics (just add new file)
+
+### Use Case 4: Budget History → Monthly Shards
+
+**Before sharding:**
+```
+finance/
+└── budget-history-2025.md  (500 lines, 12 months)
+```
+
+**After sharding:**
+```
+finance/
+└── budget-history-2025/
+    ├── index.md
+    ├── january.md
+    ├── february.md
+    ├── march.md
+    └── ... (more months)
+```
+
+**Benefits:**
+- Compare specific months easily
+- Load only relevant months for analysis
+- Add new month without editing large file
+
+## Integration with Documentation Pattern
+
+**Powerful Combination:** Shard → Index
+
+```bash
+# Step 1: Shard large document
+npx @kayvan/markdown-tree-parser explode annual-review-2025.md annual-review-2025/
+
+# Step 2: Index the sharded folder (auto-generated by sharding tool, but can refresh)
+# Run index-docs on annual-review-2025/
+
+# Result: Organized, indexed, navigable content
+```
+
+**The sharding tool automatically creates index.md**, but you can:
+- Re-run index-docs to refresh descriptions
+- Customize the index
+- Add groupings
+
+## Sharding Workflow Template
+
+```xml
+<step n="1" goal="Check document size">
+  <action>Count lines in {document_path}</action>
+
+  <check if="line count > 500">
+    <output>
+Alex: "This document is {{line_count}} lines. That's quite large - would you like me to shard it into smaller sections?"
+    </output>
+
+    <ask>Shard document? (yes/no)</ask>
+
+    <check if="user says yes">
+      <action>Execute shard-doc tool on {document_path}</action>
+      <action>Recommend deleting or archiving original</action>
+    </check>
+  </check>
+
+  <check if="line count <= 500">
+    <output>
+Alex: "Document is {{line_count}} lines - manageable size, no sharding needed."
+    </output>
+  </check>
+</step>
+```
+
+## Document Structure for Sharding
+
+### Good Structure (Easy to Shard)
+
+```markdown
+# Document Title
+
+## Section 1
+Content for section 1
+
+## Section 2
+Content for section 2
+
+## Section 3
+Content for section 3
+```
+
+**Shards into:**
+- section-1.md
+- section-2.md
+- section-3.md
+
+### Problematic Structure
+
+```markdown
+# Document Title
+
+Content without sections...
+
+## Section 1
+Content
+
+More content without sections...
+
+## Section 2
+Content
+```
+
+**Issue:** Content outside sections creates orphan files
+
+**Solution:** Ensure all content is under a level 2 heading
+
+## Best Practices
+
+### 1. Document Structure
+
+**Before sharding, structure your document:**
+- Start with `# Title` (level 1)
+- All content under `## Section Name` (level 2)
+- Subsections use `###` (level 3+)
+- No orphan content between level 2 sections
+
+### 2. Section Naming
+
+**Use descriptive level 2 headings:**
+- ✅ `## Q1 2025 Review`
+- ✅ `## Financial Goals for 2025`
+- ✅ `## Machine Learning Fundamentals`
+- ❌ `## Part 1` (not descriptive)
+- ❌ `## Misc` (too vague)
+
+### 3. Sharding Threshold
+
+**Recommended thresholds:**
+- **500+ lines:** Consider sharding
+- **1000+ lines:** Strongly recommend sharding
+- **200-500 lines:** Optional (depends on content)
+- **<200 lines:** Don't shard (overhead not worth it)
+
+### 4. Original Document Handling
+
+**Recommendation:** **Delete** the original after sharding
+
+**Why:**
+- Prevents confusion (which version is current?)
+- Avoids duplicate content
+- Agents won't load wrong version
+- Can always recombine shards if needed
+
+**If you must keep original:**
+- Move to `archive/` folder
+- Or rename with `.backup.md` extension
+- Don't leave in same location as shards
+
+### 5. Updating Sharded Documents
+
+**To update a section:**
+1. Edit the specific shard file (e.g., `q1-2025.md`)
+2. Save changes
+3. No need to recombine
+
+**To add a new section:**
+1. Create new markdown file in shard folder
+2. Follow naming pattern
+3. Optionally re-run index-docs to update index
+
+**To recombine shards:**
+```bash
+# Concatenate all section files
+cat *.md > combined.md
+```
+
+## Agent Integration
+
+### Finance Manager Agent
+```
+1. Create annual budget document
+2. After completion, ask if user wants to shard by quarter
+3. If yes, run shard-doc
+4. Agent can now load only relevant quarters
+```
+
+### Health Tracker Agent
+```
+1. User has large health log
+2. Agent suggests sharding by month
+3. After sharding, agent loads only current month
+4. Faster, more focused analysis
+```
+
+### Schedule Optimizer Agent
+```
+1. Annual plan document created
+2. Shard by quarter or month
+3. Agent focuses on current period only
+4. Reduces cognitive load
+```
+
+## Workflow Integration Example
+
+```xml
+<step n="FINAL-1" goal="Generate annual review document">
+  <template-output target="{reviews_folder}/annual-review-{{year}}.md" show="user">
+    <!-- Generate full annual review -->
+  </template-output>
+</step>
+
+<step n="FINAL-2" goal="Check if sharding is beneficial">
+  <action>Count lines in annual-review-{{year}}.md</action>
+
+  <check if="line count > 500">
+    <output>
+Alex: "Your annual review is {{line_count}} lines. I recommend sharding it by quarter for easier navigation."
+    </output>
+
+    <ask>Shard into quarterly sections? (yes/no)</ask>
+
+    <check if="user says yes">
+      <action>Execute shard-doc on annual-review-{{year}}.md</action>
+      <action>Destination: annual-review-{{year}}/</action>
+      <action>Recommend deleting original</action>
+
+      <output>
+✓ Annual review sharded into quarters:
+  - q1-{{year}}.md
+  - q2-{{year}}.md
+  - q3-{{year}}.md
+  - q4-{{year}}.md
+
+Each quarter is now a separate, manageable file!
+      </output>
+    </check>
+  </check>
+</step>
+```
+
+## Summary
+
+The sharding pattern provides:
+- ✅ Split large documents into manageable sections
+- ✅ Automatic section file creation
+- ✅ Auto-generated index for navigation
+- ✅ Selective loading (load only what you need)
+- ✅ Better organization
+- ✅ Easier agent integration (agents load relevant sections only)
+- ✅ Reversible (can recombine if needed)
+
+Use this pattern when documents exceed 500 lines or have 10+ logical sections that can be worked on independently.
+
+## Migration Notes
+
+**From BMAD to Personal Automation:**
+- ❌ Remove: Software-specific documents (architecture, PRD, epics)
+- ✅ Keep: Large markdown documents (reviews, goals, research, plans)
+- ✅ Adapt: Shard by time period (quarters, months) or category (financial, health, career)
+
+**Common Personal Documents to Shard:**
+- Annual reviews → Quarterly sections
+- Comprehensive goal docs → Category sections
+- Research documents → Topic sections
+- Budget histories → Monthly sections
+- Learning notes → Course/module sections
+
+**Integration with Other Patterns:**
+- **With Goal Tracking:** Shard large goal documents by category
+- **With Review Pattern:** Shard annual reviews into quarters
+- **With Documentation Pattern:** Auto-index sharded folders
+- **With Workflows:** Auto-shard large outputs
