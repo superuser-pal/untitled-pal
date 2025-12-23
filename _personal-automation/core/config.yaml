@@ -4,20 +4,26 @@ communication_language: English
 document_output_language: English
 
 # Localization
-timezone: America/Los_Angeles
-date_format: YYYY-MM-DD
+timezone: Belgium/Brussels
+date_format: DD-MM-YYYY
 
 # Framework Settings
 framework_version: 1.0.0
 core_path: "{project-root}/_personal-automation/core"
 
-# Domain Paths (each domain is self-contained)
+# Domain Paths (STRICT LIMIT: 5 domains only)
+# Each domain is self-contained with its own agent, workflows, and data
 domains:
   finance: "{project-root}/_personal-automation/domains/finance"
   email: "{project-root}/_personal-automation/domains/email"
-  health: "{project-root}/_personal-automation/domains/health"
-  schedule: "{project-root}/_personal-automation/domains/schedule"
-  career: "{project-root}/_personal-automation/domains/career"
-  goals: "{project-root}/_personal-automation/domains/goals"
-  relationships: "{project-root}/_personal-automation/domains/relationships"
-  home: "{project-root}/_personal-automation/domains/home"
+  writing: "{project-root}/_personal-automation/domains/writing"
+  social-media: "{project-root}/_personal-automation/domains/social-media"
+  framework-lab: "{project-root}/_personal-automation/domains/framework-lab"
+
+# Domain Agents (one per domain)
+agents:
+  sofia: "finance"           # Financial Advisor - Automated audits, total financial visibility
+  elena: "email"             # Email Productivity - Noise filtering, task extraction
+  scribe: "writing"          # Writing Coach - Substack support, research, style/grammar/voice
+  proxy: "social-media"      # Social Media Strategist - Strategic growth for 'Lara Lou'
+  the-architect: "framework-lab"  # Meta-management - OSS, version control, system roadmap
