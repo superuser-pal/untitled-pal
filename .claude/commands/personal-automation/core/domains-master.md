@@ -1,0 +1,1 @@
+../../../../_personal-automation/core/agents/master.md
