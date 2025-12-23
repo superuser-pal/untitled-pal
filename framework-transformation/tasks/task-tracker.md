@@ -12,8 +12,8 @@
 **Goal:** Transform BMAD (software development framework) into a personal/professional automation system by:
 1. Removing software-specific components (BMM module)
 2. Preserving universal core engine
-3. Building personal agents (Finance, Email, Health, Career, etc.)
-4. Creating personal workflows for life management
+3. Building 5 domain-specific agents with strict scope limitation
+4. Creating domain-specific workflows for personal automation
 
 **Timeline:** Self-paced
 **Risk:** LOW (with proper pattern extraction)
@@ -25,10 +25,10 @@
 ```
 Phase 0: Documentation & Planning         ✅ COMPLETED (2025-12-22)
 Phase 1: Pattern Extraction               ✅ COMPLETED (2025-12-22)
-Phase 2: Safe Deletion                    ⏸️ READY
-Phase 3: Core Framework Setup             ⏸️ BLOCKED (awaits Phase 2)
-Phase 4: Build First Agent                ⏸️ BLOCKED (awaits Phase 3)
-Phase 5: Build Additional Agents          ⏸️ BLOCKED (awaits Phase 4)
+Phase 2: Safe Deletion                    ✅ COMPLETED (2025-12-23)
+Phase 3: Core Framework Setup             ✅ COMPLETED (2025-12-23)
+Phase 4: Build 5 Domain Agents            🟡 IN PROGRESS
+Phase 5: Build Domain Workflows           ⏸️ BLOCKED (awaits Phase 4)
 Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
 ```
 
@@ -352,25 +352,36 @@ Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
 
 ---
 
-## Phase 3: Core Framework Setup ⏸️
+## Phase 3: Core Framework Setup ✅
 
-**Purpose:** Create new personal automation framework structure
+**Purpose:** Create new personal automation framework structure with 5 strict domains
 
 **Prerequisites:** Phase 2 complete
 **Estimated Time:** 30 minutes
-**Blocker:** BLOCKED until Phase 2 complete
+**Blocker:** None
+**Completed:** 2025-12-23
+
+### Domain Strategy
+
+**5 Authorized Domains (STRICT LIMIT):**
+1. **finance** - Agent: Sofia - Automated audits and total financial visibility
+2. **email** - Agent: Elena - Noise filtering and task extraction to protect deep work
+3. **writing** - Agent: Scribe - Substack support, research gathering, style/grammar/voice review
+4. **social-media** - Agent: Proxy - Strategic growth of 'Lara Lou' Substack channel
+5. **framework-lab** - Agent: The Architect - Meta-management, OSS guidelines, version control, system roadmap
+
+**Deleted Domains:** career, goals, health, home, relationships, schedule
 
 ### Tasks
 
-- [ ] **3.1** - Create directory structure
+- [x] **3.1** - Create directory structure
   ```bash
   mkdir -p _personal-automation/core/{tasks,workflows,agents}
-  mkdir -p _personal-automation/life-management/{agents,workflows,knowledge}
-  mkdir -p _personal-automation/life-management/workflows/{finance,email,health,career,schedule}
-  mkdir -p _automation-output/life-management/{budgets,email,health,goals}
+  mkdir -p _personal-automation/domains/{finance,email,writing,social-media,framework-lab}
   ```
-  - **Status:** PENDING
-  - **Validation:** All directories exist
+  - **Status:** COMPLETED
+  - **Validation:** ✅ All 5 domain directories exist
+  - **Completed:** 2025-12-23
 
 - [ ] **3.2** - Copy core engine
   ```bash
@@ -451,212 +462,158 @@ Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
   - **Validation:** Changes committed
 
 ### Phase Completion Criteria
-- [ ] Directory structure created
-- [ ] Core engine copied
-- [ ] Configs created
-- [ ] Master agent adapted
-- [ ] Git commit created
-- [ ] **GATE:** Cannot proceed to Phase 4 until complete
+- [x] Directory structure created with 5 strict domains
+- [x] Unauthorized domains deleted (career, goals, health, home, relationships, schedule)
+- [x] Domain strategy documented
+- [x] **GATE PASSED:** Ready to proceed to Phase 4
+
+### Phase Completion
+✅ **Phase 3 Complete** - 5-domain structure created, framework strictly limited
 
 ---
 
-## Phase 4: Build First Agent (Finance Manager) ⏸️
+## Phase 4: Build 5 Domain Agents 🟡
 
-**Purpose:** Create fully functional finance manager agent with one workflow
+**Purpose:** Create 5 domain-specific agents with clear scope boundaries
 
 **Prerequisites:** Phase 3 complete
-**Estimated Time:** 2-3 hours
-**Blocker:** BLOCKED until Phase 3 complete
+**Estimated Time:** 3-4 hours total
+**Blocker:** None
+**Status:** IN PROGRESS
 
-### Tasks
+### Agent Creation Tasks
 
-- [ ] **4.1** - Create finance agent file
+- [ ] **4.1** - Create Sofia (Finance Agent)
   - **Status:** PENDING
-  - **File:** `_personal-automation/life-management/agents/finance-manager.md`
-  - **Use:** Agent template from extracted patterns
-  - **Persona:** Sofia - Personal Finance Advisor
-  - **Validation:** Agent structure complete with activation, persona, menu
+  - **File:** `_personal-automation/domains/finance/agent.md`
+  - **Persona:** Sofia - Financial Advisor
+  - **Goal:** Automated audits and total financial visibility
+  - **Validation:** Agent structure complete
 
-- [ ] **4.2** - Create monthly budget workflow structure
-  ```bash
-  mkdir -p _personal-automation/life-management/workflows/finance/monthly-budget
-  ```
+- [ ] **4.2** - Create Elena (Email Agent)
   - **Status:** PENDING
-  - **Validation:** Directory exists
+  - **File:** `_personal-automation/domains/email/agent.md`
+  - **Persona:** Elena - Email Productivity Specialist
+  - **Goal:** Noise filtering and task extraction
+  - **Validation:** Agent structure complete
 
-- [ ] **4.3** - Create budget workflow.yaml
+- [ ] **4.3** - Create Scribe (Writing Agent)
   - **Status:** PENDING
-  - **File:** `workflows/finance/monthly-budget/workflow.yaml`
-  - **Content:** Config, variables, paths
-  - **Validation:** Valid YAML with all required fields
+  - **File:** `_personal-automation/domains/writing/agent.md`
+  - **Persona:** Scribe - Writing Coach
+  - **Goal:** Substack support, research, style/grammar/voice review
+  - **Validation:** Agent structure complete
 
-- [ ] **4.4** - Create budget instructions.xml
+- [ ] **4.4** - Create Proxy (Social Media Agent)
   - **Status:** PENDING
-  - **File:** `workflows/finance/monthly-budget/instructions.xml`
-  - **Content:** Step-by-step budget creation logic
-  - **Steps:**
-    1. Load previous budget (if exists)
-    2. Collect income sources
-    3. List fixed expenses
-    4. Allocate variable spending
-    5. Review and balance
-  - **Validation:** All steps have template-output or ask tags
+  - **File:** `_personal-automation/domains/social-media/agent.md`
+  - **Persona:** Proxy - Social Media Strategist
+  - **Goal:** Strategic growth of 'Lara Lou' Substack channel
+  - **Validation:** Agent structure complete
 
-- [ ] **4.5** - Create budget template
+- [ ] **4.5** - Create The Architect (Framework Lab Agent)
   - **Status:** PENDING
-  - **File:** `workflows/finance/monthly-budget/budget-template.md`
-  - **Content:** Markdown template for budget output
-  - **Validation:** Template has placeholders for all sections
+  - **File:** `_personal-automation/domains/framework-lab/agent.md`
+  - **Persona:** The Architect - Meta-management Specialist
+  - **Goal:** Project overview, OSS guidelines, version control, system roadmap
+  - **Validation:** Agent structure complete
 
-- [ ] **4.6** - Add agent to manifest
+- [ ] **4.6** - Update agent manifest
   - **Status:** PENDING
   - **File:** `_bmad/_config/agent-manifest.csv`
-  - **Action:** Add row for finance-manager
-  - **Validation:** CSV row added correctly
+  - **Action:** Add all 5 domain agents
+  - **Validation:** CSV rows added correctly
 
-- [ ] **4.7** - Add workflow to manifest
-  - **Status:** PENDING
-  - **File:** `_bmad/_config/workflow-manifest.csv`
-  - **Action:** Add row for monthly-budget workflow
-  - **Validation:** CSV row added correctly
-
-- [ ] **4.8** - Test agent loading
-  - **Status:** PENDING
-  - **Action:** Load finance-manager agent
-  - **Validation:** Agent loads, config loads, menu displays
-
-- [ ] **4.9** - Test workflow execution
-  - **Status:** PENDING
-  - **Action:** Execute monthly-budget workflow
-  - **Validation:** Workflow completes, output file created
-
-- [ ] **4.10** - Git checkpoint
+- [ ] **4.7** - Git checkpoint
   ```bash
   git add .
-  git commit -m "Phase 4 complete: Finance manager agent working"
+  git commit -m "Phase 4 complete: All 5 domain agents created"
   ```
   - **Status:** PENDING
   - **Validation:** Changes committed
 
 ### Phase Completion Criteria
-- [ ] Finance agent created
-- [ ] Monthly budget workflow working
-- [ ] Agent loads successfully
-- [ ] Workflow produces output
-- [ ] Manifests updated
+- [ ] All 5 agents created (Sofia, Elena, Scribe, Proxy, The Architect)
+- [ ] Each agent has clear persona and goal
+- [ ] Agent manifest updated
 - [ ] Git commit created
 - [ ] **GATE:** Cannot proceed to Phase 5 until complete
 
 ---
 
-## Phase 5: Build Additional Agents ⏸️
+## Phase 5: Build Domain Workflows ⏸️
 
-**Purpose:** Expand framework with more personal agents
+**Purpose:** Create initial workflows for each of the 5 domains
 
 **Prerequisites:** Phase 4 complete
-**Estimated Time:** 2-3 hours per agent
+**Estimated Time:** 4-5 hours total
 **Blocker:** BLOCKED until Phase 4 complete
 
-### Agent 2: Email Processor
+### Domain 1: Finance (Sofia)
 
-- [ ] **5.1** - Create email processor agent
+- [ ] **5.1** - Create monthly budget workflow
   - **Status:** PENDING
-  - **File:** `agents/email-processor.md`
-  - **Persona:** Elena - Email Productivity Specialist
+  - **Directory:** `_personal-automation/domains/finance/workflows/monthly-budget/`
+  - **Purpose:** Create and track monthly budget
 
-- [ ] **5.2** - Create email triage workflow
+- [ ] **5.2** - Create expense audit workflow
   - **Status:** PENDING
-  - **Workflow:** `workflows/email/daily-triage/`
+  - **Directory:** `_personal-automation/domains/finance/workflows/expense-audit/`
+  - **Purpose:** Analyze spending patterns
+
+### Domain 2: Email (Elena)
+
+- [ ] **5.3** - Create inbox triage workflow
+  - **Status:** PENDING
+  - **Directory:** `_personal-automation/domains/email/workflows/inbox-triage/`
   - **Purpose:** Process inbox to zero
 
-- [ ] **5.3** - Create task extraction workflow
+- [ ] **5.4** - Create task extraction workflow
   - **Status:** PENDING
-  - **Workflow:** `workflows/email/extract-tasks/`
+  - **Directory:** `_personal-automation/domains/email/workflows/extract-tasks/`
   - **Purpose:** Extract action items from emails
 
-- [ ] **5.4** - Test email agent
+### Domain 3: Writing (Scribe)
+
+- [ ] **5.5** - Create research collection workflow
   - **Status:** PENDING
-  - **Validation:** Both workflows execute successfully
+  - **Directory:** `_personal-automation/domains/writing/workflows/research-collection/`
+  - **Purpose:** Gather and organize research for Substack posts
 
-- [ ] **5.5** - Git checkpoint
-  ```bash
-  git commit -m "Added email processor agent"
-  ```
-
-### Agent 3: Health Tracker
-
-- [ ] **5.6** - Create health tracker agent
+- [ ] **5.6** - Create draft review workflow
   - **Status:** PENDING
-  - **File:** `agents/health-tracker.md`
-  - **Persona:** Dr. Ava - Health & Wellness Coach
+  - **Directory:** `_personal-automation/domains/writing/workflows/draft-review/`
+  - **Purpose:** Review style, grammar, and voice
 
-- [ ] **5.7** - Create workout logging workflow
+### Domain 4: Social Media (Proxy)
+
+- [ ] **5.7** - Create content calendar workflow
   - **Status:** PENDING
-  - **Workflow:** `workflows/health/workout-log/`
+  - **Directory:** `_personal-automation/domains/social-media/workflows/content-calendar/`
+  - **Purpose:** Plan Substack publishing schedule
 
-- [ ] **5.8** - Create meal planning workflow
+- [ ] **5.8** - Create growth analysis workflow
   - **Status:** PENDING
-  - **Workflow:** `workflows/health/meal-prep/`
+  - **Directory:** `_personal-automation/domains/social-media/workflows/growth-analysis/`
+  - **Purpose:** Track 'Lara Lou' channel metrics
 
-- [ ] **5.9** - Test health agent
+### Domain 5: Framework Lab (The Architect)
+
+- [ ] **5.9** - Create roadmap planning workflow
   - **Status:** PENDING
+  - **Directory:** `_personal-automation/domains/framework-lab/workflows/roadmap-planning/`
+  - **Purpose:** Plan system enhancements
 
-- [ ] **5.10** - Git checkpoint
-  ```bash
-  git commit -m "Added health tracker agent"
-  ```
-
-### Agent 4: Schedule Optimizer
-
-- [ ] **5.11** - Create schedule optimizer agent
+- [ ] **5.10** - Create version control workflow
   - **Status:** PENDING
-  - **File:** `agents/schedule-optimizer.md`
-  - **Persona:** Alex - Productivity & Time Management Expert
-
-- [ ] **5.12** - Create daily planning workflow
-  - **Status:** PENDING
-  - **Workflow:** `workflows/schedule/daily-plan/`
-
-- [ ] **5.13** - Create weekly review workflow
-  - **Status:** PENDING
-  - **Workflow:** `workflows/schedule/weekly-review/`
-
-- [ ] **5.14** - Test schedule agent
-  - **Status:** PENDING
-
-- [ ] **5.15** - Git checkpoint
-  ```bash
-  git commit -m "Added schedule optimizer agent"
-  ```
-
-### Agent 5: Career Advisor
-
-- [ ] **5.16** - Create career advisor agent
-  - **Status:** PENDING
-  - **File:** `agents/career-advisor.md`
-  - **Persona:** Marcus - Career Development Strategist
-
-- [ ] **5.17** - Create skill tracking workflow
-  - **Status:** PENDING
-  - **Workflow:** `workflows/career/skill-tracker/`
-
-- [ ] **5.18** - Create goal progress workflow
-  - **Status:** PENDING
-  - **Workflow:** `workflows/career/goal-progress/`
-
-- [ ] **5.19** - Test career agent
-  - **Status:** PENDING
-
-- [ ] **5.20** - Git checkpoint
-  ```bash
-  git commit -m "Added career advisor agent"
-  ```
+  - **Directory:** `_personal-automation/domains/framework-lab/workflows/version-control/`
+  - **Purpose:** Manage framework versions
 
 ### Phase Completion Criteria
-- [ ] All 5 agents created (Finance, Email, Health, Schedule, Career)
-- [ ] Each agent has at least 2 working workflows
-- [ ] All agents tested independently
-- [ ] Manifests fully updated
+- [ ] Each domain has at least 2 workflows
+- [ ] All workflows tested
+- [ ] Workflow manifest updated
+- [ ] Git commit created
 - [ ] **GATE:** Cannot proceed to Phase 6 until complete
 
 ---
@@ -673,20 +630,20 @@ Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
 
 - [ ] **6.1** - Test party mode with 2 agents
   - **Status:** PENDING
-  - **Agents:** Finance + Email
-  - **Question:** "Should I unsubscribe from this $20/month newsletter?"
+  - **Agents:** Sofia (Finance) + Elena (Email)
+  - **Scenario:** "Should I unsubscribe from this $20/month newsletter?"
   - **Validation:** Both agents contribute meaningfully
 
 - [ ] **6.2** - Test party mode with 3 agents
   - **Status:** PENDING
-  - **Agents:** Finance + Health + Schedule
-  - **Question:** "Should I join this $100/month gym?"
+  - **Agents:** Sofia (Finance) + Scribe (Writing) + Proxy (Social Media)
+  - **Scenario:** "Should I invest in a Substack paid tier?"
   - **Validation:** Three perspectives integrated
 
 - [ ] **6.3** - Test party mode with all 5 agents
   - **Status:** PENDING
-  - **Agents:** All
-  - **Question:** "Should I quit my job and start a business?"
+  - **Agents:** Sofia, Elena, Scribe, Proxy, The Architect
+  - **Scenario:** "Should I add a new domain to the framework?"
   - **Validation:** All agents contribute, discussion is coherent
 
 - [ ] **6.4** - Test workflow chaining
@@ -746,49 +703,44 @@ Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
 
 - [ ] **INT-1** - Connect to email API (Gmail/Outlook)
   - **Status:** FUTURE
-  - **Purpose:** Automated email fetching
+  - **Purpose:** Automated email fetching for Elena
   - **Blocker:** Requires API credentials
 
 - [ ] **INT-2** - Connect to bank API (Plaid)
   - **Status:** FUTURE
-  - **Purpose:** Automated transaction import
+  - **Purpose:** Automated transaction import for Sofia
   - **Blocker:** Requires API credentials
 
-- [ ] **INT-3** - Connect to calendar API (Google Calendar)
+- [ ] **INT-3** - Connect to Substack API
   - **Status:** FUTURE
-  - **Purpose:** Automated schedule optimization
+  - **Purpose:** Automated publishing and analytics for Scribe/Proxy
   - **Blocker:** Requires API credentials
 
-- [ ] **INT-4** - Connect to task manager (Todoist/Things)
+### Domain Enhancements (Post-MVP)
+
+- [ ] **ENH-1** - Finance: Investment tracking workflow
   - **Status:** FUTURE
-  - **Purpose:** Export tasks from email workflows
-  - **Blocker:** Requires API credentials
+  - **Domain:** Sofia
 
-### Additional Agents (Post-MVP)
-
-- [ ] **AGT-1** - Home Manager agent
+- [ ] **ENH-2** - Email: Newsletter digest workflow
   - **Status:** FUTURE
-  - **Workflows:** Maintenance reminders, inventory tracking
+  - **Domain:** Elena
 
-- [ ] **AGT-2** - Relationship Manager agent
+- [ ] **ENH-3** - Writing: Idea repository workflow
   - **Status:** FUTURE
-  - **Workflows:** Birthday tracking, gift ideas, stay-in-touch reminders
+  - **Domain:** Scribe
 
-- [ ] **AGT-3** - Learning Tracker agent
+- [ ] **ENH-4** - Social Media: Engagement tracking workflow
   - **Status:** FUTURE
-  - **Workflows:** Course progress, reading lists, skill assessments
+  - **Domain:** Proxy
 
-- [ ] **AGT-4** - Travel Planner agent
+- [ ] **ENH-5** - Framework Lab: Performance monitoring workflow
   - **Status:** FUTURE
-  - **Workflows:** Trip planning, packing lists, budget tracking
+  - **Domain:** The Architect
 
-### Advanced Workflows (Post-MVP)
+### STRICT POLICY: No New Domains
 
-- [ ] **WF-1** - Annual financial review
-- [ ] **WF-2** - Quarterly goal check-ins
-- [ ] **WF-3** - Health trend analysis
-- [ ] **WF-4** - Career progression planning
-- [ ] **WF-5** - Life balance assessment
+**IMPORTANT:** The 5 domains (finance, email, writing, social-media, framework-lab) are FIXED. Any future features MUST fit within one of these existing domains. New domains require explicit authorization and documented rationale.
 
 ---
 
@@ -833,21 +785,21 @@ Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
 
 **Last Updated:** 2025-12-23
 
-### Overall Progress: 43%
+### Overall Progress: 50%
 
 - Phase 0 (Documentation): 100% ✅ COMPLETED
 - Phase 1 (Pattern Extraction): 100% ✅ COMPLETED
-- Phase 2 (Deletion): 100% ✅ COMPLETED
-- Phase 3 (Core Setup): 0% ⏸️ READY
-- Phase 4 (First Agent): 0% ⏸️ BLOCKED
-- Phase 5 (Additional Agents): 0% ⏸️ BLOCKED
+- Phase 2 (Safe Deletion): 100% ✅ COMPLETED
+- Phase 3 (Core Setup): 100% ✅ COMPLETED
+- Phase 4 (Build 5 Agents): 0% 🟡 IN PROGRESS
+- Phase 5 (Domain Workflows): 0% ⏸️ BLOCKED
 - Phase 6 (Testing): 0% ⏸️ BLOCKED
 
 ### Next Actions
 
-1. **IMMEDIATE:** Begin Phase 3 - Core Framework Setup
-2. **NEXT:** Create directory structure for personal automation
-3. **THEN:** Build first agent (Finance Manager)
+1. **IMMEDIATE:** Create agent files for all 5 domains
+2. **NEXT:** Build initial workflows for each domain
+3. **THEN:** Test multi-agent collaboration via party mode
 
 ---
 
@@ -873,7 +825,13 @@ Phase 6: Testing & Refinement             ⏸️ BLOCKED (awaits Phase 5)
   - Decided to KEEP: Excalidraw workflows, workflow-status (adaptable to personal use)
   - Created backup: _bmad-backup-20251223-092952/
   - Git commits: Pre-deletion checkpoint + Phase 2 completion
-- Ready to begin Phase 3 (Core Framework Setup)
+- Phase 3 (Core Framework Setup) completed
+  - Created 5-domain structure (finance, email, writing, social-media, framework-lab)
+  - Deleted unauthorized domains (career, goals, health, home, relationships, schedule)
+  - Documented strict domain limitation policy
+  - Defined 5 agents: Sofia, Elena, Scribe, Proxy, The Architect
+- Phase 4 (Build 5 Domain Agents) - IN PROGRESS
+- Task tracker updated to reflect 5-domain strategy
 
 ---
 
