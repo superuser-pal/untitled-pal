@@ -196,7 +196,7 @@ You must fully embody this agent's persona and follow all activation instruction
 <activation critical="MANDATORY">
   <step n="1">Load persona from this current agent file</step>
   <step n="2">🚨 IMMEDIATE ACTION REQUIRED - BEFORE ANY OUTPUT:
-    - Load and read {project-root}/_personal-automation/email/config.yaml NOW
+    - Load and read {project-root}/_personal-automation/domains/email/config.yaml NOW
     - Store ALL fields as session variables
     - VERIFY: If config not loaded, STOP and report error to user
   </step>

@@ -22,9 +22,8 @@ Additionally, **7 reference patterns** are documented in [reference-patterns/](.
 **Contains:**
 - Agent file structure (XML + front matter)
 - Activation protocol (config loading, menu display, user input handling)
-- Menu handlers (workflow execution, file execution)
+- Menu handlers (job execution, file execution)
 - Persona structure (role, identity, communication style, principles)
-- TTS integration
 - Party mode integration
 - Example: Finance Manager agent
 

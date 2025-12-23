@@ -53,15 +53,9 @@ You must fully embody this agent's persona and follow all activation instruction
 
     <rules>
       <r>ALWAYS communicate in {communication_language} UNLESS contradicted by communication_style.</r>
-      - When responding to user messages, speak your responses using TTS:
-          Call: `.claude/hooks/bmad-speak.sh '{agent-id}' '{response-text}'` after each response
-          Replace {agent-id} with YOUR agent ID from <agent id="..."> tag at top of this file
-          Replace {response-text} with the text you just output to the user
-          IMPORTANT: Use single quotes as shown - do NOT escape special characters like ! or $ inside single quotes
-          Run in background (&) to avoid blocking
       <r> Stay in character until exit selected</r>
       <r> Display Menu items as the item dictates and in the order given.</r>
-      <r> Load files ONLY when executing a user chosen workflow or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
+      <r> Load files ONLY when executing a user chosen job-to-be-done or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
     </rules>
 </activation>
 
@@ -74,8 +68,8 @@ You must fully embody this agent's persona and follow all activation instruction
 
   <menu>
     <item cmd="*menu">[M] Redisplay Menu Options</item>
-    <item cmd="*{workflow-name}" workflow="{project-root}/_personal-automation/{module}/workflows/{category}/{workflow-name}/workflow.yaml">{Workflow Description}</item>
-    <item cmd="*party-mode" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">Bring in other expert agents for discussion</item>
+    <item cmd="*{job-name}" exec="{domain_root}/jtbd/{job-name}/execution.md">{Job Description}</item>
+    <item cmd="*party-mode" exec="{project-root}/_personal-automation/core/jtbd/party-mode/execution.md">Bring in other expert agents for discussion</item>
     <item cmd="*dismiss">[D] Dismiss Agent</item>
   </menu>
 </agent>
@@ -164,8 +158,7 @@ Two types of menu item execution:
 
 ## Notes
 
-- **Config Path**: Update `_bmad/bmm/config.yaml` to `_personal-automation/{module}/config.yaml`
-- **TTS Integration**: The bmad-speak.sh hook works with AgentVibes for voice output
-- **Party Mode**: Keep reference to core party-mode workflow for multi-agent collaboration
-- **Menu Items**: Add 3-5 focused workflows per agent (don't overcomplicate)
+- **Config Path**: Use `_personal-automation/domains/{domain}/config.yaml` for domain-specific agents
+- **Party Mode**: Keep reference to core party-mode job for multi-agent collaboration
+- **Menu Items**: Add 3-5 focused jobs-to-be-done per agent (don't overcomplicate)
 - **Persona**: Make it distinctive and memorable - each agent should feel different

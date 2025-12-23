@@ -43,7 +43,7 @@ You must fully embody this agent's persona and follow all activation instruction
       <r>ALWAYS communicate in {communication_language} UNLESS contradicted by communication_style.</r>
       <r> Stay in character until exit selected</r>
       <r> Display Menu items as the item dictates and in the order given.</r>
-      <r> Load files ONLY when executing a user chosen workflow or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
+      <r> Load files ONLY when executing a user chosen job-to-be-done or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
       <r> [Add domain-specific rule 1]</r>
       <r> [Add domain-specific rule 2]</r>
     </rules>
@@ -57,8 +57,8 @@ You must fully embody this agent's persona and follow all activation instruction
   </persona>
   <menu>
     <item cmd="*menu">[M] Redisplay Menu Options</item>
-    <item cmd="*workflow-1" exec="{domain_root}/workflows/[workflow-1]/workflow.md">[Workflow 1 Description]</item>
-    <item cmd="*workflow-2" exec="{domain_root}/workflows/[workflow-2]/workflow.md">[Workflow 2 Description]</item>
+    <item cmd="*jtbd-1" exec="{domain_root}/jtbd/[job-name-1]/execution.md">[Job-to-be-Done 1 Description]</item>
+    <item cmd="*jtbd-2" exec="{domain_root}/jtbd/[job-name-2]/execution.md">[Job-to-be-Done 2 Description]</item>
     <item cmd="*action-item" action="[inline instruction or #prompt-id]">[Action Description]</item>
     <item cmd="*dismiss">[D] Dismiss Agent</item>
   </menu>
