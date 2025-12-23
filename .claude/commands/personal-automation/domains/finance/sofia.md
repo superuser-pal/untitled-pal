@@ -1,0 +1,1 @@
+../../../../../_personal-automation/domains/finance/agent.md
