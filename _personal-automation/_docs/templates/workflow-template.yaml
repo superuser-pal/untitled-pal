@@ -1,0 +1,24 @@
+name: [workflow-name]
+description: [What this workflow accomplishes]
+domain: [domain-name]
+version: 1.0.0
+
+variables:
+  workflow_name: "[workflow-name]"
+  output_file: "{domain_root}/output/{current_date}-[output-name].md"
+  data_folder: "{domain_root}/data"
+  knowledge_folder: "{domain_root}/knowledge"
+
+inputs:
+  - name: [input_1]
+    description: [What is this input for?]
+    required: true
+  - name: [input_2]
+    description: [What is this input for?]
+    required: false
+    default: "[default value]"
+
+outputs:
+  - name: [output_1]
+    path: "{output_file}"
+    description: [What gets generated]

@@ -1,0 +1,490 @@
+# Workflow Instructions Patterns - Personal Automation Framework
+# Extracted from BMAD workflow instructions on 2025-12-22
+
+This document shows common XML patterns used in workflow instructions.md files.
+
+## Critical Header Block
+
+Every instructions.md file must start with:
+
+```xml
+# {Workflow Name} Instructions
+
+<critical>The workflow execution engine is governed by: {project-root}/_bmad/core/tasks/workflow.xml</critical>
+<critical>You MUST have already loaded and processed: {project-root}/path/to/workflow.yaml</critical>
+<critical>Communicate all responses in {communication_language}</critical>
+<critical>Generate all documents in {document_output_language}</critical>
+```
+
+## Core XML Tags
+
+### 1. `<workflow>` - Container
+Wraps all workflow steps:
+
+```xml
+<workflow>
+  <step n="1" goal="First step description">
+    <!-- Step content -->
+  </step>
+
+  <step n="2" goal="Second step description">
+    <!-- Step content -->
+  </step>
+</workflow>
+```
+
+### 2. `<step>` - Workflow Step
+Define individual workflow steps:
+
+```xml
+<step n="1" goal="Brief description of what this step achieves">
+  <!-- Actions, checks, outputs, asks -->
+</step>
+```
+
+**Attributes:**
+- `n`: Step number (can be decimal like "0.5" for inserted steps)
+- `goal`: Short description of step purpose
+
+### 3. `<action>` - Do Something
+Instructs the AI to perform an action:
+
+```xml
+<action>Load the file at {path_variable}</action>
+<action>Extract user's spending categories from previous budget</action>
+<action>Calculate total income from all sources</action>
+<action>Set {{monthly_income}} = calculated total</action>
+```
+
+**Common Actions:**
+- Load/read files
+- Calculate values
+- Set variables
+- Process data
+- Transform information
+
+### 4. `<output>` - Display to User
+Generate output for user to see:
+
+```xml
+<output>
+Bob (Budget Advisor): "I found your previous budget from last month. Let me use that as a starting point, {user_name}."
+
+**Previous Budget Summary:**
+- Income: ${{previous_income}}
+- Expenses: ${{previous_expenses}}
+- Savings: ${{previous_savings}}
+</output>
+```
+
+**Patterns:**
+- Use agent persona name: "Name (Role): dialogue"
+- Include user name via {user_name}
+- Format data clearly (tables, lists, bold)
+- Show calculations and reasoning
+
+### 5. `<ask>` - Get User Input
+Prompt user for information:
+
+```xml
+<ask>What is your total monthly income from all sources?</ask>
+<action>Store response as {{monthly_income}}</action>
+```
+
+**With Conditional:**
+```xml
+<ask if="{{has_previous_budget}} == false">What is your total monthly income?</ask>
+```
+
+**Best Practices:**
+- Ask one clear question
+- Provide context if needed
+- Store answer in variable immediately after
+
+### 6. `<check>` - Conditional Logic
+Branching logic based on conditions:
+
+```xml
+<check if="{{monthly_income}} > 0">
+  <action>Proceed with budget creation</action>
+  <output>Great! Let's allocate your ${{monthly_income}}.</output>
+</check>
+
+<check if="{{monthly_income}} <= 0">
+  <output>Error: Income must be greater than zero.</output>
+  <action>HALT</action>
+</check>
+```
+
+**Nested Checks:**
+```xml
+<check if="{{has_previous_budget}} == true">
+  <ask>Would you like to use last month's budget as a template? (yes/no)</ask>
+
+  <check if="user says yes">
+    <action>Load previous budget structure</action>
+  </check>
+
+  <check if="user says no">
+    <action>Start from scratch</action>
+  </check>
+</check>
+```
+
+### 7. `<template-output>` - Generate Document
+Create output document from template:
+
+```xml
+<template-output target="{output_file}" show="user">
+Apply the template at {template} with these variables:
+
+**Variables to populate:**
+- {user_name}: {{user_name}}
+- {date}: {{date}}
+- {monthly_income}: {{monthly_income}}
+- {fixed_expenses}: {{fixed_expenses_total}}
+- {variable_budget}: {{variable_budget_total}}
+- {savings_goal}: {{savings_goal}}
+
+<yolo>Automatically populate template and save to {output_file}</yolo>
+</template-output>
+```
+
+**Attributes:**
+- `target`: Output file path
+- `show`: "user" (show output) or "silent" (just save)
+
+**YOLO Mode:**
+- `<yolo>` tag enables auto-execution
+- User can select "y" at prompt to auto-complete workflow
+
+### 8. `<invoke-protocol>` - Call Sub-Routine
+Execute reusable workflow components:
+
+```xml
+<invoke-protocol name="discover_inputs" />
+```
+
+**Common Protocols:**
+- `discover_inputs`: Smart file loading from workflow.yaml patterns
+- Custom protocols defined in workflow.xml
+
+### 9. `<note>` - Documentation
+Add comments for clarity:
+
+```xml
+<note>This step loads previous budgets to give context for new budget creation</note>
+```
+
+## Common Patterns
+
+### Pattern 1: Load Previous Data (Optional)
+
+```xml
+<step n="1" goal="Load previous data if available">
+  <action>Check if previous file exists: {output_folder}/budget-*.md</action>
+
+  <check if="previous file exists">
+    <action>Read most recent budget file</action>
+    <action>Extract categories and amounts</action>
+    <action>Set {{has_previous_budget}} = true</action>
+
+    <output>
+Sofia (Finance Advisor): "I found your budget from {{previous_month}}. Let's use that as a starting point!"
+    </output>
+  </check>
+
+  <check if="previous file does not exist">
+    <action>Set {{has_previous_budget}} = false</action>
+
+    <output>
+Sofia (Finance Advisor): "Looks like this is your first budget. No worries - we'll build it together from scratch!"
+    </output>
+  </check>
+</step>
+```
+
+### Pattern 2: Collect Information
+
+```xml
+<step n="2" goal="Collect user's financial information">
+  <output>
+Sofia (Finance Advisor): "Let's start with your income sources, {user_name}."
+  </output>
+
+  <ask>What is your total monthly income after taxes?</ask>
+  <action>Store as {{monthly_income}}</action>
+
+  <ask>Do you have any additional income sources (side gigs, investments)? If yes, what's the total?</ask>
+  <action>Store as {{additional_income}}</action>
+
+  <action>Calculate {{total_income}} = {{monthly_income}} + {{additional_income}}</action>
+
+  <output>
+**Total Monthly Income:** ${{total_income}}
+  </output>
+</step>
+```
+
+### Pattern 3: Iterative List Building
+
+```xml
+<step n="3" goal="Collect fixed expenses">
+  <action>Initialize {{fixed_expenses}} = empty list</action>
+
+  <output>
+Sofia (Finance Advisor): "Now let's list your fixed monthly expenses (rent, utilities, insurance, etc.)."
+  </output>
+
+  <action>Loop until user says "done":</action>
+
+  <ask>Expense name (or type "done" to finish):</ask>
+  <action>Store as {{expense_name}}</action>
+
+  <check if="{{expense_name}} != 'done'">
+    <ask>Amount for {{expense_name}}?</ask>
+    <action>Store as {{expense_amount}}</action>
+    <action>Add to {{fixed_expenses}} list</action>
+  </check>
+
+  <action>Calculate {{fixed_expenses_total}} = sum of all amounts</action>
+
+  <output>
+**Fixed Expenses Total:** ${{fixed_expenses_total}}
+  </output>
+</step>
+```
+
+### Pattern 4: Review and Confirmation
+
+```xml
+<step n="4" goal="Review budget with user">
+  <output>
+Sofia (Finance Advisor): "Here's your budget summary, {user_name}. Let's review before I save it."
+
+**Monthly Budget Summary**
+
+**Income:**
+- Total Income: ${{total_income}}
+
+**Expenses:**
+- Fixed Expenses: ${{fixed_expenses_total}}
+- Variable Budget: ${{variable_budget_total}}
+- Total Expenses: ${{total_expenses}}
+
+**Savings:**
+- Monthly Savings: ${{monthly_savings}}
+- Savings Rate: {{savings_percentage}}%
+
+**Remaining:** ${{remaining_balance}}
+  </output>
+
+  <ask>Does this look correct? (yes/no/edit)</ask>
+
+  <check if="user says no or edit">
+    <ask>What would you like to change?</ask>
+    <action>Make requested adjustments</action>
+    <action>Recalculate totals</action>
+    <action>Return to review step</action>
+  </check>
+</step>
+```
+
+### Pattern 5: Template Output with YOLO
+
+```xml
+<step n="5" goal="Generate and save budget document">
+  <output>
+Sofia (Finance Advisor): "Perfect! Let me create your budget document."
+  </output>
+
+  <template-output target="{output_file}" show="user">
+Using template at {template}, populate with:
+
+**Budget Variables:**
+- user_name: {user_name}
+- date: {{date}}
+- total_income: ${{total_income}}
+- fixed_expenses_list: {{fixed_expenses}}
+- fixed_expenses_total: ${{fixed_expenses_total}}
+- variable_budget_total: ${{variable_budget_total}}
+- savings_goal: ${{monthly_savings}}
+- savings_percentage: {{savings_percentage}}%
+
+Generate complete budget document with all categories, amounts, and totals.
+
+<yolo>Auto-generate document and save to {output_file}</yolo>
+  </template-output>
+
+  <output>
+Sofia (Finance Advisor): "Done! Your budget is saved at: {output_file}"
+
+Next steps:
+- Review your budget weekly
+- Track spending against categories
+- Adjust if needed next month
+  </output>
+</step>
+```
+
+### Pattern 6: Multi-Agent Dialogue
+
+```xml
+<output>
+Sofia (Finance Advisor): "I think we should increase the emergency fund allocation, {user_name}."
+
+Dr. Ava (Health Coach): "Good point, Sofia. But let's make sure {user_name} has enough for healthy groceries too."
+
+Alex (Schedule Optimizer): "Also consider that gym membership we discussed. That's a health investment."
+
+Sofia (Finance Advisor): "Fair points. {user_name}, how do you want to prioritize these?"
+</output>
+```
+
+**Format:** `Name (Role): "dialogue"`
+
+### Pattern 7: Error Handling
+
+```xml
+<check if="{{total_expenses}} > {{total_income}}">
+  <output>
+⚠️ **Warning:** Your expenses (${{total_expenses}}) exceed your income (${{total_income}})!
+
+Sofia (Finance Advisor): "{user_name}, we need to adjust your budget. You're overspending by ${{deficit}}."
+  </output>
+
+  <ask>Would you like to:
+1. Reduce expenses
+2. Find ways to increase income
+3. Save anyway but acknowledge the deficit</ask>
+
+  <action>Handle based on user choice</action>
+</check>
+```
+
+## Variable Naming Conventions
+
+### Workflow Variables (from YAML)
+Use `{variable}` - single braces:
+- `{user_name}` - from config
+- `{output_folder}` - from config
+- `{template}` - from workflow.yaml
+- `{output_file}` - from workflow.yaml
+
+### Runtime Variables (set during execution)
+Use `{{variable}}` - double braces:
+- `{{monthly_income}}` - user input
+- `{{total_expenses}}` - calculated
+- `{{epic_number}}` - determined at runtime
+- `{{has_previous_budget}}` - boolean flag
+
+## Complete Workflow Example
+
+```xml
+# Monthly Budget Workflow Instructions
+
+<critical>The workflow execution engine is governed by: {project-root}/_bmad/core/tasks/workflow.xml</critical>
+<critical>You MUST have already loaded and processed: {project-root}/_personal-automation/life-management/workflows/finance/monthly-budget/workflow.yaml</critical>
+<critical>Communicate all responses in {communication_language}</critical>
+<critical>Generate all documents in {document_output_language}</critical>
+
+<workflow>
+
+<step n="1" goal="Load previous budget if available">
+  <action>Check for previous budget files in {budget_folder}</action>
+
+  <check if="previous budget exists">
+    <action>Read most recent budget</action>
+    <output>
+Sofia (Finance Advisor): "Hi {user_name}! I found your budget from last month. Want to use it as a starting point?"
+    </output>
+    <ask>Use previous budget as template? (yes/no)</ask>
+  </check>
+</step>
+
+<step n="2" goal="Collect income information">
+  <output>
+Sofia (Finance Advisor): "Let's start with your income sources."
+  </output>
+
+  <ask>What's your total monthly income after taxes?</ask>
+  <action>Store as {{monthly_income}}</action>
+</step>
+
+<step n="3" goal="Collect and categorize expenses">
+  <output>
+Sofia (Finance Advisor): "Now let's categorize your expenses."
+  </output>
+
+  <action>Collect fixed expenses (rent, utilities, insurance)</action>
+  <action>Collect variable expenses (groceries, entertainment, gas)</action>
+  <action>Calculate totals</action>
+</step>
+
+<step n="4" goal="Set savings goals">
+  <action>Calculate {{remaining}} = {{monthly_income}} - {{total_expenses}}</action>
+
+  <output>
+Sofia (Finance Advisor): "You have ${{remaining}} left after expenses. Let's set a savings goal."
+  </output>
+
+  <ask>How much would you like to save this month?</ask>
+  <action>Store as {{savings_goal}}</action>
+</step>
+
+<step n="5" goal="Review and confirm">
+  <output>
+**Budget Summary**
+- Income: ${{monthly_income}}
+- Expenses: ${{total_expenses}}
+- Savings: ${{savings_goal}}
+- Remaining: ${{final_remaining}}
+  </output>
+
+  <ask>Looks good? (yes/no)</ask>
+</step>
+
+<step n="6" goal="Generate budget document">
+  <template-output target="{output_file}" show="user">
+Populate template {template} with all collected variables.
+<yolo>Auto-generate and save</yolo>
+  </template-output>
+
+  <output>
+Sofia (Finance Advisor): "All set! Your budget is saved at {output_file}."
+  </output>
+</step>
+
+</workflow>
+```
+
+## Best Practices
+
+1. **Use Personas**: Every output should have agent name and role
+2. **Clear Steps**: Each step has one clear goal
+3. **User Involvement**: Use `<ask>` frequently for collaboration
+4. **Error Handling**: Check for edge cases and invalid input
+5. **YOLO Support**: Include `<yolo>` tags for automation
+6. **Variable Storage**: Store all user inputs and calculations
+7. **Confirmation**: Always review before final save
+8. **Helpful Output**: Explain what's happening, why it matters
+9. **Next Steps**: End with actionable next steps for user
+
+## Migration from BMM
+
+When adapting software workflows to personal automation:
+
+1. **Remove Software Jargon**
+   - ❌ "epic", "story", "sprint"
+   - ✅ "goal", "task", "week/month"
+
+2. **Simplify Complexity**
+   - BMM workflows have heavy validation/review steps
+   - Personal workflows can be lighter
+
+3. **Keep Patterns**
+   - Load previous data
+   - Collect information
+   - Review and confirm
+   - Template output
+   - These patterns are universal

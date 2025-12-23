@@ -1,0 +1,2 @@
+name,description,path
+"workflow","Execute BMAD workflow engine","_personal-automation/core/tasks/workflow.xml"

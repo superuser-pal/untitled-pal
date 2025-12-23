@@ -1,0 +1,55 @@
+version: 1.0.0
+framework_type: personal-automation
+generated: 2025-12-23
+
+paths:
+  core: "_personal-automation/core"
+  domains:
+    finance: "_personal-automation/finance"
+    email: "_personal-automation/email"
+    health: "_personal-automation/health"
+    schedule: "_personal-automation/schedule"
+    career: "_personal-automation/career"
+    goals: "_personal-automation/goals"
+    relationships: "_personal-automation/relationships"
+    home: "_personal-automation/home"
+
+manifests:
+  agents: "_personal-automation/_config/agent-manifest.csv"
+  workflows: "_personal-automation/_config/workflow-manifest.csv"
+  tasks: "_personal-automation/_config/task-manifest.csv"
+  tools: "_personal-automation/_config/tool-manifest.csv"
+
+domains:
+  - name: finance
+    config: "_personal-automation/finance/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: email
+    config: "_personal-automation/email/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: health
+    config: "_personal-automation/health/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: schedule
+    config: "_personal-automation/schedule/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: career
+    config: "_personal-automation/career/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: goals
+    config: "_personal-automation/goals/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: relationships
+    config: "_personal-automation/relationships/config.yaml"
+    agents_count: 0
+    workflows_count: 0
+  - name: home
+    config: "_personal-automation/home/config.yaml"
+    agents_count: 0
+    workflows_count: 0

@@ -1,0 +1,25 @@
+# [Domain Name] Domain Configuration
+domain_name: [domain-name]
+domain_version: 1.0.0
+
+# Paths (all relative to domain folder)
+agents_path: "{domain_root}/agents"
+workflows_path: "{domain_root}/workflows"
+data_path: "{domain_root}/data"
+output_path: "{domain_root}/output"
+knowledge_path: "{domain_root}/knowledge"
+
+# Domain-specific settings
+# Add your custom configuration here
+# Examples:
+# - Finance: currency, budget_frequency, fiscal_year_start
+# - Health: units (metric/imperial), fitness_goals
+# - Schedule: timezone, work_hours, default_meeting_duration
+# - Email: max_inbox_size, auto_archive_after_days
+
+[setting_1]: [value]
+[setting_2]: [value]
+
+# Features (enable/disable domain capabilities)
+enable_[feature_1]: true
+enable_[feature_2]: false

@@ -1,0 +1,360 @@
+# Team Collaboration Pattern - Personal Automation Framework
+# Extracted from BMAD teams on 2025-12-22
+
+This pattern shows how to configure multi-agent teams for collaborative discussions.
+
+## Team YAML Structure
+
+```yaml
+# <!-- Powered by BMAD-CORE™ -->
+bundle:
+  name: Team Display Name
+  icon: 🚀
+  description: Brief description of when to use this team
+agents:
+  - agent-id-1
+  - agent-id-2
+  - agent-id-3
+party: "./default-party.csv"  # Optional: Party mode configuration
+```
+
+## Field Descriptions
+
+| Field | Required | Purpose | Example |
+|-------|----------|---------|---------|
+| `bundle.name` | ✅ Yes | Team display name | "Financial Planning Team" |
+| `bundle.icon` | ⚠️ Optional | Team emoji | "💰" |
+| `bundle.description` | ✅ Yes | When to use this team | "Team for budgeting, investments, and financial decisions" |
+| `agents` | ✅ Yes | List of agent IDs | ["finance-manager", "career-advisor"] |
+| `party` | ⚠️ Optional | Party mode config file | "./default-party.csv" |
+
+## Personal Automation Team Examples
+
+### Example 1: Financial Planning Team
+
+```yaml
+# <!-- Powered by BMAD-CORE™ -->
+bundle:
+  name: Financial Planning Team
+  icon: 💰
+  description: Team for budget planning, spending review, and financial decisions
+agents:
+  - finance-manager
+party: "./default-party.csv"
+```
+
+**When to use:**
+- Creating monthly budgets
+- Reviewing spending patterns
+- Making large purchase decisions
+
+### Example 2: Life Balance Team
+
+```yaml
+# <!-- Powered by BMAD-CORE™ -->
+bundle:
+  name: Life Balance Team
+  icon: ⚖️
+  description: Team for holistic life decisions involving finance, health, and time
+agents:
+  - finance-manager
+  - health-tracker
+  - schedule-optimizer
+party: "./default-party.csv"
+```
+
+**When to use:**
+- "Should I join this gym?" (costs money, affects health, takes time)
+- "Should I take this job?" (affects income, health, schedule)
+- "How should I structure my week?" (balance work, health, personal time)
+
+### Example 3: Career Development Team
+
+```yaml
+# <!-- Powered by BMAD-CORE™ -->
+bundle:
+  name: Career Development Team
+  icon: 🚀
+  description: Team for career planning, skill development, and professional growth
+agents:
+  - career-advisor
+  - schedule-optimizer
+  - finance-manager
+party: "./default-party.csv"
+```
+
+**When to use:**
+- Planning skill development path
+- Deciding on courses/certifications (time + money)
+- Career change decisions
+
+### Example 4: Health & Wellness Team
+
+```yaml
+# <!-- Powered by BMAD-CORE™ -->
+bundle:
+  name: Health & Wellness Team
+  icon: 🏃
+  description: Team for health goals, meal planning, and fitness decisions
+agents:
+  - health-tracker
+  - finance-manager
+  - schedule-optimizer
+party: "./default-party.csv"
+```
+
+**When to use:**
+- Planning workout routines
+- Meal prep planning
+- Health-related purchases (equipment, supplements)
+
+### Example 5: Productivity Team
+
+```yaml
+# <!-- Powered by BMAD-CORE™ -->
+bundle:
+  name: Productivity Team
+  icon: ⚡
+  description: Team for task management, email processing, and time optimization
+agents:
+  - email-processor
+  - schedule-optimizer
+party: "./default-party.csv"
+```
+
+**When to use:**
+- Processing inbox to zero
+- Planning weekly schedule
+- Prioritizing tasks
+
+## Party Mode Integration
+
+### What is Party Mode?
+
+Party mode enables multiple agents to:
+1. Discuss a user's question collaboratively
+2. Provide diverse perspectives
+3. Reach consensus or surface trade-offs
+4. Make holistic recommendations
+
+### How Party Mode Works
+
+1. User activates party mode (via agent menu or directly)
+2. User selects which agents to invite (or uses pre-configured team)
+3. User asks a question
+4. Each agent responds with their perspective
+5. Agents discuss and debate
+6. User gets comprehensive, multi-faceted advice
+
+### default-party.csv Structure
+
+```csv
+agent_id,agent_name,agent_role
+finance-manager,Sofia,Personal Finance Advisor
+health-tracker,Dr. Ava,Health & Wellness Coach
+schedule-optimizer,Alex,Productivity & Time Management Expert
+email-processor,Elena,Email Productivity Specialist
+career-advisor,Marcus,Career Development Strategist
+```
+
+This CSV defines:
+- `agent_id`: Must match agent file names
+- `agent_name`: Agent's first name (used in dialogue)
+- `agent_role`: Role title (used in dialogue format)
+
+## Usage Patterns
+
+### Pattern 1: Loading a Team
+
+When a user wants multi-agent advice, they can:
+
+```
+User: "I want to discuss whether I should quit my job"
+Claude: "This is a big decision. Let me bring in the Life Balance Team."
+[Loads: finance-manager, career-advisor, schedule-optimizer]
+```
+
+### Pattern 2: Team Dialogue Format
+
+All agents must use consistent format:
+
+```
+Sofia (Personal Finance Advisor): "Let's look at the financial impact first, {user_name}. What's your current monthly income?"
+
+Marcus (Career Development Strategist): "Before we jump into numbers, I want to understand - what's driving this decision? Career growth, work-life balance, or something else?"
+
+{user_name}: [user responds]
+
+Alex (Productivity Specialist): "Good question, Marcus. {user_name}, have you considered whether this is a time management issue or truly a job fit issue?"
+```
+
+**Format:** `Name (Role): "dialogue"`
+
+### Pattern 3: Decision Framework
+
+Teams should:
+1. **Gather Information** - Each agent asks relevant questions
+2. **Share Perspectives** - Each agent presents their viewpoint
+3. **Surface Trade-offs** - Agents discuss conflicts/tensions
+4. **Reach Recommendation** - Team summarizes options
+5. **User Decides** - User makes final call with full context
+
+## Team Composition Guidelines
+
+### Small Team (2-3 agents)
+**Best for:** Focused decisions with clear domains
+- Example: Finance + Health for "Should I buy a Peloton?"
+- Example: Email + Schedule for "How do I process my inbox better?"
+
+### Medium Team (3-4 agents)
+**Best for:** Multi-faceted life decisions
+- Example: Finance + Health + Schedule + Career for "Should I work remotely?"
+- Example: Finance + Email + Schedule for "Should I start a side business?"
+
+### Large Team (5+ agents)
+**Best for:** Major life changes
+- Example: All agents for "Should I move to a new city?"
+- Example: All agents for "How should I structure my year?"
+
+## Creating New Teams
+
+### Step 1: Identify Use Case
+What decisions will this team help with?
+
+### Step 2: Select Agents
+Which agent perspectives are needed?
+
+### Step 3: Create Team File
+Save as: `_personal-automation/{module}/teams/team-{name}.yaml`
+
+```yaml
+bundle:
+  name: {Team Name}
+  icon: {emoji}
+  description: {When to use this team}
+agents:
+  - {agent-id-1}
+  - {agent-id-2}
+  - {agent-id-3}
+party: "./default-party.csv"
+```
+
+### Step 4: Document Team Purpose
+Add README or comments explaining:
+- When to use this team
+- What kinds of questions work best
+- Example scenarios
+
+## Integration with Party Mode Workflow
+
+Teams can be loaded via:
+
+1. **Direct Selection**
+   ```
+   User: "Load the Financial Planning Team"
+   ```
+
+2. **Agent Menu**
+   ```xml
+   <item cmd="*financial-team" exec="{project-root}/_personal-automation/life-management/teams/team-financial.yaml">
+     Discuss with Financial Planning Team
+   </item>
+   ```
+
+3. **Party Mode Auto-Suggest**
+   ```
+   User: "Should I buy a house?"
+   Claude: "This is a complex decision. I recommend the Life Balance Team (Finance, Career, Schedule). Should I load them?"
+   ```
+
+## Best Practices
+
+1. **Keep Teams Focused**
+   - 2-5 agents per team
+   - Clear purpose for each team
+   - Don't create overlapping teams
+
+2. **Name Teams Clearly**
+   - Use descriptive names: "Financial Planning Team", not "Team 1"
+   - Icon should match purpose
+
+3. **Document Use Cases**
+   - Description should explain WHEN to use
+   - Provide example questions
+
+4. **Balance Perspectives**
+   - Include complementary viewpoints
+   - Avoid redundant agents
+
+5. **Test Dialogue**
+   - Ensure agents don't all say the same thing
+   - Each agent should add unique value
+
+## Migration Notes
+
+When adapting from BMM teams:
+
+1. **Replace Software Agents**
+   - ❌ pm, architect, dev, tea
+   - ✅ finance-manager, health-tracker, email-processor
+
+2. **Rename Teams**
+   - ❌ "Team Full Stack", "Team Plan and Architect"
+   - ✅ "Life Balance Team", "Financial Planning Team"
+
+3. **Update Descriptions**
+   - Focus on personal life decisions
+   - Remove software development language
+
+4. **Keep Structure**
+   - YAML format stays the same
+   - Party mode integration unchanged
+   - Dialogue format identical
+
+## Example: Full Life Decision
+
+```
+User: "Should I quit my job and start a business?"
+
+[Life Balance Team loads: Finance Manager, Career Advisor, Schedule Optimizer]
+
+Sofia (Finance Manager): "Big decision, {user_name}. First question - how many months of expenses do you have saved?"
+
+Marcus (Career Advisor): "And what's the business idea? Is this something you're passionate about, or just escaping a bad job?"
+
+Alex (Schedule Optimizer): "Important point - have you calculated how much time this business will require in the first 6 months?"
+
+{user_name}: "I have 6 months saved. It's a consulting business in my field. Probably 60 hours/week initially."
+
+Sofia: "6 months is decent, but with a 60-hour week, you might need 9-12 months runway. Can you save more first?"
+
+Marcus: "Consulting in your field is lower risk. You have expertise and likely some network. That's a strength."
+
+Alex: "60 hours/week means you'll have almost no time for health, family, or rest. Is that sustainable for you? Or can you start part-time?"
+
+[Discussion continues with user, agents debate trade-offs, surface options]
+
+Marcus: "Here's what I'm hearing - you could:
+1. Save for 6 more months, then quit (safer)
+2. Start consulting part-time while employed (slower but sustainable)
+3. Quit now with strict budget (risky but fast)"
+
+Sofia: "I vote for option 2 - part-time consulting keeps income flowing."
+
+Alex: "Agreed. Option 2 lets you test the business without the time crunch."
+
+{user_name}: "That makes sense. Let me try part-time for 3 months first."
+
+All agents: "Smart decision, {user_name}! Want us to help you plan the first 90 days?"
+```
+
+## Summary
+
+Teams enable:
+- ✅ Multi-perspective advice
+- ✅ Holistic decision-making
+- ✅ Debate and discussion
+- ✅ Surface trade-offs
+- ✅ Better outcomes for complex decisions
+
+Use teams for decisions that span multiple life domains (money + time + health + career).

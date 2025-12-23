@@ -1,0 +1,19 @@
+# Finance Domain Configuration
+domain_name: finance
+domain_version: 1.0.0
+
+# Paths (all relative to finance domain folder)
+agents_path: "{domain_root}/agents"
+workflows_path: "{domain_root}/workflows"
+data_path: "{domain_root}/data"
+output_path: "{domain_root}/output"
+knowledge_path: "{domain_root}/knowledge"
+
+# Finance-specific settings
+currency: USD
+budget_frequency: monthly
+fiscal_year_start: January
+
+# Features
+enable_auto_categorization: true
+enable_spending_alerts: true

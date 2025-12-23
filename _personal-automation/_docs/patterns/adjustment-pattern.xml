@@ -1,0 +1,552 @@
+# Mid-Cycle Adjustment Pattern - Personal Automation Framework
+# Adapted from BMM correct-course workflow on 2025-12-22
+
+This pattern shows how to handle mid-cycle adjustments when things go off track - adapted from BMAD's course correction workflow.
+
+## Concept: From Sprint Correction to Life Adjustment
+
+**Software Development (BMM):**
+- Mid-sprint course correction when things derail
+- Analyzes what went wrong
+- Proposes solutions
+- Adjusts sprint plan
+
+**Personal Life (Adapted):**
+- Mid-week/mid-month adjustment when off track
+- Analyzes what's not working
+- Proposes solutions
+- Adjusts goals/habits/schedule
+
+## When to Use Course Correction
+
+### Trigger Events
+1. **Major Life Change**
+   - New job, move, relationship change
+   - Health issue or injury
+   - Unexpected financial situation
+
+2. **Persistent Struggle**
+   - Same goal failing 2+ weeks in a row
+   - Habit streak broken repeatedly
+   - Consistent lack of progress
+
+3. **New Information**
+   - Learned something that invalidates original plan
+   - Discovered better approach mid-way through
+   - External factors changed (schedule, budget, etc.)
+
+4. **Feeling Stuck**
+   - Not sure what to do next
+   - Plan no longer makes sense
+   - Overwhelmed or burned out
+
+### Don't Use For
+- ❌ Minor setbacks (one missed workout)
+- ❌ Normal fluctuations (bad day)
+- ❌ Scheduled reviews (use retrospective pattern)
+
+## Workflow Structure
+
+```xml
+# Mid-Cycle Adjustment Workflow Instructions
+
+<critical>The workflow execution engine is governed by: {project-root}/_bmad/core/tasks/workflow.xml</critical>
+<critical>You MUST have already loaded and processed: {project-root}/_personal-automation/life-management/workflows/goals/adjust-course/workflow.yaml</critical>
+<critical>Communicate all responses in {communication_language}</critical>
+<critical>Generate all documents in {document_output_language}</critical>
+
+<workflow>
+
+<step n="1" goal="Identify What Triggered Course Correction">
+  <output>
+Alex (Schedule Optimizer): "Something's not working, {user_name}. Let's figure out what needs to change."
+  </output>
+
+  <ask>What prompted you to do a course correction right now?</ask>
+  <action>Store as {{trigger_event}}</action>
+
+  <ask>How long has this issue been going on?</ask>
+  <action>Store as {{duration}}</action>
+
+  <output>
+Alex: "Got it. {{trigger_event}} has been affecting you for {{duration}}. Let's break this down."
+  </output>
+</step>
+
+<step n="2" goal="Load Current Goal Status">
+  <action>Load {goals_folder}/goal-status.yaml</action>
+  <action>Extract current goals and their status</action>
+  <action>Identify goals that are blocked, paused, or low progress</action>
+
+  <output>
+**Current Goal Status:**
+
+**Struggling Goals:**
+{{list_of_struggling_goals}}
+
+**Blocked Goals:**
+{{list_of_blocked_goals}}
+
+**On-Track Goals:**
+{{list_of_on_track_goals}}
+
+Alex: "Looking at your goals, I see {{struggling_count}} goals that are struggling. Let's focus there."
+  </output>
+</step>
+
+<step n="3" goal="Analyze Root Cause">
+  <output>
+Alex: "Let's dig into WHY things aren't working. Be specific - vague answers won't help us fix this."
+  </output>
+
+  <ask>For {{primary_struggling_goal}}, what specifically is preventing progress?</ask>
+  <action>Store as {{root_cause}}</action>
+
+  <ask>Is this a TIME problem, ENERGY problem, MOTIVATION problem, or EXTERNAL BLOCKER?</ask>
+  <action>Store as {{problem_type}}</action>
+
+  <check if="{{problem_type}} == TIME">
+    <ask>What's taking up the time you planned to use for this?</ask>
+    <action>Store as {{time_drain}}</action>
+  </check>
+
+  <check if="{{problem_type}} == ENERGY">
+    <ask>When do you try to work on this? Are you depleted by then?</ask>
+    <action>Store as {{energy_issue}}</action>
+  </check>
+
+  <check if="{{problem_type}} == MOTIVATION">
+    <ask>Why did you set this goal originally? Does it still matter to you?</ask>
+    <action>Store as {{motivation_check}}</action>
+  </check>
+
+  <check if="{{problem_type}} == EXTERNAL BLOCKER">
+    <ask>What specific external factor is blocking you? Is it within your control?</ask>
+    <action>Store as {{external_blocker}}</action>
+  </check>
+
+  <output>
+**Root Cause Analysis:**
+
+**Problem:** {{root_cause}}
+**Type:** {{problem_type}}
+**Details:** {{problem_details}}
+
+Alex: "Okay, I think I understand the issue now."
+  </output>
+</step>
+
+<step n="4" goal="Generate Solution Options">
+  <output>
+Alex: "Based on {{problem_type}}, here are some options for getting back on track."
+  </output>
+
+  <action>Based on {{problem_type}}, generate 3-4 solution options</action>
+
+  <check if="{{problem_type}} == TIME">
+    <output>
+**Option 1: Reduce Scope**
+- Cut the goal in half (e.g., 3 workouts/week → 2 workouts/week)
+- Pros: More realistic, likely to succeed
+- Cons: Slower progress
+
+**Option 2: Remove Conflicting Commitment**
+- Identify what's eating your time and cut it
+- Example: {{time_drain}} - can you reduce or eliminate this?
+- Pros: Creates space for your goal
+- Cons: May require difficult choices
+
+**Option 3: Reschedule Goal**
+- Move goal to next month when you have more time
+- Pros: Removes pressure now
+- Cons: Delays progress
+
+**Option 4: Combine Activities**
+- Can you stack this goal with something else?
+- Example: Listen to course while commuting
+- Pros: Efficient use of time
+- Cons: May not work for all goals
+    </output>
+  </check>
+
+  <check if="{{problem_type}} == ENERGY">
+    <output>
+**Option 1: Change Timing**
+- Work on this goal when you have most energy
+- If you're drained at night, try morning
+- Pros: Leverages peak energy
+- Cons: May conflict with existing schedule
+
+**Option 2: Reduce Intensity**
+- Make it easier (e.g., 30-min workout → 15-min workout)
+- Pros: Lower barrier to entry
+- Cons: Less dramatic results
+
+**Option 3: Fix Energy Source**
+- Address why you're depleted (sleep, stress, diet)
+- Pros: Fixes root issue
+- Cons: Takes time to see results
+
+**Option 4: Batch Activities**
+- Do this goal once/week with high focus vs. daily while tired
+- Pros: One high-energy session
+- Cons: Less frequent practice
+    </output>
+  </check>
+
+  <check if="{{problem_type}} == MOTIVATION">
+    <output>
+**Option 1: Revisit the Why**
+- Reconnect with original purpose
+- Visualize benefits of completing this goal
+- Pros: May reignite motivation
+- Cons: May reveal goal isn't actually important
+
+**Option 2: Change the Approach**
+- Keep the outcome, change the method
+- Example: Hate gym? Try home workouts or sports
+- Pros: More enjoyable path
+- Cons: Learning curve for new approach
+
+**Option 3: Add Accountability**
+- Tell someone, join a group, post progress
+- Pros: External motivation
+- Cons: Pressure may backfire
+
+**Option 4: Abandon Goal**
+- If it doesn't matter anymore, let it go
+- Pros: Frees mental space
+- Cons: Feels like failure (but sometimes it's wisdom)
+    </output>
+  </check>
+
+  <check if="{{problem_type}} == EXTERNAL BLOCKER">
+    <output>
+**Option 1: Remove the Blocker**
+- If blocker is: {{external_blocker}}
+- Can you eliminate it or work around it?
+- Pros: Clears the path
+- Cons: May not be within your control
+
+**Option 2: Adapt Goal to Blocker**
+- Example: Gym closed? Do home workouts
+- Pros: Maintains progress
+- Cons: May not be ideal
+
+**Option 3: Pause Until Blocker Resolves**
+- Set goal to "paused" status
+- Revisit when blocker is gone
+- Pros: Honest about constraints
+- Cons: Momentum lost
+
+**Option 4: Escalate**
+- If blocker is someone/something you can influence, address it
+- Pros: May permanently remove obstacle
+- Cons: May create conflict
+    </output>
+  </check>
+
+  <ask>Which option feels best to you, or do you have another idea?</ask>
+  <action>Store as {{chosen_solution}}</action>
+</step>
+
+<step n="5" goal="Create Action Plan">
+  <output>
+Alex: "Okay, {{chosen_solution}} it is. Let's make this concrete."
+  </output>
+
+  <ask>What's the FIRST action you need to take to implement this solution?</ask>
+  <action>Store as {{first_action}}</action>
+
+  <ask>When will you do that first action?</ask>
+  <action>Store as {{action_deadline}}</action>
+
+  <ask>What needs to change in your goal-status.yaml?</ask>
+  <action>Store as {{goal_status_changes}}</action>
+
+  <output>
+**Action Plan:**
+
+**Solution:** {{chosen_solution}}
+
+**First Action:** {{first_action}}
+**Deadline:** {{action_deadline}}
+
+**Goal Status Changes:**
+{{goal_status_changes}}
+
+Alex: "Perfect. Let me update your goal status and document this adjustment."
+  </output>
+</step>
+
+<step n="6" goal="Update Goal Status">
+  <action>Update {goals_folder}/goal-status.yaml based on {{goal_status_changes}}</action>
+
+  <check if="goal scope changed">
+    <action>Update goal title, target, or progress percentage</action>
+  </check>
+
+  <check if="goal paused">
+    <action>Set status to "paused"</action>
+    <action>Add pause reason to notes</action>
+  </check>
+
+  <check if="goal abandoned">
+    <action>Set status to "abandoned"</action>
+    <action>Add abandonment reason to notes</action>
+  </check>
+
+  <check if="new tasks added">
+    <action>Add tasks to tasks section</action>
+  </check>
+
+  <output>
+Alex: "Goal status updated! Here's what changed:"
+
+**Changes Made:**
+{{summary_of_changes}}
+  </output>
+</step>
+
+<step n="7" goal="Document Adjustment">
+  <template-output target="{goals_folder}/adjustments/adjustment-{{date}}.md" show="user">
+Populate adjustment template with:
+
+**Variables:**
+- user_name: {user_name}
+- date: {{date}}
+- trigger_event: {{trigger_event}}
+- duration: {{duration}}
+- primary_struggling_goal: {{primary_struggling_goal}}
+- root_cause: {{root_cause}}
+- problem_type: {{problem_type}}
+- problem_details: {{problem_details}}
+- chosen_solution: {{chosen_solution}}
+- first_action: {{first_action}}
+- action_deadline: {{action_deadline}}
+- goal_status_changes: {{goal_status_changes}}
+
+<yolo>Generate and save adjustment document</yolo>
+  </template-output>
+
+  <output>
+Alex: "Course correction complete! Your adjustment is documented at {goals_folder}/adjustments/adjustment-{{date}}.md"
+
+**Next Steps:**
+1. Complete {{first_action}} by {{action_deadline}}
+2. Review updated goals in goal-status.yaml
+3. Check in next week to see if adjustment is working
+
+You've got this, {user_name}! Sometimes the best progress is knowing when to pivot. 🎯
+  </output>
+</step>
+
+</workflow>
+```
+
+## Adjustment Template Example
+
+```markdown
+# Course Correction: {{trigger_event}}
+**Date:** {{date}}
+**User:** {{user_name}}
+
+---
+
+## Trigger
+
+**What prompted this adjustment:**
+{{trigger_event}}
+
+**Duration of issue:**
+{{duration}}
+
+---
+
+## Affected Goals
+
+**Primary Struggling Goal:**
+{{primary_struggling_goal}}
+
+**Other Affected Goals:**
+{{other_affected_goals}}
+
+---
+
+## Root Cause Analysis
+
+**Problem:**
+{{root_cause}}
+
+**Problem Type:**
+{{problem_type}}
+
+**Details:**
+{{problem_details}}
+
+---
+
+## Solution Chosen
+
+{{chosen_solution}}
+
+**Why this solution:**
+{{solution_rationale}}
+
+---
+
+## Action Plan
+
+**First Action:**
+{{first_action}}
+
+**Deadline:**
+{{action_deadline}}
+
+**Success Criteria:**
+{{success_criteria}}
+
+---
+
+## Goal Status Changes
+
+{{goal_status_changes}}
+
+---
+
+## Check-In Plan
+
+- [ ] Week 1: Did {{first_action}} get done?
+- [ ] Week 2: Is the adjustment working?
+- [ ] Week 3: Need further changes?
+
+---
+
+**Status:** {{adjustment_status}}
+**Follow-up Date:** {{follow_up_date}}
+```
+
+## Common Adjustment Scenarios
+
+### Scenario 1: Overcommitted
+
+**Trigger:** "I have too many goals and I'm making no progress on any of them"
+
+**Root Cause:** TIME - trying to do too much
+
+**Solution:** Cut 50% of goals, focus on top 2-3
+
+**Action:**
+1. Rank goals by importance
+2. Pause bottom 50%
+3. Update goal-status.yaml
+4. Revisit paused goals next month
+
+### Scenario 2: Wrong Approach
+
+**Trigger:** "I hate going to the gym, I keep skipping workouts"
+
+**Root Cause:** MOTIVATION - method doesn't fit preferences
+
+**Solution:** Change approach from gym to home workouts or sports
+
+**Action:**
+1. Research home workout programs
+2. Try 3 options this week
+3. Pick one and commit
+4. Update goal from "gym 3x/week" to "workout 3x/week (home)"
+
+### Scenario 3: External Blocker
+
+**Trigger:** "My work schedule changed and I no longer have evenings free"
+
+**Root Cause:** EXTERNAL BLOCKER - schedule shift
+
+**Solution:** Move evening goals to morning or weekends
+
+**Action:**
+1. Identify which goals were evening-based
+2. Test morning alternatives this week
+3. Update goal timing in schedule
+4. Adjust expectations if needed
+
+### Scenario 4: Energy Mismatch
+
+**Trigger:** "I'm exhausted after work and can't do my course"
+
+**Root Cause:** ENERGY - trying to learn when depleted
+
+**Solution:** Move learning to weekend mornings when fresh
+
+**Action:**
+1. Block Saturday/Sunday mornings for course
+2. Reduce frequency from 5x/week to 2x/week (weekends)
+3. Accept slower progress but higher quality
+
+## Integration with Other Patterns
+
+### 1. Triggers Review
+Course correction often reveals issues to discuss in next retrospective
+
+### 2. Updates Goal Status
+Directly modifies goal-status.yaml
+
+### 3. Informs Planning
+Adjustments should influence next period's goals
+
+## Best Practices
+
+### 1. Don't Overuse
+- Not for minor setbacks
+- Reserve for significant issues
+- 1-2 per month max
+
+### 2. Be Honest
+- No shame in adjusting
+- Rigidity leads to failure
+- Flexibility leads to success
+
+### 3. Document Why
+- Track trigger, cause, solution
+- Learn from patterns over time
+- Review adjustments in retrospectives
+
+### 4. Follow Through
+- Actually implement the solution
+- Check in 1 week later
+- Iterate if needed
+
+### 5. Question the Goal
+- Sometimes the goal itself is wrong
+- Be willing to abandon
+- Sunk cost fallacy is real
+
+## Agent Integration
+
+### Schedule Optimizer Agent
+Facilitates course correction, proposes solutions
+
+### Finance Manager Agent
+Joins if financial goals affected
+
+### Health Tracker Agent
+Joins if health goals affected
+
+### Party Mode Adjustment
+Multiple agents help diagnose and solve:
+```
+Alex (Schedule Optimizer): "Let's figure out why this isn't working, {user_name}."
+Sofia (Finance Manager): "If it's money-related, I can help adjust the budget."
+Dr. Ava (Health Coach): "Or if it's energy, we can look at your recovery."
+```
+
+## Summary
+
+Mid-cycle adjustments enable:
+- ✅ Quick recovery from derailments
+- ✅ Flexible, adaptive goal pursuit
+- ✅ Learning what works/doesn't
+- ✅ Preventing total abandonment
+- ✅ Maintaining momentum despite setbacks
+
+Use this pattern when you need to change course mid-period, not at scheduled review times.

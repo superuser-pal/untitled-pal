@@ -1,0 +1,480 @@
+# Review/Retrospective Pattern - Personal Automation Framework
+# Adapted from BMM retrospective workflow on 2025-12-22
+
+This pattern shows how to conduct personal reviews and retrospectives - adapted from BMAD's epic retrospective.
+
+## Concept: From Epic Retrospective to Personal Review
+
+**Software Development (BMM):**
+- Reviews completed epic (set of stories)
+- Team discussion of what went well/poorly
+- Extract lessons learned
+- Plan improvements for next epic
+
+**Personal Life (Adapted):**
+- Reviews completed period (week/month/quarter)
+- Self-reflection on what worked/didn't
+- Extract lessons and insights
+- Plan adjustments for next period
+
+## Review Types
+
+### 1. Weekly Review
+**Duration:** 15-30 minutes
+**Frequency:** End of week (Sunday evening)
+**Scope:** Past 7 days
+
+**Questions:**
+- What did I accomplish this week?
+- What didn't get done? Why?
+- What worked well?
+- What struggled?
+- What do I want to change next week?
+
+### 2. Monthly Review
+**Duration:** 45-60 minutes
+**Frequency:** Last day of month
+**Scope:** Past month
+
+**Questions:**
+- What goals did I complete?
+- What goals are in progress?
+- What goals stalled? Why?
+- What surprised me this month?
+- What patterns emerged?
+- What do I want to focus on next month?
+
+### 3. Quarterly Review
+**Duration:** 2-3 hours
+**Frequency:** End of quarter
+**Scope:** Past 3 months
+
+**Questions:**
+- What were my biggest wins?
+- What were my biggest learnings?
+- What didn't work? What will I stop doing?
+- What do I want to start doing?
+- How am I tracking toward annual goals?
+
+### 4. Annual Review
+**Duration:** Half day to full day
+**Frequency:** End of year
+**Scope:** Full year
+
+**Questions:**
+- What am I most proud of this year?
+- What would I do differently?
+- What did I learn about myself?
+- What relationships did I strengthen?
+- What goals did I achieve?
+- What do I want next year to be about?
+
+## Workflow Structure (Monthly Example)
+
+```xml
+# Monthly Review Workflow Instructions
+
+<critical>The workflow execution engine is governed by: {project-root}/_bmad/core/tasks/workflow.xml</critical>
+<critical>You MUST have already loaded and processed: {project-root}/_personal-automation/life-management/workflows/goals/monthly-review/workflow.yaml</critical>
+<critical>Communicate all responses in {communication_language}</critical>
+<critical>Generate all documents in {document_output_language}</critical>
+
+<workflow>
+
+<step n="1" goal="Load Goal Status and Determine Review Period">
+  <action>Load {goals_folder}/goal-status.yaml</action>
+  <action>Extract metadata.period_label to determine which month/period to review</action>
+  <action>Set {{review_period}} = metadata.period_label</action>
+
+  <output>
+Alex (Schedule Optimizer): "Welcome to your monthly review, {user_name}. Let's reflect on {{review_period}}."
+  </output>
+</step>
+
+<step n="2" goal="Review Goal Completion">
+  <output>
+Alex: "First, let's look at your goals for {{review_period}}."
+  </output>
+
+  <action>From goal-status.yaml, extract all goals</action>
+  <action>Categorize by status: completed, in-progress, not-started, paused</action>
+  <action>Calculate completion rate: (completed goals / total goals) * 100</action>
+
+  <output>
+**Goal Summary for {{review_period}}**
+
+**Completed Goals ({{completed_count}}):**
+{{list_of_completed_goals}}
+
+**In-Progress Goals ({{in_progress_count}}):**
+{{list_of_in_progress_goals}}
+
+**Not Started ({{not_started_count}}):**
+{{list_of_not_started_goals}}
+
+**Completion Rate:** {{completion_rate}}%
+
+Alex: "You completed {{completed_count}} out of {{total_goals}} goals. How do you feel about that, {user_name}?"
+  </output>
+
+  <ask>How do you feel about your goal completion this month?</ask>
+  <action>Store response as {{feelings_about_goals}}</action>
+</step>
+
+<step n="3" goal="Identify What Went Well">
+  <output>
+Alex: "Let's start with the positives. What worked well this month?"
+  </output>
+
+  <ask>What are you most proud of this month?</ask>
+  <action>Store as {{proudest_moment}}</action>
+
+  <ask>What habits or routines worked really well?</ask>
+  <action>Store as {{successful_habits}}</action>
+
+  <ask>What surprised you in a good way?</ask>
+  <action>Store as {{positive_surprises}}</action>
+
+  <action>Review goal-status.yaml notes section for wins</action>
+  <action>Review completed goals for common success patterns</action>
+
+  <output>
+**What Went Well:**
+
+**Proudest Moment:**
+{{proudest_moment}}
+
+**Successful Habits:**
+{{successful_habits}}
+
+**Positive Surprises:**
+{{positive_surprises}}
+
+**Patterns from Data:**
+{{success_patterns_from_data}}
+  </output>
+</step>
+
+<step n="4" goal="Identify What Struggled">
+  <output>
+Alex: "Now let's look at what didn't go as planned. This isn't about blame - it's about learning."
+  </output>
+
+  <ask>Which goal gave you the most trouble? Why?</ask>
+  <action>Store as {{biggest_struggle}}</action>
+
+  <ask>What habits or routines fell apart?</ask>
+  <action>Store as {{failed_habits}}</action>
+
+  <ask>What took way more time/energy than expected?</ask>
+  <action>Store as {{unexpected_drains}}</action>
+
+  <action>Review goal-status.yaml blockers section</action>
+  <action>Review in-progress goals with low progress %</action>
+  <action>Review notes section for struggles</action>
+
+  <output>
+**What Struggled:**
+
+**Biggest Struggle:**
+{{biggest_struggle}}
+
+**Failed Habits:**
+{{failed_habits}}
+
+**Unexpected Drains:**
+{{unexpected_drains}}
+
+**Blockers from Data:**
+{{blockers_list}}
+  </output>
+</step>
+
+<step n="5" goal="Extract Lessons Learned">
+  <output>
+Alex: "Based on what we've discussed, what did you learn this month?"
+  </output>
+
+  <ask>What's one thing you learned about yourself?</ask>
+  <action>Store as {{self_insight}}</action>
+
+  <ask>What would you do differently next time?</ask>
+  <action>Store as {{do_differently}}</action>
+
+  <ask>What's one thing you want to STOP doing?</ask>
+  <action>Store as {{stop_doing}}</action>
+
+  <ask>What's one thing you want to START doing?</ask>
+  <action>Store as {{start_doing}}</action>
+
+  <ask>What's one thing you want to CONTINUE doing?</ask>
+  <action>Store as {{continue_doing}}</action>
+
+  <output>
+**Lessons Learned:**
+
+**Self-Insight:**
+{{self_insight}}
+
+**Stop-Start-Continue:**
+- 🛑 STOP: {{stop_doing}}
+- ▶️ START: {{start_doing}}
+- ✅ CONTINUE: {{continue_doing}}
+
+**Do Differently:**
+{{do_differently}}
+  </output>
+</step>
+
+<step n="6" goal="Plan Adjustments for Next Period">
+  <output>
+Alex: "Now let's turn these lessons into actions for next month."
+  </output>
+
+  <ask>Based on what struggled, what goals should we adjust or remove?</ask>
+  <action>Store as {{goals_to_adjust}}</action>
+
+  <ask>What new goals should we add based on what you learned?</ask>
+  <action>Store as {{new_goals}}</action>
+
+  <ask>What habits do you want to establish or fix?</ask>
+  <action>Store as {{habit_changes}}</action>
+
+  <output>
+**Adjustments for Next Period:**
+
+**Goals to Adjust/Remove:**
+{{goals_to_adjust}}
+
+**New Goals to Add:**
+{{new_goals}}
+
+**Habit Changes:**
+{{habit_changes}}
+
+Alex: "Great! I'll help you update your goal-status.yaml for next month."
+  </output>
+</step>
+
+<step n="7" goal="Generate Review Document">
+  <template-output target="{goals_folder}/reviews/review-{{date}}.md" show="user">
+Populate review template with:
+
+**Variables:**
+- review_period: {{review_period}}
+- user_name: {user_name}
+- completion_rate: {{completion_rate}}%
+- completed_goals: {{completed_count}}
+- total_goals: {{total_goals}}
+- proudest_moment: {{proudest_moment}}
+- successful_habits: {{successful_habits}}
+- positive_surprises: {{positive_surprises}}
+- biggest_struggle: {{biggest_struggle}}
+- failed_habits: {{failed_habits}}
+- unexpected_drains: {{unexpected_drains}}
+- self_insight: {{self_insight}}
+- stop_doing: {{stop_doing}}
+- start_doing: {{start_doing}}
+- continue_doing: {{continue_doing}}
+- do_differently: {{do_differently}}
+- goals_to_adjust: {{goals_to_adjust}}
+- new_goals: {{new_goals}}
+- habit_changes: {{habit_changes}}
+
+<yolo>Generate and save review document</yolo>
+  </template-output>
+
+  <output>
+Alex: "Your monthly review is complete and saved at {goals_folder}/reviews/review-{{date}}.md"
+
+**Next Steps:**
+1. Update goal-status.yaml with new goals
+2. Remove/adjust struggling goals
+3. Implement habit changes
+4. Review this document next month for comparison
+
+Great work reflecting on {{review_period}}, {user_name}! 🎉
+  </output>
+</step>
+
+</workflow>
+```
+
+## Review Template Example
+
+```markdown
+# Monthly Review: {{review_period}}
+**Reviewer:** {{user_name}}
+**Date:** {{date}}
+**Overall Completion Rate:** {{completion_rate}}%
+
+---
+
+## Goal Summary
+
+**Completed Goals ({{completed_count}}/{{total_goals}}):**
+{{completed_goals_list}}
+
+**In Progress:**
+{{in_progress_goals_list}}
+
+**Not Started:**
+{{not_started_goals_list}}
+
+---
+
+## 🎉 What Went Well
+
+### Proudest Moment
+{{proudest_moment}}
+
+### Successful Habits
+{{successful_habits}}
+
+### Positive Surprises
+{{positive_surprises}}
+
+### Success Patterns
+{{success_patterns_from_data}}
+
+---
+
+## 😓 What Struggled
+
+### Biggest Struggle
+{{biggest_struggle}}
+
+### Failed Habits
+{{failed_habits}}
+
+### Unexpected Drains
+{{unexpected_drains}}
+
+### Blockers
+{{blockers_list}}
+
+---
+
+## 💡 Lessons Learned
+
+### Self-Insight
+{{self_insight}}
+
+### Stop-Start-Continue
+- **🛑 STOP:** {{stop_doing}}
+- **▶️ START:** {{start_doing}}
+- **✅ CONTINUE:** {{continue_doing}}
+
+### Do Differently Next Time
+{{do_differently}}
+
+---
+
+## 🔄 Adjustments for Next Period
+
+### Goals to Adjust/Remove
+{{goals_to_adjust}}
+
+### New Goals to Add
+{{new_goals}}
+
+### Habit Changes
+{{habit_changes}}
+
+---
+
+## Action Items
+
+- [ ] Update goal-status.yaml with new goals
+- [ ] Remove/adjust {{adjusted_goal_count}} goals
+- [ ] Implement {{habit_change_count}} habit changes
+- [ ] Review this document next month
+
+---
+
+**Completion Status:** {{completion_rate}}% → Target for next period: {{target_completion_rate}}%
+```
+
+## Integration with Agents
+
+### Schedule Optimizer Agent
+Facilitates reviews, asks reflection questions, surfaces insights
+
+### Finance Manager Agent
+Joins financial reviews, provides budget context
+
+### Health Tracker Agent
+Joins health reviews, provides fitness/nutrition context
+
+### Party Mode Review
+Multiple agents review together:
+```
+Alex (Schedule Optimizer): "Let's review your month, {user_name}."
+Sofia (Finance Manager): "I'll cover the financial goals."
+Dr. Ava (Health Coach): "And I'll review health progress."
+```
+
+## Best Practices
+
+### 1. Schedule Regular Reviews
+- Weekly: Sunday evening, 15-30 min
+- Monthly: Last day of month, 1 hour
+- Quarterly: End of quarter, 2-3 hours
+- Annual: End of year, half day
+
+### 2. Be Honest
+- No sugarcoating
+- Acknowledge failures
+- Celebrate wins
+- Focus on learning
+
+### 3. Look for Patterns
+- What's consistently working?
+- What's consistently failing?
+- Why?
+
+### 4. Make It Actionable
+- Extract specific changes
+- Update goals based on insights
+- Commit to 1-3 key adjustments
+
+### 5. Track Over Time
+- Keep review documents
+- Compare month-to-month
+- Notice long-term trends
+
+## Variations
+
+### Quick Weekly Check-In (10 min)
+```
+1. What went well this week?
+2. What didn't go well?
+3. One thing to change next week?
+```
+
+### Deep Quarterly Dive (3 hours)
+```
+1. Review all 3 monthly reviews
+2. Identify quarterly themes
+3. Major wins and major lessons
+4. Big picture: Am I on track for annual goals?
+5. What needs to radically change?
+```
+
+### Life Area Reviews
+Focus on specific domains:
+- **Financial Review:** Budget, savings, spending, debt
+- **Health Review:** Fitness, nutrition, sleep, mental health
+- **Career Review:** Skills, projects, growth, satisfaction
+- **Relationship Review:** Family, friends, partner, networking
+
+## Summary
+
+Personal reviews provide:
+- ✅ Regular reflection and learning
+- ✅ Course correction opportunities
+- ✅ Pattern recognition over time
+- ✅ Accountability and progress tracking
+- ✅ Continuous improvement mindset
+
+Use this pattern for any periodic review (weekly, monthly, quarterly, annual).

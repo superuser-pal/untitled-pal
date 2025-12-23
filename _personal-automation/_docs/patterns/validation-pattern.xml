@@ -1,0 +1,755 @@
+# Validation Pattern - Personal Automation Framework
+# Extracted from BMAD validate-workflow.xml on 2025-12-22
+
+This pattern shows how to use checklist-based validation with evidence collection to systematically verify that goals, habits, plans, and outcomes meet their intended criteria.
+
+## Concept: Systematic Checklist Validation
+
+**What it is:**
+A structured validation framework that runs a checklist against any document or outcome, collecting evidence and producing a comprehensive validation report with PASS/PARTIAL/FAIL/N/A marks.
+
+**Why it's universal:**
+- Works for ANY checklist (goals, habits, plans, reviews)
+- Evidence-based (quotes with line numbers)
+- Four validation states (PASS, PARTIAL, FAIL, N/A)
+- Generates actionable reports
+- Identifies gaps and improvements
+
+**Personal automation value:**
+- Validate monthly goal completion
+- Verify habit streaks with evidence
+- Check annual review completeness
+- Assess quarterly progress
+- Quality-gate major decisions
+
+## Complete Validation Task Structure
+
+```xml
+<task id="_bmad/core/tasks/validate-workflow.xml" name="Validate Workflow Output">
+  <objective>Run a checklist against a document with thorough analysis and produce a validation report</objective>
+
+  <inputs>
+    <input name="workflow" desc="Workflow path containing checklist.md" />
+    <input name="checklist" desc="Checklist to validate against (defaults to workflow's checklist.md)" />
+    <input name="document" desc="Document to validate (ask user if not specified)" />
+  </inputs>
+
+  <!-- ... (complete flow below) ... -->
+</task>
+```
+
+## Four-Step Validation Flow
+
+### Step 1: Setup
+
+**Goal:** Load checklist and document to validate
+
+**Actions:**
+```
+1. If checklist not provided, load checklist.md from workflow location
+2. Try to fuzzy match for files similar to the input document name
+3. If document not provided or unsure, ask user: "Which document should I validate?"
+4. Load both the checklist and document
+```
+
+**Example:**
+```
+User: "Validate my monthly review"
+
+Agent:
+1. Looks for checklist: /workflows/monthly-review/checklist.md
+2. Fuzzy matches document: /reviews/monthly/review-2025-12.md
+3. Loads both files
+```
+
+### Step 2: Validate (CRITICAL)
+
+**Mandate:** For EVERY checklist item, WITHOUT SKIPPING ANY
+
+**For each item:**
+```
+1. Read requirement carefully
+2. Search document for evidence (quotes with line numbers)
+3. Analyze deeply - look for explicit AND implied coverage
+4. Mark with one of four states
+```
+
+**Four Validation Marks:**
+
+```
+✓ PASS - Requirement fully met (provide evidence)
+⚠ PARTIAL - Some coverage but incomplete (explain gaps)
+✗ FAIL - Not met or severely deficient (explain why)
+➖ N/A - Not applicable (explain reason)
+```
+
+**CRITICAL:** DO NOT SKIP ANY SECTIONS OR ITEMS
+
+**Validation process:**
+```
+For each checklist item:
+  1. Understand what's being asked
+  2. Search document thoroughly
+  3. Look for:
+     - Explicit mentions (direct evidence)
+     - Implicit coverage (related content)
+     - Partial coverage (incomplete attempts)
+  4. Collect evidence:
+     - Quote exact text
+     - Note line numbers
+     - Explain relevance
+  5. Make judgment:
+     - PASS: Fully addressed
+     - PARTIAL: Partially addressed, note what's missing
+     - FAIL: Not addressed or inadequate
+     - N/A: Doesn't apply, explain why
+```
+
+### Step 3: Generate Report
+
+**Goal:** Create comprehensive validation report
+
+**Report saved to:** `{document-folder}/validation-report-{timestamp}.md`
+
+**Report Format:**
+
+```markdown
+# Validation Report
+
+**Document:** {document-path}
+**Checklist:** {checklist-path}
+**Date:** {timestamp}
+
+## Summary
+- Overall: X/Y passed (Z%)
+- Critical Issues: {count}
+
+## Section Results
+
+### {Section Name}
+Pass Rate: X/Y (Z%)
+
+{For each item:}
+[MARK] {Item description}
+Evidence: {Quote with line# or explanation}
+{If FAIL/PARTIAL: Impact: {why this matters}}
+
+## Failed Items
+{All ✗ items with recommendations}
+
+## Partial Items
+{All ⚠ items with what's missing}
+
+## Recommendations
+1. Must Fix: {critical failures}
+2. Should Improve: {important gaps}
+3. Consider: {minor improvements}
+```
+
+**Example report:**
+
+```markdown
+# Validation Report
+
+**Document:** /goals/monthly/january-2025-goals.md
+**Checklist:** /checklists/monthly-goals-checklist.md
+**Date:** 2025-12-22
+
+## Summary
+- Overall: 8/12 passed (67%)
+- Critical Issues: 2
+
+## Section Results
+
+### Goal Clarity
+Pass Rate: 3/4 (75%)
+
+✓ PASS: Each goal has a clear outcome
+Evidence: Line 12: "Lose 5 pounds by Jan 31", Line 18: "Save $1000 by Jan 31"
+
+✓ PASS: Goals are measurable
+Evidence: Line 12 (weight number), Line 18 (dollar amount), Line 24 (workout count)
+
+⚠ PARTIAL: Goals have deadlines
+Evidence: Lines 12, 18 have deadlines. Line 24 "Workout more" missing deadline.
+Impact: Without deadline, "workout more" is vague and hard to track.
+
+✓ PASS: Goals align with annual objectives
+Evidence: Line 5 references annual health goal, Line 15 references annual savings target
+
+### Action Plans
+Pass Rate: 2/4 (50%)
+
+✗ FAIL: Each goal has specific action steps
+Evidence: Weight loss goal has steps (Line 30-35), but savings goal has no action plan.
+Impact: Without action steps, savings goal lacks a clear path to completion.
+
+✓ PASS: Actions are time-bound
+Evidence: Line 31 "Weekly meal prep on Sundays"
+
+✗ FAIL: Obstacles identified for each goal
+Evidence: No obstacles section found in document.
+Impact: No preparation for potential blockers.
+
+⚠ PARTIAL: Tracking method specified
+Evidence: Line 40 mentions "daily weight log" but no tracking for savings or workouts.
+Impact: Incomplete tracking means incomplete accountability.
+
+## Failed Items
+
+1. ✗ Each goal has specific action steps
+   - Weight loss: ✓ Has action plan
+   - Savings: ✗ Missing action plan
+   - Workouts: ✗ Missing action plan
+   - **Recommendation:** Add action plans for savings and workouts
+
+2. ✗ Obstacles identified for each goal
+   - No obstacles section in document
+   - **Recommendation:** Add "Potential Obstacles" section with mitigation strategies
+
+## Partial Items
+
+1. ⚠ Goals have deadlines
+   - Weight loss: ✓ Jan 31
+   - Savings: ✓ Jan 31
+   - Workouts: ✗ Missing deadline
+   - **Recommendation:** Add deadline to workout goal (e.g., "3x/week throughout January")
+
+2. ⚠ Tracking method specified
+   - Weight: ✓ Daily log
+   - Savings: ✗ No tracking method
+   - Workouts: ✗ No tracking method
+   - **Recommendation:** Specify tracking method for each goal
+
+## Recommendations
+
+### Must Fix (Critical)
+1. Add action plans for savings and workout goals
+2. Add obstacles section with mitigation strategies
+
+### Should Improve (Important)
+3. Add deadline to workout goal
+4. Specify tracking method for all goals
+
+### Consider (Minor)
+5. Add weekly check-in schedule
+6. Define success criteria beyond numbers
+```
+
+### Step 4: Summary for User
+
+**Goal:** Present validation results and halt
+
+**Actions:**
+```
+1. Present section-by-section summary
+2. Highlight all critical issues
+3. Provide path to saved report
+4. HALT - do not continue unless user asks
+```
+
+**Example summary:**
+```
+Agent: "I've validated your January goals against the monthly goals checklist.
+
+**Overall:** 8/12 items passed (67%)
+
+**Critical Issues (2):**
+- Missing action plans for 2 of 3 goals
+- No obstacles identified
+
+**Partial Coverage (2):**
+- Workout goal missing deadline
+- Tracking methods incomplete
+
+**Full report saved to:**
+/goals/monthly/validation-report-2025-12-22.md
+
+**Recommendations:**
+1. Add action plans for savings and workouts (MUST FIX)
+2. Add obstacles section (MUST FIX)
+3. Add deadline to workout goal (SHOULD IMPROVE)
+4. Complete tracking methods (SHOULD IMPROVE)
+
+Would you like me to help fix these issues?"
+```
+
+## Critical Validation Rules
+
+**Rule 1:** NEVER skip sections - validate EVERYTHING
+
+**Rule 2:** ALWAYS provide evidence (quotes + line numbers) for marks
+
+**Rule 3:** Think deeply about each requirement - don't rush
+
+**Rule 4:** Save report to document's folder automatically
+
+**Rule 5:** HALT after presenting summary - wait for user
+
+## Personal Automation Use Cases
+
+### Use Case 1: Monthly Goal Validation
+
+**Checklist:** `monthly-goals-checklist.md`
+
+```markdown
+# Monthly Goals Checklist
+
+## Goal Clarity
+- [ ] Each goal has a clear, specific outcome
+- [ ] Goals are measurable (numbers, dates, concrete results)
+- [ ] Goals have deadlines
+- [ ] Goals align with quarterly objectives
+
+## Action Plans
+- [ ] Each goal has 3-5 specific action steps
+- [ ] Actions are time-bound (when they happen)
+- [ ] Obstacles identified for each goal
+- [ ] Tracking method specified
+
+## Resources
+- [ ] Required resources listed (time, money, tools)
+- [ ] Resource availability confirmed
+- [ ] Conflicts with other goals identified
+
+## Review
+- [ ] Weekly check-in schedule defined
+- [ ] Success criteria beyond goal completion
+- [ ] Reflection questions included
+```
+
+**Document:** `january-2025-goals.md`
+
+**Validation process:**
+```
+1. Load checklist and document
+2. For each checklist item, search document for evidence
+3. Mark as PASS/PARTIAL/FAIL/N/A with evidence
+4. Generate report showing:
+   - What's complete
+   - What's missing
+   - What needs improvement
+5. User fixes issues and re-validates
+```
+
+### Use Case 2: Habit Streak Verification
+
+**Checklist:** `habit-streak-checklist.md`
+
+```markdown
+# Habit Streak Checklist
+
+## Streak Claim
+- [ ] Habit clearly defined (what, when, how long)
+- [ ] Streak length claimed (X days)
+- [ ] Start date specified
+
+## Evidence
+- [ ] Daily logs for claimed period
+- [ ] No gaps in the streak
+- [ ] Each log shows completion (not just intent)
+- [ ] Timestamps or dated entries
+
+## Consistency
+- [ ] Habit performed at similar time each day (if relevant)
+- [ ] Duration/intensity consistent (if relevant)
+- [ ] Quality maintained (not declining over time)
+```
+
+**Document:** `workout-habit-log.md`
+
+**Validation:**
+```
+Claim: "30-day workout streak"
+
+Validation finds:
+✓ PASS: Habit defined (30-min workout, every morning)
+✓ PASS: Streak length claimed (30 days, Jan 1-30)
+✓ PASS: Daily logs present
+⚠ PARTIAL: 28 of 30 days logged (Jan 15, 22 missing)
+Evidence: Lines 45-430, gaps at expected lines for Jan 15 and 22
+Impact: Streak is 28 days, not 30 days
+
+Recommendation: Update streak claim to 28 days or verify if Jan 15/22 logs exist elsewhere
+```
+
+### Use Case 3: Quarterly Review Completeness
+
+**Checklist:** `quarterly-review-checklist.md`
+
+```markdown
+# Quarterly Review Checklist
+
+## Goal Summary
+- [ ] Each quarterly goal reviewed
+- [ ] Completion percentage for each goal
+- [ ] Wins celebrated
+- [ ] Lessons learned from failures
+
+## Metrics
+- [ ] Key metrics tracked (finance, health, career, etc.)
+- [ ] Trends identified (improving, declining, stable)
+- [ ] Comparison to previous quarter
+
+## Adjustments
+- [ ] What worked (keep doing)
+- [ ] What didn't work (stop or change)
+- [ ] New insights or opportunities
+- [ ] Next quarter priorities defined
+
+## Reflection
+- [ ] Biggest challenge faced
+- [ ] Most proud of
+- [ ] One thing to improve next quarter
+```
+
+**Document:** `q4-2024-review.md`
+
+**Validation:**
+```
+Validates completeness:
+✓ PASS: All 12 goals reviewed
+✓ PASS: Completion % for each
+✗ FAIL: Lessons from failures missing
+Evidence: Section "Lessons Learned" only discusses successes, not failures
+Impact: Missed learning opportunities
+
+✓ PASS: Metrics tracked (all categories present)
+⚠ PARTIAL: Trends identified for finance and health, but not career
+Impact: Career progress unclear
+
+Validation report guides user to add:
+1. Failure analysis section
+2. Career trend analysis
+```
+
+### Use Case 4: Annual Goal Quality Gate
+
+**Checklist:** `annual-goals-quality-gate.md`
+
+```markdown
+# Annual Goals Quality Gate
+
+## Strategic Alignment
+- [ ] Goals align with 5-year vision
+- [ ] No more than 5 major goals (focus)
+- [ ] Goals span multiple life areas (balance)
+- [ ] Goals are challenging but achievable
+
+## Clarity
+- [ ] Each goal passes SMART test (Specific, Measurable, Achievable, Relevant, Time-bound)
+- [ ] Success criteria crystal clear
+- [ ] Milestone dates defined
+
+## Planning
+- [ ] Quarterly breakdown for each goal
+- [ ] Dependencies identified
+- [ ] Resource requirements listed
+- [ ] Risks assessed
+
+## Support System
+- [ ] Accountability partner identified
+- [ ] Tools/systems in place for tracking
+- [ ] Monthly review process defined
+```
+
+**Document:** `2025-annual-goals.md`
+
+**Validation:**
+```
+Quality gate validation:
+✓ PASS: 4 goals (within limit of 5)
+✓ PASS: Goals span health, finance, career (balance)
+⚠ PARTIAL: Only 3 of 4 goals pass SMART test
+Evidence: Goal 4 "Be healthier" is too vague (Line 45)
+Impact: FAIL quality gate - cannot proceed until Goal 4 is refined
+
+✗ FAIL: Resource requirements not listed
+Impact: FAIL quality gate - may encounter resource conflicts mid-year
+
+Quality gate decision: FAIL
+Must fix before accepting annual goals:
+1. Refine Goal 4 to be SMART
+2. Add resource requirements section
+```
+
+## Integration with Workflows
+
+### Pattern 1: Post-Workflow Validation
+
+**After workflow completion:**
+
+```xml
+<step n="FINAL" goal="Validate output">
+  <output>Document created! Let me validate it against the checklist.</output>
+
+  <invoke-task>
+    Task: validate-workflow.xml
+    Inputs:
+      - checklist: {installed_path}/checklist.md
+      - document: {{default_output_file}}
+  </invoke-task>
+
+  <output>
+Validation complete!
+- Overall: {{pass_rate}}%
+- See: {{validation_report_path}}
+
+{{#if critical_issues}}
+⚠️ Critical issues found:
+{{critical_issues}}
+
+Would you like me to help fix these?
+{{/if}}
+  </output>
+</step>
+```
+
+### Pattern 2: Standalone Validation
+
+**Run validation directly:**
+
+```
+User: "Validate my monthly goals"
+
+Agent:
+1. Loads monthly-goals-checklist.md
+2. Asks: "Which document should I validate?"
+3. User provides: /goals/monthly/january-2025.md
+4. Runs validation
+5. Generates report
+6. Presents summary with recommendations
+```
+
+### Pattern 3: Iterative Fix-Validate Loop
+
+**Validation → Fix → Re-validate:**
+
+```
+Round 1:
+- Validation: 67% pass (8/12)
+- User fixes 2 FAIL items
+
+Round 2:
+- Validation: 83% pass (10/12)
+- User fixes 1 PARTIAL item
+
+Round 3:
+- Validation: 100% pass (12/12)
+- Quality gate: PASS
+```
+
+## Validation Marks Deep Dive
+
+### ✓ PASS: Requirement Fully Met
+
+**Criteria:**
+- Evidence clearly shows requirement is satisfied
+- No significant gaps
+- Quality meets or exceeds expectation
+
+**Example:**
+```
+Requirement: Each goal has a clear, specific outcome
+
+Evidence:
+- Line 12: "Lose 5 pounds by Jan 31" ✓
+- Line 18: "Save $1000 by Jan 31" ✓
+- Line 24: "Complete 12 workouts in January" ✓
+
+Mark: ✓ PASS
+All goals have clear, specific outcomes with numbers and deadlines.
+```
+
+### ⚠ PARTIAL: Some Coverage but Incomplete
+
+**Criteria:**
+- Requirement partially addressed
+- Significant content present but gaps exist
+- Usable but needs improvement
+
+**Example:**
+```
+Requirement: Tracking method specified
+
+Evidence:
+- Line 40: "Daily weight log" ✓ (for weight loss goal)
+- Line 55: No tracking method for savings goal ✗
+- Line 68: No tracking method for workout goal ✗
+
+Mark: ⚠ PARTIAL
+Tracking specified for 1 of 3 goals. Missing tracking methods for savings and workouts.
+Impact: Incomplete accountability system.
+```
+
+### ✗ FAIL: Not Met or Severely Deficient
+
+**Criteria:**
+- Requirement not addressed
+- Inadequate attempt that doesn't meet intent
+- Critical gap
+
+**Example:**
+```
+Requirement: Obstacles identified for each goal
+
+Evidence:
+- Searched entire document for "obstacle", "blocker", "challenge", "risk"
+- No section or mentions found
+
+Mark: ✗ FAIL
+No obstacles identified for any goal. Document lacks risk awareness and mitigation planning.
+Impact: Unprepared for common blockers, higher failure risk.
+```
+
+### ➖ N/A: Not Applicable
+
+**Criteria:**
+- Requirement doesn't apply to this document
+- Valid reason for exclusion
+- Explain why it doesn't apply
+
+**Example:**
+```
+Requirement: Resource budget specified
+
+Evidence:
+- Document is a retrospective review, not a planning document
+- Resources were already used, budget is historical
+
+Mark: ➖ N/A
+This is a review document, not a planning document. Resource budgeting is not applicable to retrospectives.
+```
+
+## Best Practices
+
+### 1. Write Good Checklists
+
+**Good checklist items:**
+- ✅ Specific and unambiguous
+- ✅ Verifiable with evidence
+- ✅ One requirement per item
+- ✅ Explains why it matters (impact)
+
+**Example:**
+```
+Good:
+- [ ] Each goal has a specific deadline (date)
+  Why: Deadlines create accountability and urgency
+
+Bad:
+- [ ] Goals are good
+  (Too vague, not verifiable)
+```
+
+### 2. Collect Strong Evidence
+
+**Good evidence:**
+- Exact quotes from document
+- Line numbers for traceability
+- Explains how quote satisfies requirement
+- Acknowledges partial coverage honestly
+
+**Example:**
+```
+Requirement: Goals are measurable
+
+Evidence:
+- Line 12: "Lose 5 pounds" - measurable number ✓
+- Line 18: "$1000 savings" - measurable dollar amount ✓
+- Line 24: "Workout more" - NOT measurable (no number) ✗
+
+Partial coverage: 2 of 3 goals are measurable.
+```
+
+### 3. Provide Actionable Recommendations
+
+**Good recommendations:**
+- Specific (not "improve X", but "add Y to section Z")
+- Prioritized (Must Fix, Should Improve, Consider)
+- Explain impact (why it matters)
+
+**Example:**
+```
+Bad:
+- Improve goal clarity
+
+Good:
+- Add specific number to "workout more" goal (e.g., "12 workouts in January")
+  Impact: Makes goal measurable and trackable
+  Priority: Must Fix (critical for goal success)
+```
+
+### 4. Use Validation Thresholds
+
+**Define quality gates:**
+- 100% PASS: Perfect (rare, may be overkill)
+- 90%+ PASS: Excellent (publish-ready)
+- 75%+ PASS: Good (acceptable with minor fixes)
+- 60-74% PASS: Needs work (fix critical items)
+- <60% PASS: Fail (major revision needed)
+
+**Example:**
+```
+Monthly goals validation: 67% (8/12 passed)
+Quality gate: 75% required
+Decision: FAIL - fix 1-2 more items before proceeding
+```
+
+### 5. Iterate Until Quality Gate Passes
+
+**Validation workflow:**
+```
+1. First validation: Identify all gaps
+2. User fixes critical (FAIL) items
+3. Re-validate: Check fixes
+4. User fixes important (PARTIAL) items
+5. Re-validate: Verify quality gate
+6. If passed: Proceed
+7. If failed: Repeat from step 2
+```
+
+## Summary
+
+The validation pattern provides:
+- ✅ Checklist-based systematic validation
+- ✅ Evidence collection with line numbers
+- ✅ Four-state marking (PASS/PARTIAL/FAIL/N/A)
+- ✅ Comprehensive validation reports
+- ✅ Actionable recommendations
+- ✅ Quality gate decisions
+
+Use this pattern to verify that goals, habits, plans, and outcomes meet their intended criteria before committing to them.
+
+## Migration Notes
+
+**From BMAD to Personal Automation:**
+
+**Keep (Universal):**
+- ✅ Complete validation flow (setup → validate → report → summary)
+- ✅ Four validation marks (PASS/PARTIAL/FAIL/N/A)
+- ✅ Evidence collection with line numbers
+- ✅ Report format
+- ✅ Critical rules (no skipping, evidence required)
+
+**Adapt (Context):**
+- Checklists: Software quality (tests, docs, architecture) → Personal quality (goal completeness, habit verification, review depth)
+- Documents: PRD, tech specs, code → Monthly goals, quarterly reviews, annual plans
+- Validation gates: Release readiness → Goal readiness, plan completeness
+
+**Personal checklists to create:**
+- monthly-goals-checklist.md
+- quarterly-review-checklist.md
+- annual-goals-checklist.md
+- habit-streak-checklist.md
+- budget-checklist.md
+- weekly-review-checklist.md
+
+## Use When
+
+- Validating monthly/quarterly/annual goals
+- Verifying habit streaks
+- Checking review completeness
+- Quality-gating important decisions
+- Ensuring plan thoroughness
+- Before committing to major changes

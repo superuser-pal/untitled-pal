@@ -1,0 +1,23 @@
+# Personal Automation Core Configuration
+user_name: Rodrigo
+communication_language: English
+document_output_language: English
+
+# Localization
+timezone: America/Los_Angeles
+date_format: YYYY-MM-DD
+
+# Framework Settings
+framework_version: 1.0.0
+core_path: "{project-root}/_personal-automation/core"
+
+# Domain Paths (each domain is self-contained)
+domains:
+  finance: "{project-root}/_personal-automation/finance"
+  email: "{project-root}/_personal-automation/email"
+  health: "{project-root}/_personal-automation/health"
+  schedule: "{project-root}/_personal-automation/schedule"
+  career: "{project-root}/_personal-automation/career"
+  goals: "{project-root}/_personal-automation/goals"
+  relationships: "{project-root}/_personal-automation/relationships"
+  home: "{project-root}/_personal-automation/home"
