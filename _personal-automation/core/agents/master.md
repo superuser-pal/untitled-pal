@@ -61,10 +61,23 @@ You must fully embody this agent's persona and follow all activation instruction
   </persona>
   <menu>
     <item cmd="*menu">[M] Redisplay Menu Options</item>
+
+    <!-- Domain Agent Loading -->
+    <item cmd="*load-sofia" exec="{project-root}/_personal-automation/domains/finance/agent.md">Load Sofia (Finance Agent)</item>
+    <item cmd="*load-elena" exec="{project-root}/_personal-automation/domains/email/agent.md">Load Elena (Email Agent)</item>
+    <item cmd="*load-scribe" exec="{project-root}/_personal-automation/domains/writing/agent.md">Load Scribe (Writing Agent)</item>
+    <item cmd="*load-proxy" exec="{project-root}/_personal-automation/domains/social-media/agent.md">Load Proxy (Social Media Agent)</item>
+    <item cmd="*load-architect" exec="{project-root}/_personal-automation/domains/framework-lab/agent.md">Load The Architect (Framework Lab Agent)</item>
+
+    <!-- System Information -->
     <item cmd="*list-domains" action="Show the 5 domains with their agents and focus areas: Finance (Sofia - automated audits), Email (Elena - noise filtering), Writing (Scribe - Substack support), Social Media (Proxy - strategic growth), Framework Lab (The Architect - system oversight)">Show Available Domains</item>
     <item cmd="*list-agents" action="list all agents from {project-root}/_personal-automation/_config/agent-manifest.csv with their domain, role, and expertise">List All Domain Agents</item>
-    <item cmd="*party-mode" exec="{project-root}/_personal-automation/core/jtbd/party-mode/execution.md">Start Multi-Agent Collaboration (Party Mode)</item>
     <item cmd="*system-status" action="Show framework status: agent count, domain structure, available workflows">Show Framework Status</item>
+
+    <!-- Collaboration -->
+    <item cmd="*party-mode" exec="{project-root}/_personal-automation/core/jtbd/workflow.md">Start Multi-Agent Collaboration (Party Mode)</item>
+
+    <!-- Exit -->
     <item cmd="*dismiss">[D] Dismiss Agent</item>
   </menu>
 </agent>

@@ -1,13 +1,13 @@
 ---
 name: party-mode
-description: Orchestrates group discussions between all installed BMAD agents, enabling natural multi-agent conversations
+description: Orchestrates group discussions between all installed Personal Automation agents, enabling natural multi-agent conversations
 ---
 
 # Party Mode Workflow
 
-**Goal:** Orchestrates group discussions between all installed BMAD agents, enabling natural multi-agent conversations
+**Goal:** Orchestrates group discussions between all installed Personal Automation agents, enabling natural multi-agent conversations
 
-**Your Role:** You are a party mode facilitator and multi-agent conversation orchestrator. You bring together diverse BMAD agents for collaborative discussions, managing the flow of conversation while maintaining each agent's unique personality and expertise.
+**Your Role:** You are a party mode facilitator and multi-agent conversation orchestrator. You bring together diverse Personal Automation agents for collaborative discussions, managing the flow of conversation while maintaining each agent's unique personality and expertise.
 
 ---
 
@@ -27,17 +27,17 @@ This uses **micro-file architecture** with **sequential conversation orchestrati
 
 ### Configuration Loading
 
-Load config from `{project-root}/_bmad/core/config.yaml` and resolve:
+Load config from `{project-root}/_personal-automation/core/config.yaml` and resolve:
 
 - `project_name`, `output_folder`, `user_name`
 - `communication_language`, `document_output_language`, `user_skill_level`
 - `date` as a system-generated value
-- Agent manifest path: `{project-root}/_bmad/_config/agent-manifest.csv`
+- Agent manifest path: `{project-root}/_personal-automation/_config/agent-manifest.csv`
 
 ### Paths
 
-- `installed_path` = `{project-root}/_bmad/core/workflows/party-mode`
-- `agent_manifest_path` = `{project-root}/_bmad/_config/agent-manifest.csv`
+- `installed_path` = `{project-root}/_personal-automation/core/jtbd`
+- `agent_manifest_path` = `{project-root}/_personal-automation/_config/agent-manifest.csv`
 - `standalone_mode` = `true` (party mode is an interactive workflow)
 
 ---
@@ -77,7 +77,7 @@ Execute party mode activation and conversation orchestration:
 
 "🎉 PARTY MODE ACTIVATED! 🎉
 
-Welcome {{user_name}}! All BMAD agents are here and ready for a dynamic group discussion. I've brought together our complete team of experts, each bringing their unique perspectives and capabilities.
+Welcome {{user_name}}! All Personal Automation agents are here and ready for a dynamic group discussion. I've brought together our complete team of experts, each bringing their unique perspectives and capabilities.
 
 **Let me introduce our collaborating agents:**
 
