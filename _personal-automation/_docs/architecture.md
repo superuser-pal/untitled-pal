@@ -12,12 +12,9 @@ _personal-automation/
 └── domains/         # All domain folders organized together
     ├── finance/
     ├── email/
-    ├── health/
-    ├── schedule/
-    ├── career/
-    ├── goals/
-    ├── relationships/
-    └── home/
+    ├── writing/
+    ├── social-media/
+    └── framework-lab/
 ```
 
 ## Core Components
@@ -26,14 +23,14 @@ _personal-automation/
 The central orchestration layer that coordinates all domains.
 
 **Components:**
-- **workflow.xml** - Execution engine that interprets all job configuration files
+- **workflow.xml** - Execution engine that interprets all workflow configuration files
 - **master.md** - Master agent that provides the main user interface
-- **party-mode/** - Multi-agent collaboration job
+- **party-mode/** - Multi-agent collaboration workflow
 - **config.yaml** - Framework-wide configuration
 
 **Responsibilities:**
 - Load and coordinate domain agents
-- Execute jobs-to-be-done across domains
+- Execute workflows across domains
 - Facilitate multi-agent discussions
 - Maintain framework configuration
 
@@ -43,18 +40,18 @@ All domains live under `domains/` for better organization. Each domain follows i
 ```
 domains/[domain-name]/
 ├── agents/          # Domain expert agent(s)
-├── jtbd/           # Jobs-to-be-Done for this domain
+├── workflows/       # Workflows for this domain
 ├── data/           # Your personal data
 ├── output/         # Generated reports, plans, logs
 ├── knowledge/      # Best practices, tips, guides
 └── config.yaml     # Domain-specific settings
 ```
 
-**Agent + JTBD Hierarchy:**
+**Agent + Workflow Hierarchy:**
 - **Agents**: Domain experts who understand your life context
-- **Jobs-to-be-Done**: Outcome-driven tasks agents help you accomplish
-- Each job captures: situation, motivation, and expected outcome
-- Agents execute jobs based on your specific needs
+- **Workflows**: Outcome-driven tasks agents help you accomplish
+- Each workflow captures: situation, motivation, and expected outcome
+- Agents execute workflows based on your specific needs
 
 **Benefits:**
 - Everything related to one life area in one place
@@ -69,7 +66,7 @@ Central registry of all framework components.
 **Files:**
 - **manifest.yaml** - Framework metadata and domain registry
 - **agent-manifest.csv** - All agents indexed
-- **jtbd-manifest.csv** - All jobs-to-be-done indexed
+- **workflow-manifest.csv** - All workflows indexed
 - **task-manifest.csv** - All tasks indexed
 - **tool-manifest.csv** - All tools indexed
 
@@ -84,12 +81,12 @@ Self-documenting framework with guides, patterns, and templates.
 
 ## Key Design Patterns
 
-### 1. Job Execution Pattern
-All jobs-to-be-done follow the same execution model:
+### 1. Workflow Execution Pattern
+All workflows follow the same execution model:
 
 1. User loads master agent or domain agent
-2. Selects job from menu (based on desired outcome)
-3. Agent loads job-config.yaml configuration
+2. Selects workflow from menu (based on desired outcome)
+3. Agent loads workflow-config.yaml configuration
 4. Passes to workflow.xml execution engine
 5. Engine interprets execution.md step-by-step
 6. Generates output using templates
@@ -108,7 +105,7 @@ Dynamic path resolution using template variables:
 Multi-agent collaboration for cross-domain decisions:
 
 1. User requests party mode from master agent
-2. Master loads party-mode job
+2. Master loads party-mode workflow
 3. User selects agents from different domains
 4. Agents discuss and provide perspectives
 5. User makes informed decision
@@ -121,8 +118,8 @@ Multi-agent collaboration for cross-domain decisions:
 ### 4. Runtime Loading Pattern
 Resources loaded only when needed:
 
-- Agents don't pre-load all jobs
-- Jobs don't pre-load all data
+- Agents don't pre-load all workflows
+- Workflows don't pre-load all data
 - Manifests queried dynamically
 - Efficient memory usage
 
@@ -130,12 +127,12 @@ Resources loaded only when needed:
 
 ### Input Flow
 ```
-User → Master Agent → Domain Agent → Job-to-be-Done → Data Files
+User → Master Agent → Domain Agent → Workflow → Data Files
 ```
 
 ### Output Flow
 ```
-Job-to-be-Done → Template → Generated Output → domain/output/
+Workflow → Template → Generated Output → domain/output/
 ```
 
 ### Cross-Domain Flow
@@ -164,16 +161,16 @@ Domain A Agent ←→ Party Mode ←→ Domain B Agent
 1. Copy domain-template/ into domains/
 2. Create domain config.yaml
 3. Create domain agent
-4. Build initial jobs-to-be-done
+4. Build initial workflows
 5. Register in manifests
 
-### Adding New Jobs-to-be-Done
-1. Copy jtbd-template.yaml
+### Adding New Workflows
+1. Copy workflow-template.yaml
 2. Define situation, motivation, and expected outcome
 3. Create execution.md with step-by-step instructions
 4. Define variables and inputs
 5. Create output template
-6. Register in jtbd-manifest.csv
+6. Register in workflow-manifest.csv
 
 ### Adding New Agents
 1. Copy agent-template.md
@@ -199,12 +196,12 @@ Domain A Agent ←→ Party Mode ←→ Domain B Agent
 
 ### Phase 4 (Next)
 - First domain agent (Finance)
-- First complete job-to-be-done
+- First complete workflow
 - Real automation example
 
 ### Phase 5
 - 4 more domain agents
-- Multiple jobs per domain
+- Multiple workflows per domain
 - Cross-domain examples
 
 ### Phase 6
@@ -218,8 +215,8 @@ Domain A Agent ←→ Party Mode ←→ Domain B Agent
 |--------|------|---------------------|
 | Purpose | Software development | Personal life management |
 | Structure | Module-based | Domain-driven |
-| Agents | Development roles (PM, Dev, QA) | Life areas (Finance, Health) |
-| Tasks | Workflows (SDLC phases) | Jobs-to-be-Done (outcome-focused) |
+| Agents | Development roles (PM, Dev, QA) | Life areas (Finance, Email, Writing) |
+| Tasks | Workflows (SDLC phases) | Workflows (outcome-focused) |
 | Output | Code, docs, tests | Plans, reports, logs |
 | Data | Project requirements | Personal information |
 

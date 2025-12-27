@@ -55,7 +55,7 @@ You must fully embody this agent's persona and follow all activation instruction
       <r>ALWAYS communicate in {communication_language} UNLESS contradicted by communication_style.</r>
       <r> Stay in character until exit selected</r>
       <r> Display Menu items as the item dictates and in the order given.</r>
-      <r> Load files ONLY when executing a user chosen job-to-be-done or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
+      <r> Load files ONLY when executing a user chosen workflow or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
     </rules>
 </activation>
 
@@ -68,8 +68,8 @@ You must fully embody this agent's persona and follow all activation instruction
 
   <menu>
     <item cmd="*menu">[M] Redisplay Menu Options</item>
-    <item cmd="*{job-name}" exec="{domain_root}/jtbd/{job-name}/execution.md">{Job Description}</item>
-    <item cmd="*party-mode" exec="{project-root}/_personal-automation/core/jtbd/party-mode/execution.md">Bring in other expert agents for discussion</item>
+    <item cmd="*{workflow-name}" exec="{domain_root}/workflows/{workflow-name}/execution.md">{Workflow Description}</item>
+    <item cmd="*party-mode" exec="{project-root}/_personal-automation/core/workflows/party-mode.md">Bring in other expert agents for discussion</item>
     <item cmd="*dismiss">[D] Dismiss Agent</item>
   </menu>
 </agent>
@@ -130,10 +130,10 @@ Two types of menu item execution:
 
 1. Copy this template
 2. Replace all `{placeholders}` with actual values
-3. Update config path to point to your module's config
+3. Update config path to point to your domain's config
 4. Define persona (role, identity, communication_style, principles)
 5. Add menu items for agent's workflows
-6. Save as `{agent-id}.md` in appropriate agents folder
+6. Save as `agent.md` in appropriate domain folder
 
 ## Example: Finance Manager Agent
 
@@ -148,9 +148,9 @@ Two types of menu item execution:
 
   <menu>
     <item cmd="*menu">[M] Redisplay Menu Options</item>
-    <item cmd="*monthly-budget" workflow="{project-root}/_personal-automation/life-management/workflows/finance/monthly-budget/workflow.yaml">Create monthly budget plan</item>
-    <item cmd="*spending-review" workflow="{project-root}/_personal-automation/life-management/workflows/finance/spending-review/workflow.yaml">Review and categorize spending</item>
-    <item cmd="*party-mode" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">Bring in other expert agents for discussion</item>
+    <item cmd="*monthly-budget" exec="{domain_root}/workflows/monthly-budget/execution.md">Create monthly budget plan</item>
+    <item cmd="*spending-review" exec="{domain_root}/workflows/spending-review/execution.md">Review and categorize spending</item>
+    <item cmd="*party-mode" exec="{project-root}/_personal-automation/core/workflows/party-mode.md">Bring in other expert agents for discussion</item>
     <item cmd="*dismiss">[D] Dismiss Agent</item>
   </menu>
 </agent>
@@ -159,6 +159,6 @@ Two types of menu item execution:
 ## Notes
 
 - **Config Path**: Use `_personal-automation/domains/{domain}/config.yaml` for domain-specific agents
-- **Party Mode**: Keep reference to core party-mode job for multi-agent collaboration
-- **Menu Items**: Add 3-5 focused jobs-to-be-done per agent (don't overcomplicate)
+- **Party Mode**: Keep reference to core party-mode workflow for multi-agent collaboration
+- **Menu Items**: Add 3-5 focused workflows per agent (don't overcomplicate)
 - **Persona**: Make it distinctive and memorable - each agent should feel different

@@ -36,6 +36,25 @@ To activate the Master Orchestrator:
 - Start Party Mode for multi-agent collaboration
 - Check system status
 
+### Customizing Agents
+
+Each agent can be customized via YAML configuration files in `_config/agents/`:
+
+**Available Customizations:**
+- **Persona Override**: Replace role, identity, communication style, and principles
+- **Persistent Memories**: Add agent-specific context that persists across sessions
+- **Custom Menu Items**: Add domain-specific workflows or tasks to the agent's menu
+- **Custom Prompts**: Define reusable prompts for action handlers
+
+**Example:** To add a memory to Sofia (Finance agent), edit `_config/agents/sofia.customize.yaml`:
+```yaml
+memories:
+  - "User's primary financial goal is saving for a house"
+  - "User prefers weekly spending reports"
+```
+
+All agents automatically load their customization files on activation. See individual `.customize.yaml` files for detailed examples and options.
+
 ---
 
 ## Available Domain Agents
@@ -44,7 +63,7 @@ To activate the Master Orchestrator:
 **Role:** Personal Finance Advisor
 **Mission:** Automated audits and total financial visibility
 **Expertise:** Expense tracking, budget monitoring, subscription audits
-**Primary JTBD:** "Audit my spending and alert me to subscription bloat"
+**Primary Workflow:** "Audit my spending and alert me to subscription bloat"
 
 **Location:** `domains/finance/agent.md`
 
@@ -52,7 +71,7 @@ To activate the Master Orchestrator:
 **Role:** Email Productivity Specialist
 **Mission:** Ruthless inbox triage and task extraction
 **Expertise:** Noise filtering, signal detection, task extraction
-**Primary JTBD:** "Draft replies based on my `knowledge/tone-guide.md`"
+**Primary Workflow:** "Draft replies based on my `knowledge/tone-guide.md`"
 
 **Location:** `domains/email/agent.md`
 
@@ -60,7 +79,7 @@ To activate the Master Orchestrator:
 **Role:** Writing Coach & Editor
 **Mission:** Substack content creation and voice development
 **Expertise:** Newsletter writing, research gathering, style refinement
-**Primary JTBD:** "Review my Substack draft for clarity and voice consistency"
+**Primary Workflow:** "Review my Substack draft for clarity and voice consistency"
 
 **Location:** `domains/writing/agent.md`
 
@@ -68,7 +87,7 @@ To activate the Master Orchestrator:
 **Role:** Social Media Strategist
 **Mission:** Strategic growth of 'Lara Lou' Substack channel
 **Expertise:** Content calendars, growth analytics, cross-platform promotion
-**Primary JTBD:** "Create a content calendar aligned with audience psychology"
+**Primary Workflow:** "Create a content calendar aligned with audience psychology"
 
 **Location:** `domains/social-media/agent.md`
 
@@ -76,7 +95,7 @@ To activate the Master Orchestrator:
 **Role:** Framework Meta-Manager
 **Mission:** System oversight and OSS stewardship
 **Expertise:** Framework architecture, version control, roadmap management
-**Primary JTBD:** "Review proposed changes for architectural coherence"
+**Primary Workflow:** "Review proposed changes for architectural coherence"
 
 **Location:** `domains/framework-lab/agent.md`
 
@@ -100,7 +119,7 @@ To activate the Master Orchestrator:
 - Brainstorming sessions across expertise areas
 - Strategic planning that spans multiple life domains
 
-**Location:** `core/jtbd/workflow.md`
+**Location:** `core/workflows/party-mode.md`
 
 ---
 
@@ -138,13 +157,21 @@ For a workflow to be accepted into the PromptPal core, it must:
 ```
 _personal-automation/
 ├── _config/                    # Central registries
+│   ├── agents/                 # Agent customization files
+│   │   ├── domains-master.customize.yaml
+│   │   ├── sofia.customize.yaml
+│   │   ├── elena.customize.yaml
+│   │   ├── scribe.customize.yaml
+│   │   ├── proxy.customize.yaml
+│   │   └── architect.customize.yaml
 │   ├── agent-manifest.csv      # All agents with metadata
 │   ├── manifest.yaml           # Framework metadata
-│   └── *-manifest.csv          # Task, JTBD, tool registries
+│   └── *-manifest.csv          # Task, workflow, tool registries
 │
 ├── _docs/                      # Documentation & guides
 │   ├── architecture.md         # Domain-driven architecture
 │   ├── getting-started.md      # Framework introduction
+│   ├── skill-registration-pattern.md  # Skill registration guide
 │   ├── guides/                 # How-to guides
 │   ├── patterns/               # Extracted patterns
 │   └── templates/              # Component templates
@@ -153,7 +180,7 @@ _personal-automation/
 │   ├── agents/
 │   │   └── master.md           # Domains Master agent
 │   ├── config.yaml             # User configuration
-│   └── jtbd/                   # Party Mode workflow
+│   └── workflows/              # Party Mode workflow
 │
 └── domains/                    # 5 domain agents
     ├── finance/                # Sofia
@@ -214,7 +241,7 @@ agents:
 Each domain operates as an independent jurisdiction with:
 - Isolated data storage (no cross-contamination)
 - Domain-specific knowledge bases
-- Dedicated JTBD (Jobs-to-be-Done) workflows
+- Dedicated workflows for domain-specific tasks
 - Specialized agent persona and expertise
 
 ### The IDE as Cockpit

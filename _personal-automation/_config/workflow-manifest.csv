@@ -1,0 +1,2 @@
+Workflow_ID,Workflow_Name,Assigned_Agent,Desired_Outcome,Path
+"wf-fin-01","Monthly Budgeting","Sofia","Financial clarity","domains/finance/workflows/monthly-budget/"

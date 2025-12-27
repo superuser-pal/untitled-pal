@@ -1,0 +1,42 @@
+# Agent Customization: Proxy (Social Media Strategist)
+# Customize any section below - all are optional
+
+# Override agent name
+agent:
+  metadata:
+    name: ""
+
+# Replace entire persona (not merged)
+persona:
+  role: ""
+  identity: ""
+  communication_style: ""
+  principles: []
+
+# Add custom critical actions (appended after standard config loading)
+critical_actions: []
+
+# Add persistent memories for the agent
+memories: []
+# Example:
+# memories:
+#   - "User's Substack: 'Lara Lou' - focus on personal growth and mindfulness"
+#   - "User cross-posts to Twitter/X and LinkedIn"
+#   - "User prefers content calendar 2 weeks in advance"
+
+# Add custom menu items (appended to base menu)
+# Don't include * prefix or help/exit - auto-injected
+menu: []
+# Example:
+# menu:
+#   - cmd: custom-calendar
+#     workflow: "{project-root}/_personal-automation/domains/social-media/workflows/my-calendar.yaml"
+#     description: Custom content calendar workflow
+
+# Add custom prompts (for action="#id" handlers)
+prompts: []
+# Example:
+# prompts:
+# - id: engagement-analysis
+#   content: |
+#     Analyze engagement patterns and suggest optimal posting times

@@ -36,7 +36,7 @@ Load config from `{project-root}/_personal-automation/core/config.yaml` and reso
 
 ### Paths
 
-- `installed_path` = `{project-root}/_personal-automation/core/jtbd`
+- `installed_path` = `{project-root}/_personal-automation/core/workflows`
 - `agent_manifest_path` = `{project-root}/_personal-automation/_config/agent-manifest.csv`
 - `standalone_mode` = `true` (party mode is an interactive workflow)
 

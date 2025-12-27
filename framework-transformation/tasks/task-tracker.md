@@ -310,7 +310,7 @@ Phase 4: Enable HUD Templates             ⏸️ BLOCKED (awaits Phase 3)
   - **Rationale:** Dogfooding the repo's own development
   - **Agent:** Alex (Project Manager)
   - **Mission:** Orchestrate the lifecycle of complex projects
-  - **Primary JTBD:** "Sync the development roadmap with current file status and flag blockers"
+  - **Primary Workflow:** "Sync the development roadmap with current file status and flag blockers"
   - **Completed:** 2025-12-27
 
 - [x] **1D.3** - Establish terminology standard
@@ -337,7 +337,7 @@ Phase 4: Enable HUD Templates             ⏸️ BLOCKED (awaits Phase 3)
   - **Status:** COMPLETED
   - **File:** `_personal-automation/core/agents/master.md`
   - **Changes Made:**
-    - Fixed Party Mode path from `jtbd/party-mode/execution.md` to `jtbd/workflow.md`
+    - Fixed Party Mode path from `workflows/party-mode/execution.md` to `workflows/party-mode.md`
     - Added 5 individual domain agent loading menu items (*load-sofia, *load-elena, etc.)
     - Kept existing identity and principles (appropriate as-is)
     - Organized menu with clear sections (Domain Agent Loading, System Information, Collaboration, Exit)
@@ -345,20 +345,20 @@ Phase 4: Enable HUD Templates             ⏸️ BLOCKED (awaits Phase 3)
 
 - [x] **1E.2** - Fix Party Mode workflow path references
   - **Status:** COMPLETED
-  - **File:** `_personal-automation/core/jtbd/workflow.md`
+  - **File:** `_personal-automation/core/workflows/party-mode.md`
   - **Changes Made:**
     - Updated all `_bmad/` paths to `_personal-automation/`
     - Updated config path from `_bmad/core/config.yaml` to `_personal-automation/core/config.yaml`
     - Updated manifest path from `_bmad/_config/` to `_personal-automation/_config/`
-    - Updated installed path from `_bmad/core/workflows/party-mode` to `_personal-automation/core/jtbd`
+    - Updated installed path from `_bmad/core/workflows/party-mode` to `_personal-automation/core/workflows`
     - Replaced "BMAD agents" terminology with "Personal Automation agents"
   - **Completed:** 2025-12-27
 
 - [x] **1E.3** - Update Party Mode step files
   - **Status:** COMPLETED
   - **Files:**
-    - `_personal-automation/core/jtbd/steps/step-01-agent-loading.md`
-    - `_personal-automation/core/jtbd/steps/step-03-graceful-exit.md`
+    - `_personal-automation/core/workflows/steps/step-01-agent-loading.md`
+    - `_personal-automation/core/workflows/steps/step-03-graceful-exit.md`
   - **Changes Made:**
     - Updated manifest paths from `_bmad/_config/` to `_personal-automation/_config/`
     - Replaced "BMAD" terminology with "Personal Automation" throughout
@@ -410,7 +410,7 @@ Phase 4: Enable HUD Templates             ⏸️ BLOCKED (awaits Phase 3)
 - [ ] **2.1** - Create Sofia agent enhancements
   - **Status:** PENDING
   - **Mission:** Local financial intelligence and ledger maintenance
-  - **Primary JTBD:** "Audit my spending and alert me to subscription bloat"
+  - **Primary Workflow:** "Audit my spending and alert me to subscription bloat"
   - **Key Workflows:**
     - monthly-budget
     - expense-audit
@@ -435,7 +435,7 @@ Phase 4: Enable HUD Templates             ⏸️ BLOCKED (awaits Phase 3)
 - [ ] **2.5** - Create Elena agent enhancements
   - **Status:** PENDING
   - **Mission:** Local triage officer extracting tasks and sentiment from inbox
-  - **Primary JTBD:** "Draft replies based on my `knowledge/tone-guide.md`"
+  - **Primary Workflow:** "Draft replies based on my `knowledge/tone-guide.md`"
   - **Key Workflows:**
     - inbox-triage
     - extract-tasks
@@ -461,7 +461,7 @@ Phase 4: Enable HUD Templates             ⏸️ BLOCKED (awaits Phase 3)
   - **Status:** PENDING
   - **File:** `_personal-automation/domains/project-manager/agent.md`
   - **Mission:** Orchestrate the lifecycle of complex projects, beginning with dogfooding the PromptPal-Agentic-Framework repo development
-  - **Primary JTBD:** "Sync the development roadmap with current file status and flag blockers"
+  - **Primary Workflow:** "Sync the development roadmap with current file status and flag blockers"
   - **Key Workflows:**
     - roadmap-sync
     - blocker-detection

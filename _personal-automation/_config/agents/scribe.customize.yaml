@@ -1,0 +1,42 @@
+# Agent Customization: Scribe (Writing Coach & Editor)
+# Customize any section below - all are optional
+
+# Override agent name
+agent:
+  metadata:
+    name: ""
+
+# Replace entire persona (not merged)
+persona:
+  role: ""
+  identity: ""
+  communication_style: ""
+  principles: []
+
+# Add custom critical actions (appended after standard config loading)
+critical_actions: []
+
+# Add persistent memories for the agent
+memories: []
+# Example:
+# memories:
+#   - "User publishes Substack newsletter weekly on Thursdays"
+#   - "User's writing voice: conversational, data-driven, optimistic"
+#   - "User prefers essays between 800-1200 words"
+
+# Add custom menu items (appended to base menu)
+# Don't include * prefix or help/exit - auto-injected
+menu: []
+# Example:
+# menu:
+#   - cmd: custom-review
+#     workflow: "{project-root}/_personal-automation/domains/writing/workflows/my-review.yaml"
+#     description: Custom writing review workflow
+
+# Add custom prompts (for action="#id" handlers)
+prompts: []
+# Example:
+# prompts:
+# - id: voice-check
+#   content: |
+#     Review this draft for voice consistency against user's style guide

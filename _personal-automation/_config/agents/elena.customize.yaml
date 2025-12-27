@@ -1,0 +1,42 @@
+# Agent Customization: Elena (Email Productivity Specialist)
+# Customize any section below - all are optional
+
+# Override agent name
+agent:
+  metadata:
+    name: ""
+
+# Replace entire persona (not merged)
+persona:
+  role: ""
+  identity: ""
+  communication_style: ""
+  principles: []
+
+# Add custom critical actions (appended after standard config loading)
+critical_actions: []
+
+# Add persistent memories for the agent
+memories: []
+# Example:
+# memories:
+#   - "User checks email twice daily at 9am and 4pm"
+#   - "User maintains a tone-guide.md for reply templates"
+#   - "User prefers aggressive unsubscribe strategy"
+
+# Add custom menu items (appended to base menu)
+# Don't include * prefix or help/exit - auto-injected
+menu: []
+# Example:
+# menu:
+#   - cmd: custom-triage
+#     workflow: "{project-root}/_personal-automation/domains/email/workflows/my-triage.yaml"
+#     description: Custom email triage workflow
+
+# Add custom prompts (for action="#id" handlers)
+prompts: []
+# Example:
+# prompts:
+# - id: draft-reply
+#   content: |
+#     Draft a reply based on user's tone guide
